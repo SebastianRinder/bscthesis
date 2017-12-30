@@ -1,0 +1,22 @@
+\select@language {ngerman}
+\select@language {english}
+\select@language {ngerman}
+\select@language {english}
+\select@language {ngerman}
+\select@language {english}
+\contentsline {chapter}{\numberline {1}Introduction}{2}{chapter.1}
+\contentsline {section}{\numberline {1.1}Getting~started}{2}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Installing~Glossaries}{2}{subsection.1.1.1}
+\contentsline {subsection}{\numberline {1.1.2}Configure the Modification of the TU Design}{3}{subsection.1.1.2}
+\contentsline {section}{\numberline {1.2}Documentation}{4}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Structure~of~the~IAS~\LaTeX -Framework}{4}{subsection.1.2.1}
+\contentsline {subsection}{\numberline {1.2.2}Commands~\&~shortcuts}{4}{subsection.1.2.2}
+\contentsline {subsection}{\numberline {1.2.3}Getting~started~with~Glossaries}{5}{subsection.1.2.3}
+\contentsline {chapter}{\numberline {2}Motivation}{6}{chapter.2}
+\contentsline {chapter}{\numberline {3}Foundations}{7}{chapter.3}
+\contentsline {chapter}{\numberline {4}Experiments}{8}{chapter.4}
+\contentsline {chapter}{\numberline {5}Results}{9}{chapter.5}
+\contentsline {chapter}{\numberline {6}Discussion}{10}{chapter.6}
+\contentsline {chapter}{\numberline {7}Outlook}{11}{chapter.7}
+\contentsline {chapter}{Bibliography}{13}{section*.28}
+\contentsline {chapter}{\numberline {A}Some Appendix}{15}{appendix.A}

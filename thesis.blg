@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: thesis.aux
+The style file: ieeetr.bst
+Database file #1: literature/lit.bib
+Warning--empty journal in Kupcsik_AI_conditionallyaccepted
+Warning--empty journal in Muelling_BC_accepted
+Warning--empty journal in dann14a
+Warning--empty journal in Meyer_JNER_2013
+Warning--empty journal in Bocsi_AR_2014
+Warning--empty journal in BenAmor_AR_2014
+You've used 6 entries,
+            1876 wiz_defined-function locations,
+            512 strings with 4683 characters,
+and the built_in function-call counts, 1265 in all, are:
+= -- 89
+> -- 90
+< -- 0
++ -- 32
+- -- 26
+* -- 103
+:= -- 214
+add.period$ -- 6
+call.type$ -- 6
+change.case$ -- 6
+chr.to.int$ -- 0
+cite$ -- 12
+duplicate$ -- 62
+empty$ -- 116
+format.name$ -- 26
+if$ -- 281
+int.to.chr$ -- 0
+int.to.str$ -- 6
+missing$ -- 6
+newline$ -- 21
+num.names$ -- 6
+pop$ -- 33
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 19
+stack$ -- 0
+substring$ -- 28
+swap$ -- 8
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 6
+while$ -- 8
+width$ -- 7
+write$ -- 47
+(There were 6 warnings)

@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{Kupcsik_AI_conditionallyaccepted}
+A.~Kupcsik, M.~Deisenroth, J.~Peters, L.~Ai~Poh, V.~Vadakkepat, and G.~Neumann,
+  ``Model-based contextual policy search for data-efficient generalization of
+  robot skills,'' conditionally accepted.
+
+\bibitem{Muelling_BC_accepted}
+K.~Muelling, A.~Boularias, B.~Mohler, B.~Schoelkopf, and J.~Peters, ``Learning
+  strategies in table tennis using inverse reinforcement learning,'' accepted.
+
+\bibitem{dann14a}
+C.~Dann, G.~Neumann, and J.~Peters, ``Policy evaluation with temporal
+  differences: A survey and comparison,'' no.~March, pp.~809--883, 2014.
+
+\bibitem{Meyer_JNER_2013}
+T.~Meyer, J.~Peters, T.~Zander, B.~Schoelkopf, and M.~Grosse-Wentrup,
+  ``Predicting motor learning performance from electroencephalographic data,''
+  no.~1, 2014.
+
+\bibitem{Bocsi_AR_2014}
+B.~Bocsi, L.~Csato, and J.~Peters, ``Indirect robot model learning for tracking
+  control,'' 2014.
+
+\bibitem{BenAmor_AR_2014}
+H.~Ben~Amor, A.~Saxena, N.~Hudson, and J.~Peters, ``Special issue on autonomous
+  grasping and manipulation,'' 2014.
+
+\end{thebibliography}
