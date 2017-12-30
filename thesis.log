@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  30 DEC 2017 11:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  30 DEC 2017 14:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2396,7 +2396,7 @@ ist/fonts/type1/public/mathdesign/mdbch/md-chr7t.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on thesis.pdf (23 pages, 179641 bytes).
+Output written on thesis.pdf (23 pages, 182085 bytes).
 PDF statistics:
  302 PDF objects out of 1000 (max. 8388607)
  254 compressed objects within 3 object streams
