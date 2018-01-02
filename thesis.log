@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  30 DEC 2017 14:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  31 DEC 2017 14:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2374,10 +2374,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 122.
  ) 
 Here is how much of TeX's memory you used:
- 31253 strings out of 494901
- 549648 string characters out of 6178616
+ 31254 strings out of 494901
+ 549660 string characters out of 6178616
  766997 words of memory out of 5000000
- 33699 multiletter control sequences out of 15000+600000
+ 33700 multiletter control sequences out of 15000+600000
  187243 words of font info for 136 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  67i,13n,102p,2030b,715s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2390,16 +2390,17 @@ r/5chri8a.pfb></home/sebastian/.texmf-var/fonts/type1/softmake/frontpage/5fpm8a
 me/sebastian/.texmf-var/fonts/type1/softmake/stafford/5sfr8a.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/bitstrea/charter/bchb8a.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/mathdesign/mdbch/md-chbi7m.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/mathdesign/mdbch/md-chr7m.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/mathdesign/mdbch/md-chr7t.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on thesis.pdf (23 pages, 182085 bytes).
+/fonts/type1/bitstrea/charter/bchri8a.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/mathdesign/mdbch/md-chbi7m.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/mathdesign/mdbch/md-chr7m.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/mathdesign/mdbch/md-chr7t.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/txfonts/t1xtt.pfb>
+Output written on thesis.pdf (23 pages, 190365 bytes).
 PDF statistics:
- 302 PDF objects out of 1000 (max. 8388607)
- 254 compressed objects within 3 object streams
+ 306 PDF objects out of 1000 (max. 8388607)
+ 257 compressed objects within 3 object streams
  77 named destinations out of 1000 (max. 500000)
  134 words of extra memory for PDF output out of 10000 (max. 10000000)
 
