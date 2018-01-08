@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  31 DEC 2017 14:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  8 JAN 2018 13:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1820,15 +1820,15 @@ File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1a (rcs-revision 1.7)
 \glo@acronym@file=\write6
 \openout6 = `thesis.acn'.
 
-Package glossaries Info: Writing glossary file thesis.acn on input line 35.
+Package glossaries Info: Writing glossary file thesis.acn on input line 44.
 \glo@operator@file=\write7
 \openout7 = `thesis.opo'.
 
-Package glossaries Info: Writing glossary file thesis.opo on input line 35.
+Package glossaries Info: Writing glossary file thesis.opo on input line 44.
 \glo@symbol@file=\write8
 \openout8 = `thesis.syo'.
 
-Package glossaries Info: Writing glossary file thesis.syo on input line 35.
+Package glossaries Info: Writing glossary file thesis.syo on input line 44.
 )
 (./preamble/tikzGraphs.tex)
 
@@ -2066,7 +2066,7 @@ LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 (Font)              scaled to size 5.546pt on input line 87.
 \@TUD@titlelines=\count197
 
-<tud_logo.pdf, id=51, 157.58875pt x 63.23625pt>
+<tud_logo.pdf, id=59, 157.58875pt x 63.23625pt>
 File: tud_logo.pdf Graphic file (type pdf)
  <use tud_logo.pdf>
 Package pdftex.def Info: tud_logo.pdf used on input line 87.
@@ -2076,7 +2076,7 @@ File: tud_logo.pdf Graphic file (type pdf)
 <use tud_logo.pdf>
 Package pdftex.def Info: tud_logo.pdf used on input line 87.
 (pdftex.def)             Requested size: 134.92238pt x 62.59605pt.
- <img/iasLogo.jpeg, id=54, 642.4pt x 368.37625pt>
+ <img/iasLogo.jpeg, id=62, 642.4pt x 368.37625pt>
 File: img/iasLogo.jpeg Graphic file (type jpg)
 
 <use img/iasLogo.jpeg>
@@ -2107,7 +2107,7 @@ LaTeX Font Info:    Try loading font information for T1+5sf on input line 87.
 (/home/sebastian/.texmf-var/tex/latex/tex-tudfonts/softmake/stafford/t15sf.fd
 File: t15sf.fd 2008/06/23 Fontinst v1.927 font definitions for T1/5sf.
 )
-<by-nc-nd.pdf, id=68, 121.45375pt x 43.16125pt>
+<by-nc-nd.pdf, id=76, 121.45375pt x 43.16125pt>
 File: by-nc-nd.pdf Graphic file (type pdf)
  <use by-nc-nd.pdf>
 Package pdftex.def Info: by-nc-nd.pdf used on input line 87.
@@ -2329,28 +2329,27 @@ chapter 2.
 
 ]
 chapter 3.
-) (./content/3-experiments.tex [7
+[7
 
-]
+]) (./content/3-experiments.tex [8]
 chapter 4.
-) (./content/4-results.tex [8
+) (./content/4-results.tex [9
 
 ]
 chapter 5.
-) (./content/5-discussion.tex [9
+) (./content/5-discussion.tex [10
 
 ]
 chapter 6.
-) (./content/6-outlook.tex [10
+) (./content/6-outlook.tex [11
 
 ]
 chapter 7.
-) [11
-
-] [12
-
+) [12
 
 ] (./thesis.bbl) [13
+
+
 
 ] [14
 
@@ -2366,7 +2365,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 122.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 122.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 122.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: E6260894A0DCA2BD1BCFB94A2C7ACE90;533.
+(rerunfilecheck)             Checksum: 088140B3DC6118CDDE2AA4A05962C4E0;667.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -2374,11 +2373,11 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 122.
  ) 
 Here is how much of TeX's memory you used:
- 31254 strings out of 494901
- 549660 string characters out of 6178616
- 766997 words of memory out of 5000000
- 33700 multiletter control sequences out of 15000+600000
- 187243 words of font info for 136 fonts, out of 8000000 for 9000
+ 31296 strings out of 494901
+ 550142 string characters out of 6178616
+ 767230 words of memory out of 5000000
+ 33732 multiletter control sequences out of 15000+600000
+ 189832 words of font info for 144 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  67i,13n,102p,2030b,715s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}{/usr/share/t
@@ -2394,13 +2393,15 @@ xmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></usr/share/texlive/texmf-dist
 type1/public/mathdesign/mdbch/md-chbi7m.pfb></usr/share/texlive/texmf-dist/font
 s/type1/public/mathdesign/mdbch/md-chr7m.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/public/mathdesign/mdbch/md-chr7t.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on thesis.pdf (23 pages, 190365 bytes).
+nts/type1/public/mathdesign/mdbch/md-chr7v.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/mathdesign/mdbch/md-chrma.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/txfonts/t1xtt.pfb>
+Output written on thesis.pdf (23 pages, 207967 bytes).
 PDF statistics:
- 306 PDF objects out of 1000 (max. 8388607)
- 257 compressed objects within 3 object streams
- 77 named destinations out of 1000 (max. 500000)
- 134 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 325 PDF objects out of 1000 (max. 8388607)
+ 274 compressed objects within 3 object streams
+ 79 named destinations out of 1000 (max. 500000)
+ 150 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -14,9 +14,11 @@
 \contentsline {subsection}{\numberline {1.2.3}Getting~started~with~Glossaries}{5}{subsection.1.2.3}
 \contentsline {chapter}{\numberline {2}Motivation}{6}{chapter.2}
 \contentsline {chapter}{\numberline {3}Foundations}{7}{chapter.3}
-\contentsline {chapter}{\numberline {4}Experiments}{8}{chapter.4}
-\contentsline {chapter}{\numberline {5}Results}{9}{chapter.5}
-\contentsline {chapter}{\numberline {6}Discussion}{10}{chapter.6}
-\contentsline {chapter}{\numberline {7}Outlook}{11}{chapter.7}
+\contentsline {section}{\numberline {3.1}Markov decision process}{7}{section.3.1}
+\contentsline {section}{\numberline {3.2}Trajectory Kernel}{8}{section.3.2}
+\contentsline {chapter}{\numberline {4}Experiments}{9}{chapter.4}
+\contentsline {chapter}{\numberline {5}Results}{10}{chapter.5}
+\contentsline {chapter}{\numberline {6}Discussion}{11}{chapter.6}
+\contentsline {chapter}{\numberline {7}Outlook}{12}{chapter.7}
 \contentsline {chapter}{Bibliography}{13}{section*.28}
 \contentsline {chapter}{\numberline {A}Some Appendix}{15}{appendix.A}
