@@ -1,5 +1,21 @@
 \begin{thebibliography}{1}
 
+\bibitem{wilson2014using}
+A.~Wilson, A.~Fern, and P.~Tadepalli, ``Using trajectory data to improve
+  bayesian optimization for reinforcement learning,'' {\em The Journal of
+  Machine Learning Research}, vol.~15, no.~1, pp.~253--282, 2014.
+
+\bibitem{rasmussen2006gaussian}
+C.~E. Rasmussen and C.~K. Williams, {\em Gaussian processes for machine
+  learning}, vol.~1.
+\newblock MIT press Cambridge, 2006.
+
+\bibitem{brochu2010tutorial}
+E.~Brochu, V.~M. Cora, and N.~De~Freitas, ``A tutorial on bayesian optimization
+  of expensive cost functions, with application to active user modeling and
+  hierarchical reinforcement learning,'' {\em arXiv preprint arXiv:1012.2599},
+  2010.
+
 \bibitem{Kupcsik_AI_conditionallyaccepted}
 A.~Kupcsik, M.~Deisenroth, J.~Peters, L.~Ai~Poh, V.~Vadakkepat, and G.~Neumann,
   ``Model-based contextual policy search for data-efficient generalization of

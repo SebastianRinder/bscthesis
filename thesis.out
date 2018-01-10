@@ -3,11 +3,12 @@
 \BOOKMARK [1][-]{section.1.2}{Documentation}{chapter.1}% 3
 \BOOKMARK [0][-]{chapter.2}{Motivation}{}% 4
 \BOOKMARK [0][-]{chapter.3}{Foundations}{}% 5
-\BOOKMARK [1][-]{section.3.1}{Markov decision process}{chapter.3}% 6
-\BOOKMARK [1][-]{section.3.2}{Trajectory Kernel}{chapter.3}% 7
-\BOOKMARK [0][-]{chapter.4}{Experiments}{}% 8
-\BOOKMARK [0][-]{chapter.5}{Results}{}% 9
-\BOOKMARK [0][-]{chapter.6}{Discussion}{}% 10
-\BOOKMARK [0][-]{chapter.7}{Outlook}{}% 11
-\BOOKMARK [0][-]{section*.28}{Bibliography}{}% 12
-\BOOKMARK [0][-]{appendix.A}{Some Appendix}{}% 13
+\BOOKMARK [1][-]{section.3.1}{Hyper Parameter optimization}{chapter.3}% 6
+\BOOKMARK [1][-]{section.3.2}{Markov decision process}{chapter.3}% 7
+\BOOKMARK [1][-]{section.3.3}{Trajectory Kernel}{chapter.3}% 8
+\BOOKMARK [0][-]{chapter.4}{Experiments}{}% 9
+\BOOKMARK [0][-]{chapter.5}{Results}{}% 10
+\BOOKMARK [0][-]{chapter.6}{Discussion}{}% 11
+\BOOKMARK [0][-]{chapter.7}{Outlook}{}% 12
+\BOOKMARK [0][-]{section*.28}{Bibliography}{}% 13
+\BOOKMARK [0][-]{appendix.A}{Some Appendix}{}% 14

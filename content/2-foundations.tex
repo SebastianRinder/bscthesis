@@ -11,7 +11,6 @@
 - Gaussian Process Regression
 
 - Hyper Parameter optimization
-Selecting good hyper parameters avoids numerical problems and enhances the efficiency ot our learning algorithm.
 
 - Expected Improvement
 
@@ -21,33 +20,25 @@ Selecting good hyper parameters avoids numerical problems and enhances the effic
 
 - Trajectory kernel
 
-Bayesian optimization
 
+\section{Hyper Parameter optimization}
+Selecting proper hyper parameters for the Gaussian process regression enhances the efficiency of our learning algorithm. Also it helps avoiding numerical problems. To find an optimum for the signal variance hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log marginal likelihood function
 
+$$\log p(y|X,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_y^{-1} -\frac{1}{2} \log |K_y| -\frac{n}{2}\log 2\pi ,$$
 
-Figure 1D BO
+from our Gaussian process. Where $n$ is the number of observations, $X$ is the $D \times n$ dataset of inputs and $K_y = K_f + \sigma_n^2 I$ is the covariance matrix for the noisy target $y$. $K_f$ is the noise free covariance matrix from the Gaussian process.
 
-
-Gaussian process
-
-In this book we will be concerned with supervised learning, which is the problem of learning input-output mappings from empirical data (the training dataset). Depending on the characteristics of the output, this problem is known as either regression, for continuous outputs, or classification, when outputs are discrete. An example of a regression problem can be found in robotics, where we wish to learn the inverse dynamics of a robot arm. Here the task is to map from the state of the arm (given by the positions, velocities and accelerations of the joints) to the corresponding torques on the joints. Such a model can then be used to compute the torques needed to move the arm along a given trajectory.
-
-In general we denote the input as x, and the output (or target) as y. The input is usually represented as a vector x as there are in general many input variables—in the handwritten digit recognition example one may have a 256-dimensional input obtained from a raster scan of a 16 × 16 image, and in the robot arm example there are three input measurements for each joint in the arm. The target y may either be continuous (as in the regression case) or discrete (as in the classification case). We have a dataset D of n observations, D = {(x i , y i )|i = 1, . . . , n}. Given this training data we wish to make predictions for new inputs x* that we have not seen in the training set. Thus it is clear that the problem at hand is inductive; we need to move from the finite training data D to a function f that makes predictions for all possible input values.
-
-
-
-Trajectory kernel
 
 \section{Markov decision process}
 In our reinforcement learning problem we model the decision making as a Markov decision process. It consists of a tuple $(S,A,P,P_{0},R)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities, and all corresponding rewards. Assume an agent which executes a policy $\theta$ for $T$ time steps receiving a final reward $\bar{R}(\xi)$. We formulate the conditional probability of observing trajectory $\xi$ given policy $\theta$ by
 
 $$P(\xi|\theta) = P_{0}(s_{0}) \prod_{t=1}^{T} P(s_{t}|s_{t-1}, a_{t-1}) P_{\pi}(a_{t-1}|s_{t-1}, \theta)$$
 
-in which trajectory $\xi=(s_{0},a_{0}, ..., s_{T-1}, a_{T-1}, s_{T})$ contains the sequence of state, action tuples and $\theta \in \mathbb{R}^{k}$ a set of $k$ policy parameters. $P_{0}(s_{0})$ is the probability of starting in the initial state $s_{0}$. $P(s_{t}|s_{t-1}, a_{t-1})$ is the probability of transitioning from state $s_{t-1}$ to $s_{t}$ when action $a_{t-1}$ is selected. And the stochastic mapping $P_{\pi}(a_{t-1}|s_{t-1},\theta)$ is the probability for selecting the action $a_{t-1}$ when in state $s_{t-1}$ and executing the parametric policy $\theta$. The final reward for a sampled trajectory
+in which trajectory $\xi=(s_{0},a_{0}, ..., s_{T-1}, a_{T-1}, s_{T})$ contains the sequence of state, action tuples and $\theta \in \mathbb{R}^{D}$ a set of $D$ policy parameters. $P_{0}(s_{0})$ is the probability of starting in the initial state $s_{0}$. $P(s_{t}|s_{t-1}, a_{t-1})$ is the probability of transitioning from state $s_{t-1}$ to $s_{t}$ when action $a_{t-1}$ is selected. And the stochastic mapping $P_{\pi}(a_{t-1}|s_{t-1},\theta)$ is the probability for selecting the action $a_{t-1}$ when in state $s_{t-1}$ and executing the parametric policy $\theta$. The final reward for a sampled trajectory
 
 $$\bar{R}(\xi)=\sum_{t=1}^T R(s_{t-1}, a_{t-1}, s_{t})$$
 
-is the sum of all immediate rewards, given by an rewarding function $R(s_{t-1}, a_{t-1}, s_{t})$. This rewarding function depends on the given environment. In general it rewards states we want to achieve and may penalize states we do not want our agent to be in.
+is the sum of all immediate rewards, given by an rewarding function $R(s_{t-1}, a_{t-1}, s_{t})$. This rewarding function depends on the given environment. For example it rewards a state we want to achieve by returning a value greater than zero and can penalize states we do not want our agent to be in with negative values.
 
 \section{Trajectory Kernel}
 Standard kernels like the squared exponential kernel, relate policies by measuring the difference between policy parameter values. Therefore policies with similar behavior but different parameters are not compared adequately. The behavior based Trajectory kernel fixes this, by relating policies to their resulting behavior. Hence our policy search gets more efficient by avoiding redundant search. To examine the difference between two policies $\theta_{ i }$ and $\theta_{ j }$ the Kullback Leibler divergence
@@ -62,6 +53,6 @@ In general $D_{\mathrm {KL} }(P(\xi|\theta_{ i })||P(\xi|\theta_{ j }))$ is not 
 
 $$D(\theta_{ i }, \theta_{ j }) = D_{\mathrm {KL} }(P(\xi|\theta_{ i })||P(\xi|\theta_{ j })) + D_{\mathrm {KL} }(P(\xi|\theta_{ j })||P(\xi|\theta_{ i })).$$
 
-To fulfill the requirements for a kernel the resulting matrix must be positive semi-definite and scalable. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f$ and $\sigma_l$ to make it scalable.
+To fulfill the requirements for a kernel the resulting matrix must be positive semi-definite and scalable. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f$ and $\sigma_l$ to make it scalable\cite{wilson2014using}. (adding $\sigma_f$ was found useful during xps, $\sigma_l$  see paper)
 
 $$K(\theta_{ i },\theta_{ j }) = \sigma_f exp(-\sigma_l D(\theta_{ i }, \theta_{ j })).$$
