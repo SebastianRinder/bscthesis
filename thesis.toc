@@ -14,12 +14,31 @@
 \contentsline {subsection}{\numberline {1.2.3}Getting~started~with~Glossaries}{5}{subsection.1.2.3}
 \contentsline {chapter}{\numberline {2}Motivation}{6}{chapter.2}
 \contentsline {chapter}{\numberline {3}Foundations}{7}{chapter.3}
-\contentsline {section}{\numberline {3.1}Hyper Parameter optimization}{7}{section.3.1}
-\contentsline {section}{\numberline {3.2}Markov decision process}{7}{section.3.2}
-\contentsline {section}{\numberline {3.3}Trajectory Kernel}{8}{section.3.3}
-\contentsline {chapter}{\numberline {4}Experiments}{9}{chapter.4}
-\contentsline {chapter}{\numberline {5}Results}{10}{chapter.5}
-\contentsline {chapter}{\numberline {6}Discussion}{11}{chapter.6}
-\contentsline {chapter}{\numberline {7}Outlook}{12}{chapter.7}
-\contentsline {chapter}{Bibliography}{13}{section*.28}
-\contentsline {chapter}{\numberline {A}Some Appendix}{15}{appendix.A}
+\contentsline {section}{\numberline {3.1}Global Bayesian optimization}{7}{section.3.1}
+\contentsline {section}{\numberline {3.2}Hyper parameter optimization}{7}{section.3.2}
+\contentsline {section}{\numberline {3.3}Markov decision process}{7}{section.3.3}
+\contentsline {section}{\numberline {3.4}Kernel for Gaussian process}{8}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Squared exponential kernel}{8}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Matern 5/2 kernel}{8}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Trajectory kernel}{8}{subsection.3.4.3}
+\contentsline {section}{\numberline {3.5}Acquisition function}{9}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}Thompson sampling}{9}{subsection.3.5.1}
+\contentsline {subsection}{\numberline {3.5.2}Expected improvement}{9}{subsection.3.5.2}
+\contentsline {section}{\numberline {3.6}Gaussian Process Regression}{10}{section.3.6}
+\contentsline {chapter}{\numberline {4}Experiments}{11}{chapter.4}
+\contentsline {section}{\numberline {4.1}Implementation}{11}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Normalization constant}{11}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Numerical stability}{11}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Bayesian Optimizaion algorithm}{11}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Cholesky decomposition}{11}{subsection.4.1.4}
+\contentsline {subsection}{\numberline {4.1.5}OpenAI Gym in Python}{11}{subsection.4.1.5}
+\contentsline {subsection}{\numberline {4.1.6}Gaussian Process Regression}{11}{subsection.4.1.6}
+\contentsline {subsection}{\numberline {4.1.7}Hyper Parameter Optimization}{11}{subsection.4.1.7}
+\contentsline {subsection}{\numberline {4.1.8}Estimation of Trajectory Kernel Function Values}{12}{subsection.4.1.8}
+\contentsline {subsection}{\numberline {4.1.9}Action selection}{12}{subsection.4.1.9}
+\contentsline {section}{\numberline {4.2}Cart pole}{13}{section.4.2}
+\contentsline {chapter}{\numberline {5}Results}{14}{chapter.5}
+\contentsline {chapter}{\numberline {6}Discussion}{15}{chapter.6}
+\contentsline {chapter}{\numberline {7}Outlook}{16}{chapter.7}
+\contentsline {chapter}{Bibliography}{17}{section*.26}
+\contentsline {chapter}{\numberline {A}Some Appendix}{19}{appendix.A}

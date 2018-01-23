@@ -20,39 +20,142 @@
 
 - Trajectory kernel
 
+\section{Global Bayesian optimization}
 
-\section{Hyper Parameter optimization}
+\begin{algorithm}
+    $init$ = 10\\
+    $X$ = $init$ uniformly random samples from the search space\\
+    $Y$ = evaluations of the objective at the points $X$\\
+    \For{n = $init$ \KwTo 200 + $init$}{
+        compute $K(X,X)$\\
+        Optimize hyper parameters (optional)\\
+        $x_{n+1}$ = point at the optimum of the acquisition function over the Gaussian Process\\
+        $y_{n+1}$ = evaluation of the objective at the point $x_{n+1}$\\
+        $X = \{X, x_{n+1}\}$\\
+        $Y = \{Y, y_{n+1}\}$\\
+        $n = n + 1$\\
+    }
+\end{algorithm}
+
+During acquisition function optimization $K(X,X)$ from the Gaussian process does not change, so it is precomputed. The values for the initial sample count and the iteration count are not fixed, but for simplification set here.
+
+
+
+\section{Hyper parameter optimization}
 Selecting proper hyper parameters for the Gaussian process regression enhances the efficiency of our learning algorithm. Also it helps avoiding numerical problems. To find an optimum for the signal variance hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log marginal likelihood function
+\begin{equation} \label{eq:hypOpt}
+    \log p(y|x,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_n^{-1} y -\frac{1}{2} \log |K_n| -\frac{n}{2}\log 2\pi ,
+\end{equation}
 
-$$\log p(y|X,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_y^{-1} -\frac{1}{2} \log |K_y| -\frac{n}{2}\log 2\pi ,$$
-
-from our Gaussian process. Where $n$ is the number of observations, $X$ is the $D \times n$ dataset of inputs and $K_y = K_f + \sigma_n^2 I$ is the covariance matrix for the noisy target $y$. $K_f$ is the noise free covariance matrix from the Gaussian process.
+from our Gaussian process. Where $n$ is the number of observations, $x$ is the $d \times n$ dataset of inputs and $K_n$ is the covariance matrix for the noisy target $y$.
 
 
 \section{Markov decision process}
-In our reinforcement learning problem we model the decision making as a Markov decision process. It consists of a tuple $(S,A,P,P_{0},R)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities, and all corresponding rewards. Assume an agent which executes a policy $\theta$ for $T$ time steps receiving a final reward $\bar{R}(\xi)$. We formulate the conditional probability of observing trajectory $\xi$ given policy $\theta$ by
+In our reinforcement learning problem we use a Markov decision process model to describe possible decisions as probabilites. Our model consists of a tuple $(S,A,P,P_{0},R)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities, and all corresponding rewards. Assume an agent which executes a policy $x$ for $T$ time steps receiving a final reward $\bar{R}(\xi)$. This reward depending on a policy is what we want to maximize.\\
+We formulate the conditional probability of observing trajectory $\xi$ given policy $x$ by
 
-$$P(\xi|\theta) = P_{0}(s_{0}) \prod_{t=1}^{T} P(s_{t}|s_{t-1}, a_{t-1}) P_{\pi}(a_{t-1}|s_{t-1}, \theta)$$
+$$P(\xi|x) = P_{0}(s_{0}) \prod_{t=1}^{T} P(s_{t}|s_{t-1}, a_{t-1}) P_{\pi}(a_{t-1}|s_{t-1}, x)$$
 
-in which trajectory $\xi=(s_{0},a_{0}, ..., s_{T-1}, a_{T-1}, s_{T})$ contains the sequence of state, action tuples and $\theta \in \mathbb{R}^{D}$ a set of $D$ policy parameters. $P_{0}(s_{0})$ is the probability of starting in the initial state $s_{0}$. $P(s_{t}|s_{t-1}, a_{t-1})$ is the probability of transitioning from state $s_{t-1}$ to $s_{t}$ when action $a_{t-1}$ is selected. And the stochastic mapping $P_{\pi}(a_{t-1}|s_{t-1},\theta)$ is the probability for selecting the action $a_{t-1}$ when in state $s_{t-1}$ and executing the parametric policy $\theta$. The final reward for a sampled trajectory
+in which trajectory $\xi=(s_{0},a_{0}, ..., s_{T-1}, a_{T-1}, s_{T})$ contains the sequence of state, action tuples and $x \in \mathbb{R}^{D}$ a set of $d$ policy parameters. $P_{0}(s_{0})$ is the probability of starting in the initial state $s_{0}$. $P(s_{t}|s_{t-1}, a_{t-1})$ is the probability of transitioning from state $s_{t-1}$ to $s_{t}$ when action $a_{t-1}$ is executed. The stochastic mapping $P_{\pi}(a_{t-1}|s_{t-1},x)$ is the probability for selecting the action $a_{t-1}$ when in state $s_{t-1}$ and executing the parametric policy $x$. So we receive a final reward for a sampled trajectory,
 
-$$\bar{R}(\xi)=\sum_{t=1}^T R(s_{t-1}, a_{t-1}, s_{t})$$
+$$\bar{R}(\xi)=\sum_{t=1}^T R(s_{t-1}, a_{t-1}, s_{t}),$$
 
-is the sum of all immediate rewards, given by an rewarding function $R(s_{t-1}, a_{t-1}, s_{t})$. This rewarding function depends on the given environment. For example it rewards a state we want to achieve by returning a value greater than zero and can penalize states we do not want our agent to be in with negative values.
+which is the sum of all immediate rewards, given by an rewarding function $R(s_{t-1}, a_{t-1}, s_{t})$. This rewarding function depends on the given environment. For example it rewards a state we want to achieve by returning a value greater than zero and can penalize states we do not want our agent to be in by returning negative values.
 
-\section{Trajectory Kernel}
-Standard kernels like the squared exponential kernel, relate policies by measuring the difference between policy parameter values. Therefore policies with similar behavior but different parameters are not compared adequately. The behavior based Trajectory kernel fixes this, by relating policies to their resulting behavior. Hence our policy search gets more efficient by avoiding redundant search. To examine the difference between two policies $\theta_{ i }$ and $\theta_{ j }$ the Kullback Leibler divergence
+\section{Kernel for Gaussian process}
+\subsection{Squared exponential kernel}
+$$D(x_i,x_j) = x_i-x_j$$
+$$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\exp\left(-\frac{D^2(x_i,x_j)}{2\sigma_l^2} \right) $$
+\subsection{Matern 5/2 kernel}
+$$D(x_i,x_j) = x_i-x_j$$
+$$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\exp\left(-\frac{D^2(x_i,x_j)}{2\sigma_l^2} \right) $$
+\subsection{Trajectory kernel}
+Standard kernels like the squared exponential kernel, relate policies by measuring the difference between policy parameter values. Therefore policies with similar behavior but different parameters are not compared adequately. The behavior based Trajectory kernel fixes this, by relating policies to their resulting behavior. This makes our policy search more efficient, since we avoid redundant search of different policies with similar behaviour. To examine the difference between two policies $x_{ i }$ and $x_{ j }$ the discrete Kullback Leibler divergence
 
-$$D_{\mathrm {KL} }(P(\xi|\theta_{ i })||P(\xi|\theta_{ j })) = \int{ P(\xi|\theta_{ i })\,\log\left(\frac{ P(\xi|\theta_{ i }) }{ P(\xi|\theta_{ j }) }\right)d\xi }$$
+$$D_{\mathrm {KL} }(P(\xi|x_{ i })||P(\xi|x_{ j })) = \sum _{i}P(\xi|x_{ i })\,\log {\frac {P(\xi|x_{ i })}{P(\xi|x_{ j })}}.$$
 
-is applied to the respective policy-trajectory mappings $P(\xi|\theta_{ i })$ and $P(\xi|\theta_{ j })$. It measures how the two probability distributions diverge from another. When implementing the Kullback Leibler divergence we have discrete probability distributions. So the formula transforms to
+is applied to the respective policy-trajectory mappings $P(\xi|x_{ i })$ and $P(\xi|x_{ j })$. It measures how the two probability distributions diverge from another.\\
 
-$$D_{\mathrm {KL} }(P(\xi|\theta_{ i })||P(\xi|\theta_{ j })) = \sum _{i}P(\xi|\theta_{ i })\,\log {\frac {P(\xi|\theta_{ i })}{P(\xi|\theta_{ j })}}.$$
+In general $D_{\mathrm {KL} }(P(\xi|x_{ i })||P(\xi|x_{ j }))$ is not equal to $D_{\mathrm {KL} }(P(\xi|x_{ j })||P(\xi|x_{ i }))$. But we need a symmetric distance measure. So we sum up the two divergences
 
-In general $D_{\mathrm {KL} }(P(\xi|\theta_{ i })||P(\xi|\theta_{ j }))$ is not equal to $D_{\mathrm {KL} }(P(\xi|\theta_{ j })||P(\xi|\theta_{ i }))$. So to achieve a symmetric distance measure we sum up the two divergences to
+$$D(x_{ i }, x_{ j }) = D_{\mathrm {KL} }(P(\xi|x_{ i })||P(\xi|x_{ j })) + D_{\mathrm {KL} }(P(\xi|x_{ j })||P(\xi|x_{ i })),$$
 
-$$D(\theta_{ i }, \theta_{ j }) = D_{\mathrm {KL} }(P(\xi|\theta_{ i })||P(\xi|\theta_{ j })) + D_{\mathrm {KL} }(P(\xi|\theta_{ j })||P(\xi|\theta_{ i })).$$
+to achieve that $D(x_{ i }, x_{ j }) = D(x_{ j }, x_{ i })$. An additional requirement for the kernel is the resulting matrix to be positive semi-definite and scalable\cite{wilson2014using}. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f$ to compensate for the signal variance and $\sigma_l$ to adjust for signal scale. This gives us the covariance matrix
 
-To fulfill the requirements for a kernel the resulting matrix must be positive semi-definite and scalable. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f$ and $\sigma_l$ to make it scalable\cite{wilson2014using}. (adding $\sigma_f$ was found useful during xps, $\sigma_l$  see paper)
+\begin{equation} \label{eq:trajKernel}
+K(x_{ i },x_{ j },\sigma) = \sigma_f \exp(-\sigma_l D(x_{ i }, x_{ j })),
+\end{equation}
+for the gaussian process.
 
-$$K(\theta_{ i },\theta_{ j }) = \sigma_f exp(-\sigma_l D(\theta_{ i }, \theta_{ j })).$$
+\section{Acquisition function}
+The core of the Bayesian optimization consists of selecting the next point, in our search space, to evaluate. We get that point by executing a so called acquisition function. It depends on the incumbent model of the true objective and returns that next point. In our case a point means a set of policy parameters.
+We choose expected improvement during the global bayesian optimization and in the local optimization we use Thompson sampling. Both acquisition functions take the mean und the variance from the gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration looks for points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all. (To not be confused, bla, local optimum != optimum in local optimization)
+
+\subsection{Thompson sampling}
+(refactor full covariance matrix $\Sigma$, since $\sigma$ represents deviation and $\sigma^2$ variance)
+For the Thompson sampling we sample one function from the Gaussian process posterior,
+
+$$f\sim \mathrm{GP}(0,K(X,X_*)),$$
+
+where $X$ is the $n\times d$ dataset of already evaluated points, and $X_*$ is a randomly Gaussian distributed set of points with mean and variance given by the local optimzer.
+To draw values from the distribution we need the mean vector $\mu$ and the full covariance matrix $V$ from the gaussian process model. First we take the lower Cholesky decomposite of $V$ such that $A A^\top = V$. Then we compute a vector $z$, which consists of independent Gaussian distributed valus with zero mean and unit variance. Finally we get a vector $f$ of sampled values:
+
+$$f(x_*) = \mu + A z.$$
+
+We take the one with the highest value such that,
+
+$$x_{n+1} = \arg \max_{x_*} f(x_*),$$
+
+to return the next evaluation point.
+
+\subsection{Expected improvement}
+To calculate an expected improvement function value we need the mean value $\mu(x_*)$, and the standard deviation value $\sigma(x_*)$ at the test point $x_*$ from the gaussian process. Also we need the maximum of all observations $y_{max}$ and a trade-off parameter $\tau$. For the cumulative distribution function and the probability density function from the Gaussian distribution we write $\Phi(.)$ and $\phi(.)$ respectively. They both have zero mean and unit variance.
+We adopt the expected improvement function
+\[
+    \mathrm{EI}(x_*)=
+\begin{cases}
+    (\mu(x_*) - y_{max} - \tau)\Phi(\mathrm{Z}(x_*))+\sigma(x_*)\phi(\mathrm{Z}(x_*))& \text{if } \sigma(x_*)> 0\\
+    0 & \text{if } \sigma(x_*)= 0
+\end{cases}
+\]
+where
+\[
+    \mathrm{Z}(x_*)=
+\begin{cases}
+    \frac{(\mu(x_*) -y_{max} - \tau)}{\sigma(x_*)} & \text{if } \sigma(x_*)> 0\\
+    0 & \text{if } \sigma(x)= 0
+\end{cases}
+\]
+as suggested in \cite{brochu2010tutorial}. The trade-off parameter $\tau$ is set to 0.01 accordingly. The expected improvement function is then optimized over the whole search space to give us the next evaluation point
+
+$$x_{n+1} = \arg \max_{x_*} EI(x_*).$$
+
+\section{Gaussian Process Regression}
+Since we want to estimate an objective function in a machine learning environment we elect to use Gaussian process regression. It fits a multivariate gaussian distribution over our prior data. From the regression we get a posterior mean and variance which describe our model of the objective function. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more points our model incorporates the smaller the variance, and the preciser the predictions, in the vicinity around prior points.\\
+In real world applications we always have some noise in our objective observations. Therefore a Gaussian distributed error term,
+
+$$\epsilon \sim \mathcal{N}(0,\sigma_n^2),$$
+
+with zero mean and $\sigma_n^2$ variance is added to the function value. The observed target
+
+$$y_{n} = f(x) + \epsilon$$
+
+regards this noise. Before doing regression we transform our observations to zero mean and uniform variance:
+
+$$y = \frac{y_{n}-\mu_{y_{n}}}{\sigma_{y_{n}}}.$$
+
+The knowledge our training data provides is represented by the kernel matrix $K(x,x)$. With a vector of test points $x_*$ we get the joint distribution of the normalized target values and the function values at the test locations:
+
+$$\left[ \begin{array}{c} y \\ f_* \end{array} \right] \sim \mathcal{N} \left(0, \begin{bmatrix} K(x,x)+\sigma_n^2 I & K(x,x_*) \\ K(x_*,x) & K(x_*,x_*) \end{bmatrix} \right)$$
+
+Now we can calculate the posterior mean and variance at given test points.
+
+\begin{equation} \label{eq:kNoise}
+    K_n(x,x) = K(x,x)+\sigma_n^2 I
+\end{equation}
+
+\begin{equation} \label{eq:meanGauss}
+    \mu(x_*)= K(x_*,x)K_n(x,x)^{-1}y
+\end{equation}
+
+$$\sigma^2(x_*)= K(x_*,x_*)-K(x_*,x)K_n(x,x)^{-1}K(x,x_*)$$

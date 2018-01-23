@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  11 JAN 2018 00:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  23 JAN 2018 14:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1463,8 +1463,8 @@ Package: amsthm 2015/03/04 v2.20.2
 \thm@headsep=\skip107
 \dth@everypar=\toks45
 )
-(/usr/share/texlive/texmf-dist/tex/latex/glossaries/base/glossaries.sty
-Package: glossaries 2016/01/24 v4.21 (NLCT)
+(/home/sebastian/.texmf-var/tex/latex/glossaries/base/glossaries.sty
+Package: glossaries 2017/11/14 v4.35 (NLCT)
 
 (/usr/share/texlive/texmf-dist/tex/latex/mfirstuc/mfirstuc.sty
 Package: mfirstuc 2015/12/17 v2.02 (NLCT)
@@ -1552,12 +1552,12 @@ Package: fp-eval 1995/04/03
 )
 
 Package glossaries Warning: sanitize={symbol} package option deprecated on inpu
-t line 739.
+t line 865.
 
 
-(/usr/share/texlive/texmf-dist/tex/latex/glossaries/base/glossaries-compatible-
-307.sty
-Package: glossaries-compatible-307 2016/01/24 v4.21 (NLCT)
+(/home/sebastian/.texmf-var/tex/latex/glossaries/base/glossaries-compatible-307
+.sty
+Package: glossaries-compatible-307 2017/11/14 v4.35 (NLCT)
 ) (/usr/share/texlive/texmf-dist/tex/latex/tracklang/tracklang.sty
 Package: tracklang 2015/03/23 v1.2 (NLCT) Track Languages
 
@@ -1583,14 +1583,15 @@ File: glossaries-english.ldf 2014/11/23 v1.0
 \glsshorttok=\toks52
 \glslongtok=\toks53
 
-(/usr/share/texlive/texmf-dist/tex/latex/glossaries/styles/glossary-hypernav.st
-y
-Package: glossary-hypernav 2016/01/24 v4.21 (NLCT)
-) (/usr/share/texlive/texmf-dist/tex/latex/glossaries/styles/glossary-list.sty
-Package: glossary-list 2016/01/24 v4.21 (NLCT)
+(/home/sebastian/.texmf-var/tex/latex/glossaries/styles/glossary-hypernav.sty
+Package: glossary-hypernav 2017/11/14 v4.35 (NLCT)
+)
+(/home/sebastian/.texmf-var/tex/latex/glossaries/styles/glossary-list.sty
+Package: glossary-list 2017/11/14 v4.35 (NLCT)
 \glslistdottedwidth=\skip110
-) (/usr/share/texlive/texmf-dist/tex/latex/glossaries/styles/glossary-long.sty
-Package: glossary-long 2016/01/24 v4.21 (NLCT)
+)
+(/home/sebastian/.texmf-var/tex/latex/glossaries/styles/glossary-long.sty
+Package: glossary-long 2017/11/14 v4.35 (NLCT)
 
 (/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
@@ -1614,8 +1615,8 @@ Class scrreprt Info: longtable captions redefined on input line 43.
 \glsdescwidth=\skip115
 \glspagelistwidth=\skip116
 )
-(/usr/share/texlive/texmf-dist/tex/latex/glossaries/styles/glossary-super.sty
-Package: glossary-super 2016/01/24 v4.21 (NLCT)
+(/home/sebastian/.texmf-var/tex/latex/glossaries/styles/glossary-super.sty
+Package: glossary-super 2017/11/14 v4.35 (NLCT)
 
 (/usr/share/texlive/texmf-dist/tex/latex/supertabular/supertabular.sty
 Package: supertabular 2004/02/20 v4.1e the supertabular environment
@@ -1636,8 +1637,8 @@ Package: supertabular 2004/02/20 v4.1e the supertabular environment
 \ST@dimen=\dimen191
 \ST@pbox=\box50
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/glossaries/styles/glossary-tree.sty
-Package: glossary-tree 2016/01/24 v4.21 (NLCT)
+(/home/sebastian/.texmf-var/tex/latex/glossaries/styles/glossary-tree.sty
+Package: glossary-tree 2017/11/14 v4.35 (NLCT)
 \glstreeindent=\skip120
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
@@ -2066,7 +2067,7 @@ LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 (Font)              scaled to size 5.546pt on input line 87.
 \@TUD@titlelines=\count197
 
-<tud_logo.pdf, id=63, 157.58875pt x 63.23625pt>
+<tud_logo.pdf, id=83, 157.58875pt x 63.23625pt>
 File: tud_logo.pdf Graphic file (type pdf)
  <use tud_logo.pdf>
 Package pdftex.def Info: tud_logo.pdf used on input line 87.
@@ -2076,7 +2077,7 @@ File: tud_logo.pdf Graphic file (type pdf)
 <use tud_logo.pdf>
 Package pdftex.def Info: tud_logo.pdf used on input line 87.
 (pdftex.def)             Requested size: 134.92238pt x 62.59605pt.
- <img/iasLogo.jpeg, id=66, 642.4pt x 368.37625pt>
+ <img/iasLogo.jpeg, id=86, 642.4pt x 368.37625pt>
 File: img/iasLogo.jpeg Graphic file (type jpg)
 
 <use img/iasLogo.jpeg>
@@ -2107,7 +2108,7 @@ LaTeX Font Info:    Try loading font information for T1+5sf on input line 87.
 (/home/sebastian/.texmf-var/tex/latex/tex-tudfonts/softmake/stafford/t15sf.fd
 File: t15sf.fd 2008/06/23 Fontinst v1.927 font definitions for T1/5sf.
 )
-<by-nc-nd.pdf, id=80, 121.45375pt x 43.16125pt>
+<by-nc-nd.pdf, id=100, 121.45375pt x 43.16125pt>
 File: by-nc-nd.pdf Graphic file (type pdf)
  <use by-nc-nd.pdf>
 Package pdftex.def Info: by-nc-nd.pdf used on input line 87.
@@ -2187,65 +2188,11 @@ l.88   \affidavit{\StudentName}
 
  [4
 
-] (./thesis.acr
-Overfull \hbox (11.1023pt too wide) in alignment at lines 24--28
- [] [] [] 
- []
-
-) (./thesis.sys
-LaTeX Font Info:    Font shape `OT1/mdbch/b/n' will be
-(Font)              scaled to size 9.50406pt on input line 27.
-LaTeX Font Info:    Font shape `OT1/mdbch/b/n' will be
-(Font)              scaled to size 6.62404pt on input line 27.
-LaTeX Font Info:    Font shape `OT1/mdbch/b/n' will be
-(Font)              scaled to size 5.66403pt on input line 27.
-LaTeX Font Info:    Font shape `OML/mdbch/b/it' will be
-(Font)              scaled to size 9.50406pt on input line 27.
-LaTeX Font Info:    Font shape `OML/mdbch/b/it' will be
-(Font)              scaled to size 6.62404pt on input line 27.
-LaTeX Font Info:    Font shape `OML/mdbch/b/it' will be
-(Font)              scaled to size 5.66403pt on input line 27.
-LaTeX Font Info:    Font shape `OMS/mdbch/b/n' will be
-(Font)              scaled to size 9.50406pt on input line 27.
-LaTeX Font Info:    Font shape `OMS/mdbch/b/n' will be
-(Font)              scaled to size 6.62404pt on input line 27.
-LaTeX Font Info:    Font shape `OMS/mdbch/b/n' will be
-(Font)              scaled to size 5.66403pt on input line 27.
-LaTeX Font Info:    Font shape `OMX/mdbch/b/n' will be
-(Font)              scaled to size 9.50406pt on input line 27.
-LaTeX Font Info:    Font shape `OMX/mdbch/b/n' will be
-(Font)              scaled to size 6.62404pt on input line 27.
-LaTeX Font Info:    Font shape `OMX/mdbch/b/n' will be
-(Font)              scaled to size 5.66403pt on input line 27.
-LaTeX Font Info:    Font shape `OML/mdbch/b/n' will be
-(Font)              scaled to size 9.50406pt on input line 27.
-LaTeX Font Info:    Font shape `OML/mdbch/b/n' will be
-(Font)              scaled to size 6.62404pt on input line 27.
-LaTeX Font Info:    Font shape `OML/mdbch/b/n' will be
-(Font)              scaled to size 5.66403pt on input line 27.
-LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
-(Font)              scaled to size 9.50406pt on input line 27.
-LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
-(Font)              scaled to size 6.62404pt on input line 27.
-LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
-(Font)              scaled to size 5.66403pt on input line 27.
-LaTeX Font Info:    Font shape `MDB/mdbch/b/n' will be
-(Font)              scaled to size 9.50406pt on input line 27.
-LaTeX Font Info:    Font shape `MDB/mdbch/b/n' will be
-(Font)              scaled to size 6.62404pt on input line 27.
-LaTeX Font Info:    Font shape `MDB/mdbch/b/n' will be
-(Font)              scaled to size 5.66403pt on input line 27.
-
-Overfull \hbox (11.1023pt too wide) in alignment at lines 24--28
- [] [] [] 
- []
-
-) (./thesis.opi
-Overfull \hbox (11.1023pt too wide) in alignment at lines 24--28
- [] [] [] 
- []
-
-) (./content/0-introduction.tex [1
+]
+No file thesis.acr.
+No file thesis.sys.
+No file thesis.opi.
+(./content/0-introduction.tex [1
 
 ]
 chapter 1.
@@ -2323,7 +2270,50 @@ LaTeX Font Info:    Try loading font information for TS1+5ch on input line 104.
 
 (/home/sebastian/.texmf-var/tex/latex/tex-tudfonts/softmake/charter/ts15ch.fd
 File: ts15ch.fd 2008/06/23 Fontinst v1.927 font definitions for TS1/5ch.
-)) (./content/1-motivation.tex [4] [5]
+)
+LaTeX Font Info:    Font shape `OT1/mdbch/b/n' will be
+(Font)              scaled to size 9.50406pt on input line 104.
+LaTeX Font Info:    Font shape `OT1/mdbch/b/n' will be
+(Font)              scaled to size 6.62404pt on input line 104.
+LaTeX Font Info:    Font shape `OT1/mdbch/b/n' will be
+(Font)              scaled to size 5.66403pt on input line 104.
+LaTeX Font Info:    Font shape `OML/mdbch/b/it' will be
+(Font)              scaled to size 9.50406pt on input line 104.
+LaTeX Font Info:    Font shape `OML/mdbch/b/it' will be
+(Font)              scaled to size 6.62404pt on input line 104.
+LaTeX Font Info:    Font shape `OML/mdbch/b/it' will be
+(Font)              scaled to size 5.66403pt on input line 104.
+LaTeX Font Info:    Font shape `OMS/mdbch/b/n' will be
+(Font)              scaled to size 9.50406pt on input line 104.
+LaTeX Font Info:    Font shape `OMS/mdbch/b/n' will be
+(Font)              scaled to size 6.62404pt on input line 104.
+LaTeX Font Info:    Font shape `OMS/mdbch/b/n' will be
+(Font)              scaled to size 5.66403pt on input line 104.
+LaTeX Font Info:    Font shape `OMX/mdbch/b/n' will be
+(Font)              scaled to size 9.50406pt on input line 104.
+LaTeX Font Info:    Font shape `OMX/mdbch/b/n' will be
+(Font)              scaled to size 6.62404pt on input line 104.
+LaTeX Font Info:    Font shape `OMX/mdbch/b/n' will be
+(Font)              scaled to size 5.66403pt on input line 104.
+LaTeX Font Info:    Font shape `OML/mdbch/b/n' will be
+(Font)              scaled to size 9.50406pt on input line 104.
+LaTeX Font Info:    Font shape `OML/mdbch/b/n' will be
+(Font)              scaled to size 6.62404pt on input line 104.
+LaTeX Font Info:    Font shape `OML/mdbch/b/n' will be
+(Font)              scaled to size 5.66403pt on input line 104.
+LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
+(Font)              scaled to size 9.50406pt on input line 104.
+LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
+(Font)              scaled to size 6.62404pt on input line 104.
+LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
+(Font)              scaled to size 5.66403pt on input line 104.
+LaTeX Font Info:    Font shape `MDB/mdbch/b/n' will be
+(Font)              scaled to size 9.50406pt on input line 104.
+LaTeX Font Info:    Font shape `MDB/mdbch/b/n' will be
+(Font)              scaled to size 6.62404pt on input line 104.
+LaTeX Font Info:    Font shape `MDB/mdbch/b/n' will be
+(Font)              scaled to size 5.66403pt on input line 104.
+) (./content/1-motivation.tex [4] [5]
 chapter 2.
 ) (./content/2-foundations.tex [6
 
@@ -2331,32 +2321,42 @@ chapter 2.
 chapter 3.
 [7
 
-]) (./content/3-experiments.tex [8]
-chapter 4.
-) (./content/4-results.tex [9
-
 ]
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+
+ []
+
+[8] [9]) (./content/3-experiments.tex [10]
+chapter 4.
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
+
+ []
+
+[11
+
+] [12]) (./content/4-results.tex [13]
 chapter 5.
-) (./content/5-discussion.tex [10
+) (./content/5-discussion.tex [14
 
 ]
 chapter 6.
-) (./content/6-outlook.tex [11
+) (./content/6-outlook.tex [15
 
 ]
 chapter 7.
-) [12
+) [16
 
-] (./thesis.bbl) [13
+] (./thesis.bbl) [17
 
 
 
-] [14
+] [18
 
 
 ] (./meta/appendix.tex
 chapter A.
-) [15
+) [19
 
 ]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 122.
@@ -2365,7 +2365,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 122.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 122.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 122.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 40DCE155D723FE98EA4E9EA96AE7316E;742.
+(rerunfilecheck)             Checksum: F966F84431B1A32B266003F55887AF1F;1085.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -2373,13 +2373,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 122.
  ) 
 Here is how much of TeX's memory you used:
- 31363 strings out of 494901
- 551019 string characters out of 6178616
- 767802 words of memory out of 5000000
- 33795 multiletter control sequences out of 15000+600000
- 189832 words of font info for 144 fonts, out of 8000000 for 9000
+ 31446 strings out of 494901
+ 552551 string characters out of 6178616
+ 771004 words of memory out of 5000000
+ 33864 multiletter control sequences out of 15000+600000
+ 193158 words of font info for 149 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 67i,13n,102p,2030b,715s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 67i,13n,102p,2082b,715s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}{/usr/share/t
 exlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</home/sebastian/.texmf-var/fonts
 /type1/softmake/charter/5chb8a.pfb></home/sebastian/.texmf-var/fonts/type1/soft
@@ -2390,18 +2390,17 @@ me/sebastian/.texmf-var/fonts/type1/softmake/stafford/5sfr8a.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/bitstrea/charter/bchb8a.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/bitstrea/charter/bchri8a.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/mathdesign/mdbch/md-chbi7m.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/mathdesign/mdbch/md-chr7m.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/mathdesign/mdbch/md-chr7t.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/mathdesign/mdbch/md-chr7v.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/mathdesign/mdbch/md-chrma.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on thesis.pdf (23 pages, 211546 bytes).
+type1/public/mathdesign/mdbch/md-chr7m.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/mathdesign/mdbch/md-chr7t.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/mathdesign/mdbch/md-chr7v.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/mathdesign/mdbch/md-chrma.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/txfonts/t1xtt.pfb>
+Output written on thesis.pdf (27 pages, 235928 bytes).
 PDF statistics:
- 334 PDF objects out of 1000 (max. 8388607)
- 283 compressed objects within 3 object streams
- 83 named destinations out of 1000 (max. 500000)
- 158 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 392 PDF objects out of 1000 (max. 8388607)
+ 337 compressed objects within 4 object streams
+ 99 named destinations out of 1000 (max. 500000)
+ 198 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -3,51 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: thesis.aux
 The style file: ieeetr.bst
 Database file #1: literature/lit.bib
-Warning--empty journal in Kupcsik_AI_conditionallyaccepted
-Warning--empty journal in Muelling_BC_accepted
-Warning--empty journal in dann14a
-Warning--empty journal in Meyer_JNER_2013
-Warning--empty journal in Bocsi_AR_2014
-Warning--empty journal in BenAmor_AR_2014
-You've used 9 entries,
+You've used 4 entries,
             1876 wiz_defined-function locations,
-            529 strings with 5269 characters,
-and the built_in function-call counts, 1941 in all, are:
-= -- 155
-> -- 120
+            503 strings with 4284 characters,
+and the built_in function-call counts, 1069 in all, are:
+= -- 104
+> -- 47
 < -- 0
-+ -- 43
-- -- 34
-* -- 150
-:= -- 313
-add.period$ -- 10
-call.type$ -- 9
-change.case$ -- 8
++ -- 17
+- -- 13
+* -- 79
+:= -- 162
+add.period$ -- 5
+call.type$ -- 4
+change.case$ -- 3
 chr.to.int$ -- 0
-cite$ -- 15
-duplicate$ -- 96
-empty$ -- 183
-format.name$ -- 34
-if$ -- 446
+cite$ -- 4
+duplicate$ -- 51
+empty$ -- 98
+format.name$ -- 13
+if$ -- 255
 int.to.chr$ -- 0
-int.to.str$ -- 9
-missing$ -- 10
-newline$ -- 31
-num.names$ -- 9
-pop$ -- 43
+int.to.str$ -- 4
+missing$ -- 5
+newline$ -- 16
+num.names$ -- 4
+pop$ -- 11
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 37
+skip$ -- 32
 stack$ -- 0
-substring$ -- 60
-swap$ -- 19
+substring$ -- 64
+swap$ -- 20
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 6
-while$ -- 14
-width$ -- 10
-write$ -- 76
-(There were 6 warnings)
+warning$ -- 0
+while$ -- 10
+width$ -- 5
+write$ -- 42

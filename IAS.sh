@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 # COMPILE
 pdflatex thesis.tex
 pdflatex thesis.tex
