@@ -40,8 +40,8 @@
   }
 
   %% student specific information
-  \newcommand{\StudentName}{John Doe}
-  \newcommand{\StudentBirthplace}{Birthplace}
+  \newcommand{\StudentName}{Sebastian Rinder}
+  \newcommand{\StudentBirthplace}{Sindelfingen}
   \newcommand{\StudentDepartment}{Department of Computer~Science}
 
   %% thesis specific information
@@ -81,6 +81,11 @@
 
 %%}}}
 
+    \newcommand{\x}{{\boldsymbol{x}}}
+    \newcommand{\Dn}{{\cal D}_n}
+    \newcommand{\KL}{\mathrm{KL}}
+    \newcommand{\HH}{{\cal H}}
+
 \begin{document}
 %
   \pagenumbering{gobble}                    % suppress page numbering
@@ -102,11 +107,12 @@
     \listoffigures\listoftables
   \endgroup
 %
-  \chapter*{Abbreviations,~Symbols and Operators}
-  \glsaddall
-  \printglossary[type=acronym,title=List of Abbreviations,style=iasThesisGeneral]
-  \printglossary[type=symbol,style=iasThesisGeneral]
-  \printglossary[type=operator,style=iasThesisOperators]
+  \chapter*{Symbols and Notation}
+  \input{preamble/notation}
+ % \glsaddall
+ % \printglossary[type=acronym,title=List of Abbreviations,style=iasThesisGeneral]
+ % \printglossary[type=symbol,style=iasThesisGeneral]
+ % \printglossary[type=operator,style=iasThesisOperators]
 %
   \pagenumbering{arabic}                    % start normal page numbering
 %

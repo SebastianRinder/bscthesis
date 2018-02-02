@@ -3,7 +3,7 @@
 % This class is provided "as is", the authors take no responsibility
 % for any effects the style file has on the user, the user's life, family,
 % pets, scientific or other career etc.
-% 
+%
 % When making changes to this style file or the accompanying package files
 % please notify the authors:
 % tud-design@pro-kevin.de
@@ -13,7 +13,7 @@
 \def\filedate{2010/03/22}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tudthess_title}
- [\filedate\space\fileversion\space 
+ [\filedate\space\fileversion\space
    Joe Werner's TUD-Design-Manual package]
 
 \newif\ifTUD@thesis@phd \TUD@thesis@phdfalse
@@ -203,7 +203,7 @@
     			\textaccent{http://creativecommons.org/licenses/by/4.0/}
     			}{%
     			This puplication is licensed under the following Creative Commons License:\\
-    			Attribution \ \ 4.0 
+    			Attribution \ \ 4.0
     			International\\
     			\textaccent{http://creativecommons.org/licenses/by/4.0/}
     			}
@@ -217,15 +217,15 @@
     			\textaccent{http://creativecommons.org/licenses/by-nc-nd/4.0/}
     		}{%
     			This puplication is licensed under the following Creative Commons License:\\
-    			Attribution -- NonCommercial -- NoDerivatives\ \ 4.0 
+    			Attribution -- NonCommercial -- NoDerivatives\ \ 4.0
     			International\\
     			\textaccent{http://creativecommons.org/licenses/by-nc-nd/4.0/}
     		}
-    \fi    
+    \fi
     \ifnum #3=4
     		\includegraphics{publicdomain}\\[\baselineskip]
     		To the extent possible under law, the person who associated CC0 with this work has waived all copyright and related or neighboring rights to this work.\\
-    		This work is published from: Deutschland. 
+    		This work is published from: Deutschland.
     \fi
   }%
 }
@@ -311,20 +311,9 @@
     \accentfont\large
     \parindent0em
     \vskip4ex
-      Hiermit versichere ich,
-      \ifTUD@thesis@gender@female
-        die vorliegende 
-      \else\ifTUD@thesis@gender@neuter
-        das vorliegende 
-      \else
-        den vorliegenden 
-      \fi\fi
-      \TUD@thesis@thesistype ohne Hilfe Dritter und nur mit den an\-ge\-ge\-benen Quellen und 
-      Hilfsmitteln angefertigt zu haben. Alle Stellen, die aus Quellen 
-      entnommen wurden, sind als solche kenntlich gemacht. Diese Arbeit hat in
-      gleicher oder \char228 hn\-lich\-er Form noch keiner
-      Pr\char252\-fungs\-be\-h\char246 r\-de vorgelegen.\\
-      In der abgegebenen Thesis stimmen die schriftliche und elektronische Fassung \char252 berein.
+    Hiermit versichere ich, Muster Mustermann, die vorliegende Master-Thesis / Bachelor-Thesis ohne Hilfe Dritter und nur mit den angegebenen Quellen und Hilfsmitteln angefertigt zu haben. Alle Stellen, die Quellen entnommen wurden, sind als solche kenntlich gemacht worden. Diese Arbeit hat in gleicher oder ähnlicher Form noch keiner Prüfungsbehörde vorgelegen.
+
+    Mir ist bekannt, dass im Falle eines Plagiats (§38 Abs.2 APB) ein Täuschungsversuch vorliegt, der dazu führt, dass die Arbeit mit 5,0 bewertet und damit ein Prüfungsversuch verbraucht wird. Abschlussarbeiten dürfen nur einmal wiederholt werden. Bei der abgegebenen Thesis stimmen die schriftliche und die zur Archivierung eingereichte elektronische Fassung überein.
     \vskip5ex
       Darmstadt, den #1
     \vskip6ex
@@ -340,7 +329,7 @@
 %      \TUD@setbigtitlestyle{\section}{\sectfont\chapterlinesize}{\thechapter}{\TUD@chapind}{-1}
 %      \chapter*{Er\-kl\char228\-rung \ifTUD@thesis@gender@female zur\else zum\fi\  \TUD@thesis@thesistype}
       \TUD@setbigtitlestyle{\section}{\sectfont\chapterlinesize}{\thechapter}{\TUD@chapind}{-1}
-      \section*{Thesis Statement}       
+      \section*{Thesis Statement}
     }
     \accentfont\large
     \parindent0em

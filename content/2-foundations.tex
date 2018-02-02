@@ -1,54 +1,111 @@
 \chapter{Foundations}
 \label{chap:2}
-%
-
-- Bayesian optimization
-
-- Global optimization
-
-- Local optimization
-
-- Gaussian Process Regression
-
-- Hyper Parameter optimization
-
-- Expected Improvement
-
-- Thompson Sampling
-
-- Standard kernel
-
-- Trajectory kernel
 
 \section{Global Bayesian optimization}
+
+To find the maximum of our expensive black box function we use Bayesian optimization. It makes the search process more efficient by incorporating a model of the unknown function. This model is used to guide the exploration for new points.
 
 \begin{algorithm}
     $init$ = 10\\
     $X$ = $init$ uniformly random samples from the search space\\
-    $Y$ = evaluations of the objective at the points $X$\\
+    $y$ = evaluations of the objective at the points $X$\\
     \For{n = $init$ \KwTo 200 + $init$}{
         compute $K(X,X)$\\
         Optimize hyper parameters (optional)\\
-        $x_{n+1}$ = point at the optimum of the acquisition function over the Gaussian Process\\
+        $x_{n+1}$ = point at the optimum of the acquisition function\\
         $y_{n+1}$ = evaluation of the objective at the point $x_{n+1}$\\
         $X = \{X, x_{n+1}\}$\\
-        $Y = \{Y, y_{n+1}\}$\\
-        $n = n + 1$\\
+        $y = \{y, y_{n+1}\}$\\
     }
 \end{algorithm}
 
-During acquisition function optimization $K(X,X)$ from the Gaussian process does not change, so it is precomputed. The values for the initial sample count and the iteration count are not fixed, but for simplification set here.
+During acquisition function optimization $K(X,X)$ from the Gaussian process does not change, so it is precomputed. The values for the initial sample count and the iteration count are not fixed, but for simplification set to 10 and 200 here.
+
+\section{Local Bayesian optimization}
+
+Modelling the objective function for a higher dimensional search space is challenging. Also global Bayesian optimization tends to over-explore. To perform a more robust optimization we use local Bayesian optimization as stated in \cite{akrour2017local}. It restricts the search space of the acquisition function to a local area which is moved, resized, and rotated between iterations. This local area is defined by a Gaussian distribution in which the mean and variance represent the center and the exploration reach respectively. To update that mean and variance properly we minimize the Kullback-Leibler divergence between the incumbent search distribution $\pi_n$ and the probability $p_n^* = p(\x=\x^*|\mathcal{D}_n)$ of $\x^*$ being optimal. This results in a variance which neglects poorly performing regions.
+
+To prevent the mean from moving too fast from the initial point and to avoid the variance becoming too small quickly we constrain the minimization with the hyper parameters $\alpha$ and $\beta$. Therefore our optimization problem is given by
+
+\begin{align}
+    & \underset{\pi}{\arg\min} & & \KL(\pi||p_n^\star),& &\notag\\
+    & \text{subject to}
+    & & \KL(\pi||\pi_n) & &\leq \alpha,\label{eq:kl:our}\\
+    & & &\HH(\pi_n) - \HH(\pi) & &\leq \beta,\label{eq:entropy:our}
+\end{align}
+
+where $\KL(p||q) = \int p(\x) \log \frac{p(\x)}{q(\x)} d\x$ is the KL divergence between $p$ and $q$ and $\HH(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$.
 
 
+\section{Acquisition function}
+The core of the Bayesian optimization consists of selecting the next evaluation point in our search space. We get that point by optimizing a so called acquisition function. It depends on the incumbent Gaussian process model of the true objective. We choose expected improvement during the global bayesian optimization and in the local optimization we use Thompson sampling. Both acquisition functions take the mean und the variance from the gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration looks for points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all.
 
-\section{Hyper parameter optimization}
-Selecting proper hyper parameters for the Gaussian process regression enhances the efficiency of our learning algorithm. Also it helps avoiding numerical problems. To find an optimum for the signal variance hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log marginal likelihood function
-\begin{equation} \label{eq:hypOpt}
-    \log p(y|x,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_n^{-1} y -\frac{1}{2} \log |K_n| -\frac{n}{2}\log 2\pi ,
-\end{equation}
+\subsection{Expected improvement}
+To get an expected improvement function value at a test point $x_*$ we need the mean value $\mu(x_*)$, and the standard deviation value $\sigma(x_*) = \sqrt{v(x_*)}$ from the Gaussian process model. Also we need the maximum of all observations $y_{max}$ and a trade-off parameter $\tau$. For the cumulative distribution function and the probability density function from the Gaussian distribution we write $\Phi(.)$ and $\phi(.)$ respectively. They both have zero mean and unit variance.
+We adopt the expected improvement function
+\[
+    \mathrm{EI}(x_*)=
+\begin{cases}
+    (\mu(x_*) - y_{max} - \tau)\Phi(\mathrm{z}(x_*))+\sigma(x_*)\phi(\mathrm{z}(x_*))& \text{if } \sigma(x_*)> 0\\
+    0 & \text{if } \sigma(x_*)= 0
+\end{cases}
+\]
+where
+\[
+    \mathrm{z}(x_*)=
+\begin{cases}
+    \frac{(\mu(x_*) -y_{max} - \tau)}{\sigma(x_*)} & \text{if } \sigma(x_*)> 0\\
+    0 & \text{if } \sigma(x)= 0
+\end{cases}
+\]
+as suggested in \cite{brochu2010tutorial}. The trade-off parameter $\tau$ is set to 0.01 accordingly. The expected improvement function is then optimized over the whole search space to give us the next evaluation point
 
-from our Gaussian process. Where $n$ is the number of observations, $x$ is the $d \times n$ dataset of inputs and $K_n$ is the covariance matrix for the noisy target $y$.
+$$x_{n+1} = \arg \max_{x_*} \mathrm{EI(x_*)}.$$
 
+\subsection{Thompson sampling}
+For the Thompson sampling we sample one function from the Gaussian process posterior,
+
+$$\mathrm{TS}\sim \mathrm{GP}(0,K(X,X_*)),$$
+
+where $X$ is the dataset of already evaluated points, and $X_*$ is a randomly Gaussian distributed set of points with mean and variance given by the local optimzer. These mean and variance represent our current search space.
+To draw function values we need the mean vector $\mu$ and the full covariance matrix $V$ from the Gaussian process model. First we take the lower Cholesky decomposite of $V$ such that $L_V L_V^\top = V$. Then we compute a vector $g$, which consists of independent Gaussian distributed valus with zero mean and unit variance. Finally we get a vector $\mathrm{TS}$ of sampled values:
+
+$$\mathrm{TS}(x_*) = \mu + L_V g.$$
+
+We take the one with the highest value such that,
+
+$$x_{n+1} = \arg \max_{x_*} \mathrm{TS}(x_*),$$
+
+to get the next evaluation point.
+
+\section{Gaussian Process Regression}
+Since we want to estimate an objective function in a machine learning environment we elect to use Gaussian process regression. It fits a multivariate gaussian distribution over our prior data. From the regression we get a posterior mean and variance which describe our model of the objective function. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more points our model incorporates the smaller the variance, and the preciser the predictions, in the proximity around prior points.\\
+In real world applications we always have some noise in our objective observations. Therefore a Gaussian distributed error term,
+
+$$\epsilon \sim \mathcal{N}(0,\sigma_n^2),$$
+
+with zero mean and $\sigma_n^2$ variance is added to the function value. The observed target
+
+$$y_{n} = f(x) + \epsilon$$
+
+regards this noise. Before doing regression we transform our observations to zero mean and uniform variance:
+
+$$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$
+
+The knowledge our training data provides is represented by the kernel matrix $K(X,X)$. With a matrix of test points $X_*$ we get the joint distribution of the normalized target values and the function values at the test locations:
+
+$$\left[ \begin{array}{c} y \\ f_* \end{array} \right] \sim \mathcal{N} \left(0, \begin{bmatrix} K(X,X)+\sigma_n^2 I & K(X,X_*) \\ K(X_*,X) & K(X_*,X_*) \end{bmatrix} \right)$$
+
+Now we can calculate the posterior mean and variance at given test points $X_*$.
+
+\begin{align}
+    K_n &= K(X,X)+\sigma_n^2 I \label{eq:kNoise} \\
+    \mu &= K(X_*,X)K_n(X,X)^{-1}y \label{eq:meanGauss} \\
+    V &= K(X_*,X_*)-K(X_*,X)K_n(X,X)^{-1}K(X_*,X)^\top \label{eq:wholeVar} \\
+    \sigma^2 = v &= \mathrm{diag}(K(X_*,X_*)-K(X_*,X)K_n(X,X)^{-1}K(X_*,X)^\top) \label{eq:vectorVar} \\ \nonumber
+\end{align}
+
+The vectors $\mu$ and $v$ hold the means and variances for all test points. Also we get the whole covariance matrix $V$.
 
 \section{Markov decision process}
 In our reinforcement learning problem we use a Markov decision process model to describe possible decisions as probabilites. Our model consists of a tuple $(S,A,P,P_{0},R)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities, and all corresponding rewards. Assume an agent which executes a policy $x$ for $T$ time steps receiving a final reward $\bar{R}(\xi)$. This reward depending on a policy is what we want to maximize.\\
@@ -83,79 +140,15 @@ $$D(x_{ i }, x_{ j }) = D_{\mathrm {KL} }(P(\xi|x_{ i })||P(\xi|x_{ j })) + D_{\
 to achieve that $D(x_{ i }, x_{ j }) = D(x_{ j }, x_{ i })$. An additional requirement for the kernel is the resulting matrix to be positive semi-definite and scalable\cite{wilson2014using}. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f$ to compensate for the signal variance and $\sigma_l$ to adjust for signal scale. This gives us the covariance matrix
 
 \begin{equation} \label{eq:trajKernel}
-K(x_{ i },x_{ j },\sigma) = \sigma_f \exp(-\sigma_l D(x_{ i }, x_{ j })),
+K(x_{ i },x_{ j },\sigma_f,\sigma_l) = \sigma_f \exp(-\sigma_l D(x_{ i }, x_{ j })),
 \end{equation}
 for the gaussian process.
 
-\section{Acquisition function}
-The core of the Bayesian optimization consists of selecting the next point, in our search space, to evaluate. We get that point by executing a so called acquisition function. It depends on the incumbent model of the true objective and returns that next point. In our case a point means a set of policy parameters.
-We choose expected improvement during the global bayesian optimization and in the local optimization we use Thompson sampling. Both acquisition functions take the mean und the variance from the gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration looks for points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all. (To not be confused, bla, local optimum != optimum in local optimization)
 
-\subsection{Thompson sampling}
-(refactor full covariance matrix $\Sigma$, since $\sigma$ represents deviation and $\sigma^2$ variance)
-For the Thompson sampling we sample one function from the Gaussian process posterior,
-
-$$f\sim \mathrm{GP}(0,K(X,X_*)),$$
-
-where $X$ is the $n\times d$ dataset of already evaluated points, and $X_*$ is a randomly Gaussian distributed set of points with mean and variance given by the local optimzer.
-To draw values from the distribution we need the mean vector $\mu$ and the full covariance matrix $V$ from the gaussian process model. First we take the lower Cholesky decomposite of $V$ such that $A A^\top = V$. Then we compute a vector $z$, which consists of independent Gaussian distributed valus with zero mean and unit variance. Finally we get a vector $f$ of sampled values:
-
-$$f(x_*) = \mu + A z.$$
-
-We take the one with the highest value such that,
-
-$$x_{n+1} = \arg \max_{x_*} f(x_*),$$
-
-to return the next evaluation point.
-
-\subsection{Expected improvement}
-To calculate an expected improvement function value we need the mean value $\mu(x_*)$, and the standard deviation value $\sigma(x_*)$ at the test point $x_*$ from the gaussian process. Also we need the maximum of all observations $y_{max}$ and a trade-off parameter $\tau$. For the cumulative distribution function and the probability density function from the Gaussian distribution we write $\Phi(.)$ and $\phi(.)$ respectively. They both have zero mean and unit variance.
-We adopt the expected improvement function
-\[
-    \mathrm{EI}(x_*)=
-\begin{cases}
-    (\mu(x_*) - y_{max} - \tau)\Phi(\mathrm{Z}(x_*))+\sigma(x_*)\phi(\mathrm{Z}(x_*))& \text{if } \sigma(x_*)> 0\\
-    0 & \text{if } \sigma(x_*)= 0
-\end{cases}
-\]
-where
-\[
-    \mathrm{Z}(x_*)=
-\begin{cases}
-    \frac{(\mu(x_*) -y_{max} - \tau)}{\sigma(x_*)} & \text{if } \sigma(x_*)> 0\\
-    0 & \text{if } \sigma(x)= 0
-\end{cases}
-\]
-as suggested in \cite{brochu2010tutorial}. The trade-off parameter $\tau$ is set to 0.01 accordingly. The expected improvement function is then optimized over the whole search space to give us the next evaluation point
-
-$$x_{n+1} = \arg \max_{x_*} EI(x_*).$$
-
-\section{Gaussian Process Regression}
-Since we want to estimate an objective function in a machine learning environment we elect to use Gaussian process regression. It fits a multivariate gaussian distribution over our prior data. From the regression we get a posterior mean and variance which describe our model of the objective function. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more points our model incorporates the smaller the variance, and the preciser the predictions, in the vicinity around prior points.\\
-In real world applications we always have some noise in our objective observations. Therefore a Gaussian distributed error term,
-
-$$\epsilon \sim \mathcal{N}(0,\sigma_n^2),$$
-
-with zero mean and $\sigma_n^2$ variance is added to the function value. The observed target
-
-$$y_{n} = f(x) + \epsilon$$
-
-regards this noise. Before doing regression we transform our observations to zero mean and uniform variance:
-
-$$y = \frac{y_{n}-\mu_{y_{n}}}{\sigma_{y_{n}}}.$$
-
-The knowledge our training data provides is represented by the kernel matrix $K(x,x)$. With a vector of test points $x_*$ we get the joint distribution of the normalized target values and the function values at the test locations:
-
-$$\left[ \begin{array}{c} y \\ f_* \end{array} \right] \sim \mathcal{N} \left(0, \begin{bmatrix} K(x,x)+\sigma_n^2 I & K(x,x_*) \\ K(x_*,x) & K(x_*,x_*) \end{bmatrix} \right)$$
-
-Now we can calculate the posterior mean and variance at given test points.
-
-\begin{equation} \label{eq:kNoise}
-    K_n(x,x) = K(x,x)+\sigma_n^2 I
+\section{Hyper parameter optimization}
+Selecting proper hyper parameters for the Gaussian process regression enhances the efficiency of our learning algorithm. Also it helps avoiding numerical problems. To find an optimum for the signal variance hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log marginal likelihood function
+\begin{equation} \label{eq:hypOpt}
+    \log p(y|x,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_n^{-1} y -\frac{1}{2} \log |K_n| -\frac{n}{2}\log 2\pi ,
 \end{equation}
 
-\begin{equation} \label{eq:meanGauss}
-    \mu(x_*)= K(x_*,x)K_n(x,x)^{-1}y
-\end{equation}
-
-$$\sigma^2(x_*)= K(x_*,x_*)-K(x_*,x)K_n(x,x)^{-1}K(x,x_*)$$
+from our Gaussian process. Where $n$ is the number of observations, $x$ is the $d \times n$ dataset of inputs and $K_n$ is the covariance matrix for the noisy target $y$.
