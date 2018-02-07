@@ -4,45 +4,45 @@ The top-level auxiliary file: thesis.aux
 The style file: ieeetr.bst
 Database file #1: literature/lit.bib
 Warning--empty journal in akrour2017local
-You've used 6 entries,
+You've used 9 entries,
             1876 wiz_defined-function locations,
-            512 strings with 4499 characters,
-and the built_in function-call counts, 1376 in all, are:
-= -- 125
-> -- 68
+            527 strings with 4884 characters,
+and the built_in function-call counts, 1855 in all, are:
+= -- 160
+> -- 99
 < -- 0
-+ -- 25
-- -- 19
-* -- 98
-:= -- 212
-add.period$ -- 7
-call.type$ -- 6
-change.case$ -- 5
++ -- 37
+- -- 28
+* -- 128
+:= -- 289
+add.period$ -- 10
+call.type$ -- 9
+change.case$ -- 7
 chr.to.int$ -- 0
-cite$ -- 7
-duplicate$ -- 64
-empty$ -- 133
-format.name$ -- 19
-if$ -- 326
+cite$ -- 10
+duplicate$ -- 86
+empty$ -- 188
+format.name$ -- 28
+if$ -- 439
 int.to.chr$ -- 0
-int.to.str$ -- 6
-missing$ -- 6
-newline$ -- 22
-num.names$ -- 6
-pop$ -- 24
+int.to.str$ -- 9
+missing$ -- 9
+newline$ -- 32
+num.names$ -- 9
+pop$ -- 38
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 37
+skip$ -- 47
 stack$ -- 0
 substring$ -- 64
-swap$ -- 20
+swap$ -- 22
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 12
-width$ -- 7
-write$ -- 56
+while$ -- 15
+width$ -- 10
+write$ -- 80
 (There was 1 warning)

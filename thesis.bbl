@@ -1,9 +1,5 @@
 \begin{thebibliography}{1}
 
-\bibitem{akrour2017local}
-R.~Akrour, D.~Sorokin, J.~Peters, G.~Neumann, {\em et~al.}, ``Local bayesian
-  optimization of motor skills,'' 2017.
-
 \bibitem{brochu2010tutorial}
 E.~Brochu, V.~M. Cora, and N.~De~Freitas, ``A tutorial on bayesian optimization
   of expensive cost functions, with application to active user modeling and
@@ -14,6 +10,21 @@ E.~Brochu, V.~M. Cora, and N.~De~Freitas, ``A tutorial on bayesian optimization
 A.~Wilson, A.~Fern, and P.~Tadepalli, ``Using trajectory data to improve
   bayesian optimization for reinforcement learning,'' {\em The Journal of
   Machine Learning Research}, vol.~15, no.~1, pp.~253--282, 2014.
+
+\bibitem{akrour2017local}
+R.~Akrour, D.~Sorokin, J.~Peters, G.~Neumann, {\em et~al.}, ``Local bayesian
+  optimization of motor skills,'' 2017.
+
+\bibitem{lizotte2008practical}
+D.~J. Lizotte, {\em Practical bayesian optimization}.
+\newblock University of Alberta, 2008.
+
+\bibitem{DBLP:journals/corr/BrockmanCPSSTZ16}
+G.~Brockman, V.~Cheung, L.~Pettersson, J.~Schneider, J.~Schulman, J.~Tang, and
+  W.~Zaremba, ``Openai gym,'' {\em CoRR}, vol.~abs/1606.01540, 2016.
+
+\bibitem{joseCode}
+J.~Antonio Martin~H., ``Matlab sarsa implementation.''
 
 \bibitem{rasmussen2006gaussian}
 C.~E. Rasmussen and C.~K. Williams, {\em Gaussian processes for machine

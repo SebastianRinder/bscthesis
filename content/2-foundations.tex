@@ -1,17 +1,25 @@
 \chapter{Foundations}
 \label{chap:2}
 
+- Ei use max mean
+
+- hyper parameter Optimization
+-- added bound stuff
+
 \section{Global Bayesian optimization}
 
 To find the maximum of our expensive black box function we use Bayesian optimization. It makes the search process more efficient by incorporating a model of the unknown function. This model is used to guide the exploration for new points.
 
 \begin{algorithm}
-    $init$ = 10\\
-    $X$ = $init$ uniformly random samples from the search space\\
+    \caption{Global Bayesian optimization\label{alg:boGlob}}
+    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+    \Input{$X$: $m$ uniformly random samples from the search space\\$s$: number of BO iterations}
+    \Output{$x_{s+m}$}
+    \BlankLine
+
     $y$ = evaluations of the objective at the points $X$\\
-    \For{n = $init$ \KwTo 200 + $init$}{
+    \For{n = $m$ \KwTo $s$ + $m$}{
         compute $K(X,X)$\\
-        Optimize hyper parameters (optional)\\
         $x_{n+1}$ = point at the optimum of the acquisition function\\
         $y_{n+1}$ = evaluation of the objective at the point $x_{n+1}$\\
         $X = \{X, x_{n+1}\}$\\
@@ -19,26 +27,10 @@ To find the maximum of our expensive black box function we use Bayesian optimiza
     }
 \end{algorithm}
 
-During acquisition function optimization $K(X,X)$ from the Gaussian process does not change, so it is precomputed. The values for the initial sample count and the iteration count are not fixed, but for simplification set to 10 and 200 here.
-
-\section{Local Bayesian optimization}
-
-Modelling the objective function for a higher dimensional search space is challenging. Also global Bayesian optimization tends to over-explore. To perform a more robust optimization we use local Bayesian optimization as stated in \cite{akrour2017local}. It restricts the search space of the acquisition function to a local area which is moved, resized, and rotated between iterations. This local area is defined by a Gaussian distribution in which the mean and variance represent the center and the exploration reach respectively. To update that mean and variance properly we minimize the Kullback-Leibler divergence between the incumbent search distribution $\pi_n$ and the probability $p_n^* = p(\x=\x^*|\mathcal{D}_n)$ of $\x^*$ being optimal. This results in a variance which neglects poorly performing regions.
-
-To prevent the mean from moving too fast from the initial point and to avoid the variance becoming too small quickly we constrain the minimization with the hyper parameters $\alpha$ and $\beta$. Therefore our optimization problem is given by
-
-\begin{align}
-    & \underset{\pi}{\arg\min} & & \KL(\pi||p_n^\star),& &\notag\\
-    & \text{subject to}
-    & & \KL(\pi||\pi_n) & &\leq \alpha,\label{eq:kl:our}\\
-    & & &\HH(\pi_n) - \HH(\pi) & &\leq \beta,\label{eq:entropy:our}
-\end{align}
-
-where $\KL(p||q) = \int p(\x) \log \frac{p(\x)}{q(\x)} d\x$ is the KL divergence between $p$ and $q$ and $\HH(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$.
-
+During the acquisition function optimization, $K(X,X)$ from the Gaussian process does not change, so it is precomputed. The values for the initial sample count $m$ and the iteration count $s$ are typically set to about 10 and a few hundred respectively.
 
 \section{Acquisition function}
-The core of the Bayesian optimization consists of selecting the next evaluation point in our search space. We get that point by optimizing a so called acquisition function. It depends on the incumbent Gaussian process model of the true objective. We choose expected improvement during the global bayesian optimization and in the local optimization we use Thompson sampling. Both acquisition functions take the mean und the variance from the gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration looks for points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all.
+The core of the Bayesian optimization consists of selecting the next evaluation point in our search space. We get that point by optimizing a so called acquisition function. It depends on the incumbent Gaussian process model of the true objective. We choose expected improvement during the global bayesian optimization and in the local optimization (chapter \ref{chap:contributions}) we use Thompson sampling. Both acquisition functions take the mean und the variance from the gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration looks for points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all.
 
 \subsection{Expected improvement}
 To get an expected improvement function value at a test point $x_*$ we need the mean value $\mu(x_*)$, and the standard deviation value $\sigma(x_*) = \sqrt{v(x_*)}$ from the Gaussian process model. Also we need the maximum of all observations $y_{max}$ and a trade-off parameter $\tau$. For the cumulative distribution function and the probability density function from the Gaussian distribution we write $\Phi(.)$ and $\phi(.)$ respectively. They both have zero mean and unit variance.

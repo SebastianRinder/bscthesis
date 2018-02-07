@@ -1,21 +1,15 @@
 \chapter{Experiments}
-\label{chap:3}
+\label{chap:4}
 %
+
+- parallel runs on the cluster
 
 \section{Implementation}
 
-\subsection{Optimizer}
-In global optimizing we used the \texttt{GlobalSearch} Toolbox from MATLAB first. But the cluster lacked of free licences for this toolbox. So we use the local optimizer \texttt{fmincon} on 10000 random starting points. In experiments that method performed almost as good as \texttt{GlobalSearch}.
+\subsection{Problem environment}
+In early test runs we used \texttt{Matlab} implementations of cart pole, acrobot, and mountain car adapted from \cite{joseCode}. But later we implemented OpenAI Gym to have a wide range of problem environments available and to have consistent rewarding functions. Otherwise, the rewarding function would depend on the source and therefore produce less comparable results.
 
-\subsection{Normalization constant}
 
-\subsection{Numerical stability}
-in the end -> 1. explain what we want to achieve (no log of small values for example)
-2. cholesky
-3. hyp param matrix
-
-\subsection{OpenAI Gym in Python}
-To use the simulations provided by the OpenAI Gym we prepared a python module which could be imported to MATLAB. After importing the python module with \verb|py.importlib.import_module(moduleName)| we can call every method it contains. The main difficulty was the correct data type conversion when receiving data from the python module. The performance difference in the cart pole experiment is comparable. (measure)
 
 \subsection{Gaussian Process Regression}
 
@@ -78,11 +72,11 @@ Since we only have a ratio of transitioning probabilities present in our traject
     \log\left(\frac{P(\xi|x_i)}{P(\xi|x_j)}\right)
     &= \log\left(\frac{P_{0}(s_{0}) \prod_{t=1}^{T} P_s(s_{t}|s_{t-1},a_{t-1}) P_{\pi}(a_{t-1}|s_{t-1},x_i)}{P_{0}(s_{0}) \prod_{t=1}^{T} P_s(s_{t}|s_{t-1},a_{t-1}) P_{\pi}(a_{t-1}|s_{t-1},x_j)}\right)\\
     &= \log\left(\prod_{t=1}^{T}\frac{ P_{\pi}(a_{t-1}|s_{t-1},x_i)}{P_{\pi}(a_{t-1}|s_{t-1},x_j)}\right)\\
-    &= \sum_{t=1}^{T} \log \left(\frac{P_{\pi}(a_{t-1}|s_{t-1},x_i)}{P_{\pi}(a_{t-1}|s_{t-1},x_j)}\right)
+    &= \sum_{t=1}^{T} \log \left(\frac{P_{\pi}(a_{t-1}|s_{t-1},x_i)}{P_{\pi}(a_{t-1}|s_{t-1},x_j)}\right).
 \end{align*}
 
 
-Summing up the logarithms in the end is also numerically more stable than taking the logarithm of the whole product.
+Summing up the logarithms in the end is also numerically more stable than taking the logarithm of the products.
 
 \subsection{Action selection}
 
@@ -94,26 +88,13 @@ with a small gaussian noise $\epsilon_a$ needed for stochastic policies. So the 
 
 $$a \sim \mathcal{N}(f_s(s) x,\epsilon_a^2).$$
 
-Therefore the resulting probability density of the action selection,
-
-$$P_{\pi}(a|s,x) = \frac{1}{\sqrt{2\pi\epsilon_a^2}}\exp\left(-\frac{(a-f_s(s)x)^2}{2\epsilon_a^2}\right),$$
-
-enables us to do the computations of the logarithm of the probability ratios in the trajectory kernel more efficient:
-
-\begin{align*}
-    \sum_{t=0}^{T-1} \log \left(\frac{P_{\pi}(a_{t}|s_{t},x_i)}{P_{\pi}(a_{t}|s_{t},x_j)}\right) &= \sum_{t=0}^{T-1} \log \left(\frac{\frac{1}{\sqrt{2\pi\epsilon_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)x_i)^2}{2\epsilon_a^2}\right)}{\frac{1}{\sqrt{2\pi\epsilon_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)x_j)^2}{2\epsilon_a^2}\right)}\right)\\
-    &= \sum_{t=0}^{T-1} \log \left( \exp \left( -\frac{(a_t-f_s(s_t)x_i)^2}{2\epsilon_a^2} - \left(-\frac{(a_t-f_s(s_t)x_j)^2}{2\epsilon_a^2}\right)\right)\right)\\
-    &= \frac{1}{2\epsilon_a^2} \sum_{t=0}^{T-1} \left((a_t-f_s(s_t)x_j)^2 - (a_t-f_s(s_t)x_i)^2\right).
-\end{align*}
-
-The function $f_s(s)$, depending on the state, computes our $d$ dimensional state feature vector.
-
 In discrete action space environments we use a parametric soft-max action selection policy:
 
 $$P(a|s)= \frac{\exp(f_s(s)^\top x_a)}{\sum_{i\in A} \exp(f_s(s)^\top x_i)}.$$
 
-Again it consists of the linear mapping $f_s(s)^\top x$ and $A$ holds all possible actions. The resulting action is then sampled from the probability of action $a$ given state $s$.
+Again it consists of the linear mapping $f_s(s)^\top x$, and $A$ holds all possible actions. The resulting action is then sampled from the probability of action $a$ given state $s$.
 
+The state feature function $f_s(s)$ is defined for each environment as shown below.
 
 \section{Cart pole}
 

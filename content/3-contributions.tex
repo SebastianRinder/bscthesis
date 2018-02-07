@@ -1,0 +1,120 @@
+\chapter{Contributions}
+\label{chap:contributions}
+
+- including trajectory kernel to local BO
+-- fmincon local search on distance covariance
+--TS trajectory kernel
+--- Mixing up kernel metrics (scaling factor)
+---- random initial samples well distributed in search space
+
+- debug plotting
+-- mixed up kernel metrics
+-- acq func plots
+-- hyper opt plots
+--- select figure by name
+
+- global BO
+-- random initial samples well distributed in search space
+
+- simultaion implementation of cart pole, acrobot and mountain car
+-- also visualization, but not maintained (YET)
+
+- sampling of actions from probabilities
+
+\section{Local Bayesian optimization}
+
+Modelling the objective function for a higher dimensional search space is challenging. Also global Bayesian optimization tends to over-explore. To perform a more robust optimization we use local Bayesian optimization as stated in \cite{akrour2017local}. It restricts the search space of the acquisition function to a local area which is moved, resized, and rotated between iterations. This local area is defined by a Gaussian distribution in which the mean and variance represent the center and the exploration reach respectively. To update that mean and variance properly we minimize the Kullback-Leibler divergence between the incumbent search distribution $\pi_n$ and the probability $p_n^* = p(\x=\x^*|\mathcal{D}_n)$ of $\x^*$ being optimal. This results in a search area which neglects poorly performing regions.
+
+To prevent the mean from moving too fast from the initial point and to avoid the variance becoming too small quickly we constrain the minimization with the hyper parameters $\alpha$ and $\beta$. Therefore our optimization problem is given by
+
+\begin{align}
+    & \underset{\pi}{\arg\min} & & \KL(\pi||p_n^\star),& &\notag\\
+    & \text{subject to}
+    & & \KL(\pi||\pi_n) & &\leq \alpha,\label{eq:kl:our}\\
+    & & &\HH(\pi_n) - \HH(\pi) & &\leq \beta,\label{eq:entropy:our}
+\end{align}
+
+where $\KL(p||q) = \int p(\x) \log \frac{p(\x)}{q(\x)} d\x$ is the KL divergence between $p$ and $q$ and $\HH(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$.
+
+\section{Efficiency and robustness}
+We vectorize every suited operation to speed up calculations in Matlab. Additionally we tune the code to run on a parallel pool.\\
+
+Sometimes numerical instabilities lead to negative values for covariances. To avoid getting complex numbers we filter negative values before applying the square root on covariances when computing the expected improvement. Negative values also occur for the distance between two trajectories, and are filtered too.\\
+
+Depending on the acquisition function we calculate either the covariance matrix or the covariance vector from the Gaussian process regression. In case of expected improvement this saves a lot of computation time, since we only need the vector of covariances.\\
+
+Before each bayesian optimization iteration step we precompute $K$ because it only depends on the set of training points which won't change during optimization. Then $alpha$ and $L$ are derived from $K$. REF
+
+For every matrix inverse calculation we use the lower Cholesky decomposition instead. Therefore the matrix to decompose must be positive definite. We achieve this by doubling the noise variance diagonal added to the original matrix as shown in algorithm \ref{alg:cholesky}.
+
+\begin{algorithm}
+    \caption{Lower Cholesky with variance doubling\label{alg:cholesky}}
+    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+    \Input{$K$, $\sigma_n$}
+    \Output{$L$}
+    \BlankLine
+    $K_n = K+\sigma_n^2 I$\\
+    \While{$K_n$ not positive definite}{
+        double $\sigma_n^2$\\
+        $K_n = K+\sigma_n^2 I$\\
+    }
+    L = lower Cholesky of $K_n$\\
+\end{algorithm}
+
+When doing hyper parameter optimization we do not double the noise variance. Instead our log marginal likelihood function returns -infinity for hyper parameters which produce a non positive definit matrix.
+
+\section{Normalization constant}
+
+\section{Action selection}
+
+In continuous action space our stochastic policy is Gaussian distributed. Therefore the resulting probability density of the action selection,
+
+$$P_{\pi}(a|s,x) = \frac{1}{\sqrt{2\pi\epsilon_a^2}}\exp\left(-\frac{(a-f_s(s)x)^2}{2\epsilon_a^2}\right),$$
+
+allows us to do the computations of the logarithm of the probability ratios in the trajectory kernel more efficient:
+
+\begin{align*}
+    \sum_{t=0}^{T-1} \log \left(\frac{P_{\pi}(a_{t}|s_{t},x_i)}{P_{\pi}(a_{t}|s_{t},x_j)}\right) &= \sum_{t=0}^{T-1} \log \left(\frac{\frac{1}{\sqrt{2\pi\epsilon_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)x_i)^2}{2\epsilon_a^2}\right)}{\frac{1}{\sqrt{2\pi\epsilon_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)x_j)^2}{2\epsilon_a^2}\right)}\right)\\
+    &= \sum_{t=0}^{T-1} \log \left( \exp \left( -\frac{(a_t-f_s(s_t)x_i)^2}{2\epsilon_a^2} - \left(-\frac{(a_t-f_s(s_t)x_j)^2}{2\epsilon_a^2}\right)\right)\right)\\
+    &= \frac{1}{2\epsilon_a^2} \sum_{t=0}^{T-1} \left((a_t-f_s(s_t)x_j)^2 - (a_t-f_s(s_t)x_i)^2\right).
+\end{align*}
+
+
+
+
+\section{Global optimization}
+We select the initial samples set from a bunch of sample sets such that the Euclidean distance between points of the selected set is maximized. This grants us a well covered search space as a starting condition.
+\\\\
+When optimizing the expected improvement function or the hyper parameter space we use the \texttt{GlobalSearch} Toolbox from MATLAB. But if we run the experiments on the cluster we use the local optimizer \texttt{fmincon} on 10000 random starting points to work around the lack of free global optimization toolbox licences.
+
+\section{Numerical stability}
+in the end -> 1. explain what we want to achieve (no log of small values for example)
+2. cholesky
+3. hyp param matrix
+
+\section{Hyper parameter optimization}
+
+\subsection{Optimization starting point}
+When optimizing the log marginal likelihood of the gaussian process we are confronted with undefinded areas in the hyper parameter space because $K$ is not positive semi definit in those areas. To start the optimization properly we randomly select points until finding a defined one.
+
+\subsection{Adaptation of the search space}
+We start our search space with a generous boundary. For example $[\exp(-10),\exp(10)]$. After finding the first set of hyper parameters we change that boundary to a smaller one to make the following optimizations more efficient. Also the center of the search space is adjusted to always match the latest set of hyper parameters.\\
+We can do this because it is not expected that the hyper parameters change drastically between iterations.
+
+\section{Independent log-normal prior}
+The log marginal likelihood maximization will sometimes succeed at the borders of our search space. We prevent this by adding an independet log-normal prior term as introduced in \cite{lizotte2008practical}:
+
+$$\sum_{i=f,l}\left(\frac{-\log(\sigma_i)^2}{2\cdot 10^2}) - \log 10\sqrt{2\pi} \right).$$
+
+Since the suggested prior is centered at the point of origin with standard deviation 10, but we want our search space to adapt between iterations, we make the mean and the standard deviation adjustable. We write:
+
+$$\sum_{i=1,2}\left(\frac{-(h_i-c_i)^2}{2(b_{u_i}-b_{l_i})^2}) - \log(b_{u_i}-b_{l_i})\sqrt{2\pi} \right),$$
+
+where $b_l$ and $b_u$ denote the lower and upper bounds of the search space and $c$ its center. And since we optimize over the logarithmic space $h_1 = \log\sigma_f$ and $h_2 = \log\sigma_l$.
+
+
+---write whole hyper opt with L and stuff
+
+\section{OpenAI Gym in Python}
+To use the simulations provided by the OpenAI Gym we prepare a python module which is imported to MATLAB. After loading the python module with \verb|py.importlib.import_module(moduleName)| we can call every method it contains via the \verb|py.moduleName.| prefix. It is vital to convert our data correctly before calling the python subroutine with it. The matlab variables containing whole numbers are converted from \verb|Double| to \verb|Int|. Also all the vectors received by python are made usable with \verb|numpy.asarray()|.\\
+Implementing the OpenAI Gym grants us the classic control problems like cart pole, mountain car, and acrobot. Furthermore a lot of more complex environments like a humanoid walker or some Atari games are provided\cite{DBLP:journals/corr/BrockmanCPSSTZ16}. This will facilitate future research on solving higher dimensional problems.
