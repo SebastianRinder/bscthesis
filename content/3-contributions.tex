@@ -15,11 +15,17 @@
 
 - global BO
 -- random initial samples well distributed in search space
+- Ei use max means
 
 - simultaion implementation of cart pole, acrobot and mountain car
 -- also visualization, but not maintained (YET)
 
 - sampling of actions from probabilities
+
+Before doing regression we transform our observations to zero mean and uniform variance:
+
+$$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$
+
 
 \section{Local Bayesian optimization}
 

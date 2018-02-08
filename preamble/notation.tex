@@ -1,9 +1,15 @@
-Matrices are noted as capital letters and vectors as lower case letters. Vectors are assumed as column vectors. The first dimension of a matrix indicates its row number, the second dimension its column number.\\
+Matrices and constants are noted as capital letters, and vectors and scalars as lower case letters. Vectors are assumed as column vectors. The first dimension of a matrix indicates its row number, the second dimension its column number.\\
 \\
 \begin{tabular}{l l}
     \underline{Symbol} & \underline{Meaning}\\
-
-    $init$ & count of initial sample points before starting the bayesian optimization\\
+    $S$ & Matrix of states\\
+    $A$ & Matrix of actions\\
+    $p$ & state transitioning probabilitiy\\
+    $p_0$ & probabilitiy of starting in state $s_0$\\
+    $r$ & immediate reward\\
+    $\bar{r}$ & cumulative reward, sum of all rewards from one trajectory\\
+    $M$ & count of initial sample points before starting the Bayesian optimization\\
+    $N$ & total number of Bayesian optimization steps\\
     $n$ & number of training points present\\
     $n_*$ & number of sample test points\\
     $d$ & number of dimensions in the problem\\
@@ -12,10 +18,10 @@ Matrices are noted as capital letters and vectors as lower case letters. Vectors
     $X$ & $n \times d$ matrix of $n$ points $x^{\top}$\\
     $X_*$ & $n_* \times d$ matrix of $m$ test points $x^{\top}_*$\\
     $y$ & vector of $n$ evaluated objective function values\\
-    $K$ & kernel function of the Gaussian process\\
-    $K(X,X)$ & $n \times n$ covariance matrix\\
-    $K(X,X_*)$ & $n \times n_*$ covariance between training and test points\\
-    $K(X_*,X)$ & same as $K(X,X_*)^{\top}$\\
-    $K(X_*,X_*)$ & $n_* \times n_*$ covariance matrix\\
-    $\circ$ & Hadamard product (element-wise product)\\
+    $K(X,X) = K$ & $n \times n$ covariance matrix\\
+    $K(X,X_*) = K_*$ & $n \times n_*$ covariance between training and test points\\
+    $K(X_*,X) = K_*^\top$ & same as $K(X,X_*)^{\top}$\\
+    $K(X_*,X_*) = K_{**}$ & $n_* \times n_*$ covariance matrix\\
+    $\circ$ & Hadamard product, element-wise product\\
+    diag($V$) & returns the diagonal elements of the square matrix $V$ as a vector\\
 \end{tabular}
