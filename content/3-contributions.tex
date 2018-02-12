@@ -17,17 +17,20 @@
 -- random initial samples well distributed in search space
 - Ei use max means
 
-- simultaion implementation of cart pole, acrobot and mountain car
--- also visualization, but not maintained (YET)
+- simulation implementation of cart pole, acrobot and mountain car
+-- (also visualization)
 
 - sampling of actions from probabilities
 
-Before doing regression we transform our observations to zero mean and uniform variance:
-
-$$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$
+- standardize objective values for acquisition functions
+(Before doing regression we transform our observations to zero mean and uniform variance:
+$$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$)
 
 
 \section{Local Bayesian optimization}
+
+- starting search dist
+- formula for search dist update
 
 Modelling the objective function for a higher dimensional search space is challenging. Also global Bayesian optimization tends to over-explore. To perform a more robust optimization we use local Bayesian optimization as stated in \cite{akrour2017local}. It restricts the search space of the acquisition function to a local area which is moved, resized, and rotated between iterations. This local area is defined by a Gaussian distribution in which the mean and variance represent the center and the exploration reach respectively. To update that mean and variance properly we minimize the Kullback-Leibler divergence between the incumbent search distribution $\pi_n$ and the probability $p_n^* = p(\x=\x^*|\mathcal{D}_n)$ of $\x^*$ being optimal. This results in a search area which neglects poorly performing regions.
 
@@ -42,12 +45,27 @@ To prevent the mean from moving too fast from the initial point and to avoid the
 
 where $\KL(p||q) = \int p(\x) \log \frac{p(\x)}{q(\x)} d\x$ is the KL divergence between $p$ and $q$ and $\HH(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$.
 
+\begin{algorithm}
+    \caption{Thompson Sampling acquisition for Local Bayesian optimization\label{alg:acqLocalBO}}
+    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+    \Input{$X$: $N$ already evaluated points\\$X_*$: $M$ random samples from the search distribution}
+    \Output{$x_{n+1}$: next evaluation point}
+    \BlankLine
+
+    $m_d$ = mahalanobis distance from test points to incumbent search distribution\\
+    discard samples, which are outside $80\%$ of the cumulative inverse-chi-squared distribution\\
+    get mean and covariance matrix from the Gaussian process\\
+    get values from Thompson sampling\\
+    $x_{n+1}$ = sample at the highest Thompson sampled value\\
+\end{algorithm}
+
+
 \section{Efficiency and robustness}
 We vectorize every suited operation to speed up calculations in Matlab. Additionally we tune the code to run on a parallel pool.\\
 
 Sometimes numerical instabilities lead to negative values for covariances. To avoid getting complex numbers we filter negative values before applying the square root on covariances when computing the expected improvement. Negative values also occur for the distance between two trajectories, and are filtered too.\\
 
-Depending on the acquisition function we calculate either the covariance matrix or the covariance vector from the Gaussian process regression. In case of expected improvement this saves a lot of computation time, since we only need the vector of covariances.\\
+Depending on the acquisition function we calculate either the covariance matrix or the covariance vector from the Gaussian process regression. In case of expected improvement this saves a lot of computation time, since we only need the vector of covariances (algorithm \ref{alg:gp}). \\
 
 Before each bayesian optimization iteration step we precompute $K$ because it only depends on the set of training points which won't change during optimization. Then $alpha$ and $L$ are derived from $K$. REF
 
@@ -93,12 +111,21 @@ We select the initial samples set from a bunch of sample sets such that the Eucl
 \\\\
 When optimizing the expected improvement function or the hyper parameter space we use the \texttt{GlobalSearch} Toolbox from MATLAB. But if we run the experiments on the cluster we use the local optimizer \texttt{fmincon} on 10000 random starting points to work around the lack of free global optimization toolbox licences.
 
-\section{Numerical stability}
-in the end -> 1. explain what we want to achieve (no log of small values for example)
-2. cholesky
-3. hyp param matrix
 
 \section{Hyper parameter optimization}
+
+Especially for the trajectory kernel we want a hyper parameter optimization, because all the values of the distance matrix $D$ may get very big. When dividing by a well tuned hyper parameter $sigma_l$ before applying the exponential function \eqref{eq:trajKernel}, we avoid getting a zero kernel matrix $K$.\\
+
+When calculating $\log(|K_n|)$ for the hyperparameter optimization \eqref{eq:hypOpt}, again we use the Cholesky decomposition of $K$. Thus the determinant transforms to
+$$|K_n|=|L\,L^{T}|=|L|\,|L^{T}|=|L|\,|L|=|L|^{2}.$$
+
+Since the determinant of the Cholesky decomposed matrix,
+$$|L| = \textstyle\prod_{i} L_{ii},$$
+is the product of its diagonal elements, we can transform this into a numerically more stable version:
+
+$$\log(|K_n|) = \log(|L|^{2}) = 2\,\log(|L|) = 2\,\log(\textstyle\prod_{i} L_{ii}) = 2\textstyle\sum_{i} \log(L_{ii}).$$
+
+The computation of $K_y^{-1}y$ in \eqref{eq:hypOpt} is done by the same method we already use in the Gaussian process \eqref{eq:regression}.
 
 \subsection{Optimization starting point}
 When optimizing the log marginal likelihood of the gaussian process we are confronted with undefinded areas in the hyper parameter space because $K$ is not positive semi definit in those areas. To start the optimization properly we randomly select points until finding a defined one.
@@ -107,8 +134,8 @@ When optimizing the log marginal likelihood of the gaussian process we are confr
 We start our search space with a generous boundary. For example $[\exp(-10),\exp(10)]$. After finding the first set of hyper parameters we change that boundary to a smaller one to make the following optimizations more efficient. Also the center of the search space is adjusted to always match the latest set of hyper parameters.\\
 We can do this because it is not expected that the hyper parameters change drastically between iterations.
 
-\section{Independent log-normal prior}
-The log marginal likelihood maximization will sometimes succeed at the borders of our search space. We prevent this by adding an independet log-normal prior term as introduced in \cite{lizotte2008practical}:
+\subsection{Independent log-normal prior}
+The log marginal likelihood maximization will sometimes succeed at the borders of our search space resulting in very high high or very low hyper parameters. We prevent this by adding an independet log-normal prior term as introduced in \cite{lizotte2008practical}:
 
 $$\sum_{i=f,l}\left(\frac{-\log(\sigma_i)^2}{2\cdot 10^2}) - \log 10\sqrt{2\pi} \right).$$
 
@@ -121,6 +148,6 @@ where $b_l$ and $b_u$ denote the lower and upper bounds of the search space and 
 
 ---write whole hyper opt with L and stuff
 
-\section{OpenAI Gym in Python}
-To use the simulations provided by the OpenAI Gym we prepare a python module which is imported to MATLAB. After loading the python module with \verb|py.importlib.import_module(moduleName)| we can call every method it contains via the \verb|py.moduleName.| prefix. It is vital to convert our data correctly before calling the python subroutine with it. The matlab variables containing whole numbers are converted from \verb|Double| to \verb|Int|. Also all the vectors received by python are made usable with \verb|numpy.asarray()|.\\
-Implementing the OpenAI Gym grants us the classic control problems like cart pole, mountain car, and acrobot. Furthermore a lot of more complex environments like a humanoid walker or some Atari games are provided\cite{DBLP:journals/corr/BrockmanCPSSTZ16}. This will facilitate future research on solving higher dimensional problems.
+\section{Python OpenAI Gym from Matlab}
+To use the simulations provided by the OpenAI Gym we prepare a python module which is imported to MATLAB. After loading the python module with \verb|py.importlib.import_module(moduleName)| we can call every method it contains via the \verb|py.moduleName.| prefix. It is vital to convert our data correctly before calling the python subroutine with it. The Matlab variables containing whole numbers are converted from \verb|Double| to \verb|Int|. Also all the vectors received by the python module have to be converted to an array through \verb|numpy.asarray()|.\\
+Implementing the OpenAI Gym grants us the classic control problems like cart pole, mountain car, and acrobot. Furthermore a lot of more complex environments like a humanoid walker or some Atari games are provided\cite{DBLP:journals/corr/BrockmanCPSSTZ16}. This will facilitate future research working with higher dimensional problems.
