@@ -1,10 +1,24 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{brochu2010tutorial}
 E.~Brochu, V.~M. Cora, and N.~De~Freitas, ``A tutorial on bayesian optimization
   of expensive cost functions, with application to active user modeling and
   hierarchical reinforcement learning,'' {\em arXiv preprint arXiv:1012.2599},
   2010.
+
+\bibitem{shahriari2016taking}
+B.~Shahriari, K.~Swersky, Z.~Wang, R.~P. Adams, and N.~de~Freitas, ``Taking the
+  human out of the loop: A review of bayesian optimization,'' {\em Proceedings
+  of the IEEE}, vol.~104, no.~1, pp.~148--175, 2016.
+
+\bibitem{lizotte2008practical}
+D.~J. Lizotte, {\em Practical bayesian optimization}.
+\newblock University of Alberta, 2008.
+
+\bibitem{sutton1998reinforcement}
+R.~S. Sutton and A.~G. Barto, {\em Reinforcement learning: An introduction},
+  vol.~1.
+\newblock MIT press Cambridge, 1998.
 
 \bibitem{wilson2014using}
 A.~Wilson, A.~Fern, and P.~Tadepalli, ``Using trajectory data to improve
@@ -14,10 +28,6 @@ A.~Wilson, A.~Fern, and P.~Tadepalli, ``Using trajectory data to improve
 \bibitem{akrour2017local}
 R.~Akrour, D.~Sorokin, J.~Peters, G.~Neumann, {\em et~al.}, ``Local bayesian
   optimization of motor skills,'' 2017.
-
-\bibitem{lizotte2008practical}
-D.~J. Lizotte, {\em Practical bayesian optimization}.
-\newblock University of Alberta, 2008.
 
 \bibitem{DBLP:journals/corr/BrockmanCPSSTZ16}
 G.~Brockman, V.~Cheung, L.~Pettersson, J.~Schneider, J.~Schulman, J.~Tang, and
@@ -33,10 +43,5 @@ C.~E. Rasmussen and C.~K. Williams, {\em Gaussian processes for machine
 
 \bibitem{nandoCode}
 N.~de~Freitas, ``Python demo code for gp regression,'' 2013.
-
-\bibitem{shahriari2016taking}
-B.~Shahriari, K.~Swersky, Z.~Wang, R.~P. Adams, and N.~de~Freitas, ``Taking the
-  human out of the loop: A review of bayesian optimization,'' {\em Proceedings
-  of the IEEE}, vol.~104, no.~1, pp.~148--175, 2016.
 
 \end{thebibliography}
