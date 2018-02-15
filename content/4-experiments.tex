@@ -1,45 +1,14 @@
 \chapter{Experiments}
 \label{chap:4}
-%
 
-- parallel runs on the cluster
 - BO : We set the initial sample count $M = 10$ and the iteration count $N = 200$.
 
 \section{Implementation}
 
 \subsection{Problem environment}
-In early test runs we used \texttt{Matlab} implementations of cart pole, acrobot, and mountain car adapted from \cite{joseCode}. But later we implemented OpenAI Gym to have a wide range of problem environments available and to have consistent rewarding functions. Otherwise, the rewarding function would depend on the source and therefore produce less comparable results.
+In early test runs we used \texttt{MATLAB} implementations of cart pole, acrobot, and mountain car adapted from \cite{joseCode}. But later we implemented the OpenAI Gym to have a wide range of problem environments available and to have consistent rewarding functions. Otherwise, the rewarding function would depend on the source and therefore produce less comparable results.
 
 
-
-\subsection{Gaussian Process Regression}
-
-(difference between full covariance and cov vector)
-
-Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the lower Cholesky decomposed matrix:
-
-$$LL^\top=K_n$$
-
-This is considered faster and numerically more stable \cite{rasmussen2006gaussian}. The mean vector $\mu$ is then computed as follows:
-
-\begin{equation} \label{eq:regression}
-    \mu = K_n^{-1}\,y = (L\,L^{T})^{-1}\,y = (L^{-T}\,L^{-1})\,y = L^{-T}\,(L^{-1}\,y) = L^{T}\setminus(L \setminus y).
-\end{equation}
-
-The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
-Matrix $K_n$ must be positive definite for the cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ from \eqref{eq:kNoise} until positive definiteness is achieved.
-
-For the expected improvement function we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f$ because the difference between one $x_*$ and the same $x_*$ is zero. Therefore we write:
-
-$$L_k = L \setminus K(X_*,X)$$
-
-$$v = \sigma_f - \sum_{\text{rows}} (L_k \circ L_k).$$
-
-This adaptation is inspired by \cite{nandoCode} and reduces the computational effort drastically.
-
-For the whole covariance matrix we also avoid calculating the matrix inverse:
-
-$$V = K(X_*,X_*) - (L_k^\top L_k)^\top $$
 
 
 
@@ -60,17 +29,46 @@ $$P(a|s)= \frac{\exp(f_s(s)^\top x_a)}{\sum_{i\in A} \exp(f_s(s)^\top x_i)}.$$
 
 Again it consists of the linear mapping $f_s(s)^\top x$, and $A$ holds all possible actions. The resulting action is then sampled from the probability of action $a$ given state $s$.
 
-The state feature function $f_s(s)$ is defined for each environment as shown below.
+The state feature function $f_s(s)$ is defined for each environment.
 
 \section{Cart pole}
 
+\begin{wrapfigure}{R}{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{/home/sebastian/Documents/bscThesis/img/cartpole.pdf}
+    \caption{Visualization of the cart pole rendered by the Open AI Gym\label{fig:cartpolePygym}}
+\end{wrapfigure}
+
+The cart pole environment consist of a cart with a pole attached to its top. The cart is accelerated to the left or the right to balance the pole for as long as possible. An episode starts with small random state values and it ends when the maximum of time steps or a specifc state is reached. The state values contain the position and the velocity of the cart, and the angle and the angular velocity of the pole. Each of these four state values are set uniformly random between -0.05 and 0.05 at the beginning. The episode ends after 200 time steps or if the pole falls below 12 degrees relative to the vertical. It also ends when the cart is more than 2.4 meters away from the center. For each completed time step a reward of 1 is returned.
 
 % \begin{figure}
-%     \begin{center}
-%         \fbox{\includegraphics{/home/sebastian/Documents/bscThesis/img/cartpole_matlab_conti_oldreward.pdf}}
-%         \caption{Global opt, 4 dim. Mean and standard deviation from 32 trials of each kernel. Cartpole matlab implementation with old reward function, 1000 timesteps, and continuous action selection.}
-%     \end{center}
+%     \includegraphics{/home/sebastian/Documents/bscThesis/img/cartpole.pdf}
+%     \caption{Visualization of the cart pole from Open AI Gym\label{fig:cartpolePygym}}
 % \end{figure}
+
+The cart pole implementation from Open AI Gym (figure \ref{fig:cartpolePygym}) accepts a discrete action value for either applying force to the left (-1) or to the right (1). With the four state values and an additional bias value we have five dimensions for each discrete action resulting in a total of ten dimensions. In our own cart pole simulation we only use the four state parameters for calculating an continuous action value between -1 and 1. Therefore this policy has only four dimensions.
+
+
+\section{Acrobot}
+
+\begin{wrapfigure}{R}{0.25\textwidth}
+    \centering
+    \includegraphics[width=0.20\textwidth]{/home/sebastian/Documents/bscThesis/img/acrobot.pdf}
+    \caption{Visualization of the Acrobot rendered by the Open AI Gym\label{fig:acrobotPygym}}
+\end{wrapfigure}
+
+The acrobatic robot has two joints and two pendulums. The upper joint has a fixed position. It connects to the first pendulum, which is attached to the second joint. A torque can be applied to that second joint, which controls the second pendulum. The goal is to gain enough momentum and swing the end of the second pendulum above a certain mark. The angle between vertical and the first pendulum and the angle between the two pendulums form the six state parameters. Four parameters are the sine and the cosine of these two angles each, whereas the last two parameters are the angular velocities. The discrete action can has the values -1, 0 or 1. Each value stands for the amount of torque applied to the joint between the two pendulum links. With the six state values, an additional bias value, and three discrete action possibilities we get 21 dimensions for the Acrobot policy.
+
+\section{Mountain car}
+
+\begin{wrapfigure}{R}{0.4\textwidth}
+    \centering
+    \includegraphics[width=0.35\textwidth]{/home/sebastian/Documents/bscThesis/img/mountaincar.pdf}
+    \caption{Visualization of the mountain car rendered by the Open AI Gym\label{fig:mountaincarPygym}}
+\end{wrapfigure}
+
+In the mountain car task, an underpowered car tries to drive uphill. It can only reach the goal on the right side if it uses both hills to gain momentum. The end of the left hill is an inelastic wall, so if the car hits it, the velocity is set to zero.
+
 %
 % \begin{figure}
 %     \begin{center}

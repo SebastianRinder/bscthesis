@@ -26,6 +26,35 @@
 (Before doing regression we transform our observations to zero mean and uniform variance:
 $$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$)
 
+\subsection{Gaussian Process Regression}
+
+(difference between full covariance and cov vector)
+
+Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the lower Cholesky decomposed matrix:
+
+$$LL^\top=K_n$$
+
+This is considered faster and numerically more stable \cite{rasmussen2006gaussian}. The mean vector $\mu$ is then computed as follows:
+
+\begin{equation} \label{eq:regression}
+    \mu = K_n^{-1}\,y = (L\,L^{T})^{-1}\,y = (L^{-T}\,L^{-1})\,y = L^{-T}\,(L^{-1}\,y) = L^{T}\setminus(L \setminus y).
+\end{equation}
+
+The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
+Matrix $K_n$ must be positive definite for the cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ from \eqref{eq:kNoise} until positive definiteness is achieved.
+
+For the expected improvement function we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f$ because the difference between one $x_*$ and the same $x_*$ is zero. Therefore we write:
+
+$$L_k = L \setminus K(X_*,X)$$
+
+$$v = \sigma_f - \sum_{\text{rows}} (L_k \circ L_k).$$
+
+This adaptation is inspired by \cite{nandoCode} and reduces the computational effort drastically.
+
+For the whole covariance matrix we also avoid calculating the matrix inverse:
+
+$$V = K(X_*,X_*) - (L_k^\top L_k)^\top $$
+
 
 \section{Local Bayesian optimization}
 

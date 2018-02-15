@@ -2,13 +2,14 @@
 \select@language {english}
 \select@language {ngerman}
 \select@language {english}
-\select@language {ngerman}
-\select@language {english}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Visualization of the cart pole rendered by the Open AI Gym\relax }}{14}{figure.caption.25}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Visualization of the Acrobot rendered by the Open AI Gym\relax }}{15}{figure.caption.26}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Visualization of the mountain car rendered by the Open AI Gym\relax }}{15}{figure.caption.27}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

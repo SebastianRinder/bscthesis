@@ -42,14 +42,6 @@
 \@writefile{toc}{\select@language{english}}
 \@writefile{lof}{\select@language{english}}
 \@writefile{lot}{\select@language{english}}
-\select@language{ngerman}
-\@writefile{toc}{\select@language{ngerman}}
-\@writefile{lof}{\select@language{ngerman}}
-\@writefile{lot}{\select@language{ngerman}}
-\select@language{english}
-\@writefile{toc}{\select@language{english}}
-\@writefile{lof}{\select@language{english}}
-\@writefile{lot}{\select@language{english}}
 \citation{brochu2010tutorial}
 \citation{shahriari2016taking}
 \citation{lizotte2008practical}
@@ -98,6 +90,8 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}Estimation of Trajectory Kernel Values}{8}{subsection.3.5.3}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.6}Hyper parameter optimization}{9}{section.3.6}}
 \newlabel{eq:hypOpt}{{3.6}{9}{Hyper parameter optimization}{equation.3.6.6}{}}
+\citation{rasmussen2006gaussian}
+\citation{nandoCode}
 \citation{akrour2017local}
 \@writefile{toc}{\contentsline {chapter}{\numberline {4}Contributions}{10}{chapter.4}}
 \@writefile{lof}{\addvspace {10\p@ }}
@@ -105,27 +99,27 @@
 \@writefile{lol}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
 \newlabel{chap:contributions}{{4}{10}{Contributions}{chapter.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Local Bayesian optimization}{10}{section.4.1}}
-\newlabel{eq:kl:our}{{4.1}{10}{Local Bayesian optimization}{equation.4.1.1}{}}
-\newlabel{eq:entropy:our}{{4.2}{10}{Local Bayesian optimization}{equation.4.1.2}{}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Thompson Sampling acquisition for Local Bayesian optimization\relax }}{10}{algocf.2}}
-\newlabel{alg:acqLocalBO}{{2}{10}{Local Bayesian optimization}{algocf.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.0.1}Gaussian Process Regression}{10}{subsection.4.0.1}}
+\newlabel{eq:regression}{{4.1}{10}{Gaussian Process Regression}{equation.4.0.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Local Bayesian optimization}{11}{section.4.1}}
+\newlabel{eq:kl:our}{{4.2}{11}{Local Bayesian optimization}{equation.4.1.2}{}}
+\newlabel{eq:entropy:our}{{4.3}{11}{Local Bayesian optimization}{equation.4.1.3}{}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Thompson Sampling acquisition for Local Bayesian optimization\relax }}{11}{algocf.2}}
+\newlabel{alg:acqLocalBO}{{2}{11}{Local Bayesian optimization}{algocf.2}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.2}Efficiency and robustness}{11}{section.4.2}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Lower Cholesky with variance doubling\relax }}{11}{algocf.3}}
-\newlabel{alg:cholesky}{{3}{11}{Efficiency and robustness}{algocf.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.3}Normalization constant}{11}{section.4.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Action selection}{11}{section.4.4}}
-\citation{lizotte2008practical}
+\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Lower Cholesky with variance doubling\relax }}{12}{algocf.3}}
+\newlabel{alg:cholesky}{{3}{12}{Efficiency and robustness}{algocf.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Action selection}{12}{section.4.4}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.5}Global optimization}{12}{section.4.5}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.6}Hyper parameter optimization}{12}{section.4.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.1}Optimization starting point}{12}{subsection.4.6.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.2}Adaptation of the search space}{12}{subsection.4.6.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.3}Independent log-normal prior}{12}{subsection.4.6.3}}
+\citation{lizotte2008practical}
 \citation{DBLP:journals/corr/BrockmanCPSSTZ16}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.1}Optimization starting point}{13}{subsection.4.6.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.2}Adaptation of the search space}{13}{subsection.4.6.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.3}Independent log-normal prior}{13}{subsection.4.6.3}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.7}Python OpenAI Gym from Matlab}{13}{section.4.7}}
 \citation{joseCode}
-\citation{rasmussen2006gaussian}
-\citation{nandoCode}
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}Experiments}{14}{chapter.5}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
@@ -134,10 +128,16 @@
 \newlabel{chap:4}{{5}{14}{Experiments}{chapter.5}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.1}Implementation}{14}{section.5.1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Problem environment}{14}{subsection.5.1.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Gaussian Process Regression}{14}{subsection.5.1.2}}
-\newlabel{eq:regression}{{5.1}{14}{Gaussian Process Regression}{equation.5.1.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Action selection}{15}{subsection.5.1.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Cart pole}{15}{section.5.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Action selection}{14}{subsection.5.1.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Cart pole}{14}{section.5.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Visualization of the cart pole rendered by the Open AI Gym\relax }}{14}{figure.caption.25}}
+\newlabel{fig:cartpolePygym}{{5.1}{14}{Visualization of the cart pole rendered by the Open AI Gym\relax }{figure.caption.25}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Acrobot}{14}{section.5.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces Visualization of the Acrobot rendered by the Open AI Gym\relax }}{15}{figure.caption.26}}
+\newlabel{fig:acrobotPygym}{{5.2}{15}{Visualization of the Acrobot rendered by the Open AI Gym\relax }{figure.caption.26}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Mountain car}{15}{section.5.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Visualization of the mountain car rendered by the Open AI Gym\relax }}{15}{figure.caption.27}}
+\newlabel{fig:mountaincarPygym}{{5.3}{15}{Visualization of the mountain car rendered by the Open AI Gym\relax }{figure.caption.27}{}}
 \@writefile{toc}{\contentsline {chapter}{\numberline {6}Results}{16}{chapter.6}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
@@ -163,12 +163,12 @@
 \bibcite{akrour2017local}{4}
 \bibcite{sutton1998reinforcement}{5}
 \bibcite{wilson2014using}{6}
-\bibcite{DBLP:journals/corr/BrockmanCPSSTZ16}{7}
-\bibcite{joseCode}{8}
-\bibcite{rasmussen2006gaussian}{9}
-\bibcite{nandoCode}{10}
+\bibcite{rasmussen2006gaussian}{7}
+\bibcite{nandoCode}{8}
+\bibcite{DBLP:journals/corr/BrockmanCPSSTZ16}{9}
+\bibcite{joseCode}{10}
 \citation{*}
-\@writefile{toc}{\contentsline {chapter}{Bibliography}{19}{section*.27}}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{19}{section*.30}}
 \@writefile{toc}{\contentsline {chapter}{\numberline {A}Some Appendix}{21}{appendix.A}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}

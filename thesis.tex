@@ -91,7 +91,8 @@
 %
   \pagenumbering{gobble}                    % suppress page numbering
   \makethesistitle                          % generate thesis title
-  \affidavit{\StudentName}                  % generate declaration to sign (at this position)
+  %\affidavit{\StudentName}                  % generate declaration to sign (at this position)
+  \input{meta/affidavit}
 %
   \pagenumbering{roman}                     % start counting pages from now on with roman letters
   \selectlanguage{english}                  % use the english language from now on
@@ -108,7 +109,7 @@
     \listoffigures\listoftables
   \endgroup
 %
-  \chapter*{Symbols and Notation}
+  \chapter*{Symbols~and~Notation}
   \input{preamble/notation}
  % \glsaddall
  % \printglossary[type=acronym,title=List of Abbreviations,style=iasThesisGeneral]

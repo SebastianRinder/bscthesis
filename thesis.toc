@@ -2,8 +2,6 @@
 \select@language {english}
 \select@language {ngerman}
 \select@language {english}
-\select@language {ngerman}
-\select@language {english}
 \contentsline {chapter}{\numberline {1}Introduction}{2}{chapter.1}
 \contentsline {chapter}{\numberline {2}Motivation}{4}{chapter.2}
 \contentsline {chapter}{\numberline {3}Foundations}{5}{chapter.3}
@@ -20,24 +18,26 @@
 \contentsline {subsection}{\numberline {3.5.3}Estimation of Trajectory Kernel Values}{8}{subsection.3.5.3}
 \contentsline {section}{\numberline {3.6}Hyper parameter optimization}{9}{section.3.6}
 \contentsline {chapter}{\numberline {4}Contributions}{10}{chapter.4}
-\contentsline {section}{\numberline {4.1}Local Bayesian optimization}{10}{section.4.1}
+\contentsline {subsection}{\numberline {4.0.1}Gaussian Process Regression}{10}{subsection.4.0.1}
+\contentsline {section}{\numberline {4.1}Local Bayesian optimization}{11}{section.4.1}
 \contentsline {section}{\numberline {4.2}Efficiency and robustness}{11}{section.4.2}
 \contentsline {section}{\numberline {4.3}Normalization constant}{11}{section.4.3}
-\contentsline {section}{\numberline {4.4}Action selection}{11}{section.4.4}
+\contentsline {section}{\numberline {4.4}Action selection}{12}{section.4.4}
 \contentsline {section}{\numberline {4.5}Global optimization}{12}{section.4.5}
 \contentsline {section}{\numberline {4.6}Hyper parameter optimization}{12}{section.4.6}
-\contentsline {subsection}{\numberline {4.6.1}Optimization starting point}{12}{subsection.4.6.1}
-\contentsline {subsection}{\numberline {4.6.2}Adaptation of the search space}{12}{subsection.4.6.2}
-\contentsline {subsection}{\numberline {4.6.3}Independent log-normal prior}{12}{subsection.4.6.3}
+\contentsline {subsection}{\numberline {4.6.1}Optimization starting point}{13}{subsection.4.6.1}
+\contentsline {subsection}{\numberline {4.6.2}Adaptation of the search space}{13}{subsection.4.6.2}
+\contentsline {subsection}{\numberline {4.6.3}Independent log-normal prior}{13}{subsection.4.6.3}
 \contentsline {section}{\numberline {4.7}Python OpenAI Gym from Matlab}{13}{section.4.7}
 \contentsline {chapter}{\numberline {5}Experiments}{14}{chapter.5}
 \contentsline {section}{\numberline {5.1}Implementation}{14}{section.5.1}
 \contentsline {subsection}{\numberline {5.1.1}Problem environment}{14}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}Gaussian Process Regression}{14}{subsection.5.1.2}
-\contentsline {subsection}{\numberline {5.1.3}Action selection}{15}{subsection.5.1.3}
-\contentsline {section}{\numberline {5.2}Cart pole}{15}{section.5.2}
+\contentsline {subsection}{\numberline {5.1.2}Action selection}{14}{subsection.5.1.2}
+\contentsline {section}{\numberline {5.2}Cart pole}{14}{section.5.2}
+\contentsline {section}{\numberline {5.3}Acrobot}{14}{section.5.3}
+\contentsline {section}{\numberline {5.4}Mountain car}{15}{section.5.4}
 \contentsline {chapter}{\numberline {6}Results}{16}{chapter.6}
 \contentsline {chapter}{\numberline {7}Discussion}{17}{chapter.7}
 \contentsline {chapter}{\numberline {8}Outlook}{18}{chapter.8}
-\contentsline {chapter}{Bibliography}{19}{section*.27}
+\contentsline {chapter}{Bibliography}{19}{section*.30}
 \contentsline {chapter}{\numberline {A}Some Appendix}{21}{appendix.A}
