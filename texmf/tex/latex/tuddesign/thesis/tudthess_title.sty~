@@ -3,7 +3,7 @@
 % This class is provided "as is", the authors take no responsibility
 % for any effects the style file has on the user, the user's life, family,
 % pets, scientific or other career etc.
-% 
+%
 % When making changes to this style file or the accompanying package files
 % please notify the authors:
 % tud-design@pro-kevin.de
@@ -13,7 +13,7 @@
 \def\filedate{2010/03/22}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tudthess_title}
- [\filedate\space\fileversion\space 
+ [\filedate\space\fileversion\space
    Joe Werner's TUD-Design-Manual package]
 
 \newif\ifTUD@thesis@phd \TUD@thesis@phdfalse
@@ -274,14 +274,14 @@
     \vskip4ex
       Hiermit versichere ich,
       \ifTUD@thesis@gender@female
-        die vorliegende 
+        die vorliegende
       \else\ifTUD@thesis@gender@neuter
-        das vorliegende 
+        das vorliegende
       \else
-        den vorliegenden 
+        den vorliegenden
       \fi\fi
-      \TUD@thesis@thesistype ohne Hilfe Dritter und nur mit den an\-ge\-ge\-benen Quellen und 
-      Hilfsmitteln angefertigt zu haben. Alle Stellen, die aus Quellen 
+      \TUD@thesis@thesistype ohne Hilfe Dritter und nur mit den an\-ge\-ge\-benen Quellen und
+      Hilfsmitteln angefertigt zu haben. Alle Stellen, die aus Quellen
       entnommen wurden, sind als solche kenntlich gemacht. Diese Arbeit hat in
       gleicher oder \char228 hn\-lich\-er Form noch keiner
       Pr\char252\-fungs\-be\-h\char246 r\-de vorgelegen.\\
@@ -301,7 +301,7 @@
 %      \TUD@setbigtitlestyle{\section}{\sectfont\chapterlinesize}{\thechapter}{\TUD@chapind}{-1}
 %      \chapter*{Er\-kl\char228\-rung \ifTUD@thesis@gender@female zur\else zum\fi\  \TUD@thesis@thesistype}
       \TUD@setbigtitlestyle{\section}{\sectfont\chapterlinesize}{\thechapter}{\TUD@chapind}{-1}
-      \section*{Thesis Statement}       
+      \section*{Thesis Statement}
     }
     \accentfont\large
     \parindent0em

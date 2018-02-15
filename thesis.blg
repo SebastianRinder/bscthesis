@@ -3,8 +3,8 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: thesis.aux
 The style file: ieeetr.bst
 Database file #1: literature/lit.bib
-Warning--can't use both volume and number fields in sutton1998reinforcement
 Warning--empty journal in akrour2017local
+Warning--can't use both volume and number fields in sutton1998reinforcement
 You've used 10 entries,
             1876 wiz_defined-function locations,
             531 strings with 4987 characters,

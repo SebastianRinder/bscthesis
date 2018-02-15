@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  15 FEB 2018 00:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  15 FEB 2018 16:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2131,24 +2131,6 @@ l.93   \makethesistitle
 
  </home/sebastian/.texmf-var/tex/latex/tuddesign/thesis/by-nc-nd.pdf>]
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 93.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 93.
-Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 93.
-Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 93.
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.93   \makethesistitle
-                                                 % generate thesis title
-[1
-
-
-]
-Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 94.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 94.
@@ -2162,7 +2144,7 @@ een already used, duplicate ignored
                    \relax 
 l.94   \affidavit{\StudentName}
                                                  % generate declaration to s...
-[2
+[1
 
 
 
@@ -2213,57 +2195,71 @@ Class scrreprt Warning: \float@addtolists detected!
 (scrreprt)              a package that still implements the
 (scrreprt)              deprecated \float@addtolist interface .
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 10--22
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 10--22
+) (./content/1-motivation.tex
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 10--22
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 10--22
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 10--22
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 10--22
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 10--22
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
 
  []
 
-) (./content/1-motivation.tex [2
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--1
+
+ []
+
+
+Underfull \vbox (badness 4242) has occurred while \output is active []
+
+ [2
 
 ]
+[3]
 chapter 2.
-) (./content/2-foundations.tex [3
+) (./content/2-foundations.tex [4
 
 ]
 chapter 3.
-[4
+[5
 
-] [5] [6]
+] [6] [7]
 Underfull \hbox (badness 10000) in paragraph at lines 132--133
 
  []
 
-) (./content/3-contributions.tex [7] [8]
+) (./content/3-contributions.tex [8] [9]
 chapter 4.
 LaTeX Font Info:    Font shape `OT1/mdbch/b/n' will be
 (Font)              scaled to size 9.50406pt on input line 35.
@@ -2317,11 +2313,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 66--67
 
  []
 
-[9
+[10
 
 ]
 
-LaTeX Warning: Reference `alg:gp' on page 10 undefined on input line 68.
+LaTeX Warning: Reference `alg:gp' on page 11 undefined on input line 68.
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 68--69
@@ -2337,31 +2333,30 @@ Underfull \hbox (badness 10000) in paragraph at lines 110--113
 
  []
 
-[10]
+[11]
 Underfull \hbox (badness 10000) in paragraph at lines 117--118
 
  []
 
-[11]) (./content/4-experiments.tex [12]
+[12]) (./content/4-experiments.tex [13]
 chapter 5.
-[13
+[14
 
-]) (./content/5-results.tex [14]
+]) (./content/5-results.tex [15]
 chapter 6.
-) (./content/6-discussion.tex [15
+) (./content/6-discussion.tex [16
 
 ]
 chapter 7.
-) (./content/7-outlook.tex [16
+) (./content/7-outlook.tex [17
 
 ]
 chapter 8.
-) [17
-
-] [18
-
+) [18
 
 ] (./thesis.bbl) [19
+
+
 
 ] [20
 
@@ -2390,11 +2385,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 129.
 Here is how much of TeX's memory you used:
  31315 strings out of 494901
  550014 string characters out of 6178616
- 770675 words of memory out of 5000000
+ 770651 words of memory out of 5000000
  33725 multiletter control sequences out of 15000+600000
  138347 words of font info for 121 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 67i,13n,102p,2082b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 67i,13n,102p,2082b,495s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}{/usr/share/t
 exlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</home/sebastian/.texmf-var/fonts
 /type1/softmake/charter/5chb8a.pfb></home/sebastian/.texmf-var/fonts/type1/soft
@@ -2412,10 +2407,10 @@ nts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/adobe/utopia/putri8a.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/public/txfonts/t1xtt.pfb>
-Output written on thesis.pdf (29 pages, 264090 bytes).
+Output written on thesis.pdf (28 pages, 264426 bytes).
 PDF statistics:
- 438 PDF objects out of 1000 (max. 8388607)
- 381 compressed objects within 4 object streams
+ 436 PDF objects out of 1000 (max. 8388607)
+ 380 compressed objects within 4 object streams
  107 named destinations out of 1000 (max. 500000)
  246 words of extra memory for PDF output out of 10000 (max. 10000000)
 
