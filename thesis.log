@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  15 FEB 2018 23:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.13)  16 FEB 2018 10:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2340,58 +2340,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 146--147
 [12]) (./content/4-experiments.tex [13]
 chapter 5.
 
-</home/sebastian/Documents/bscThesis/img/cartpole.pdf, id=337, 441.14813pt x 10
+</home/sebastian/Documents/bscThesis/img/cartpole.pdf, id=339, 441.14813pt x 10
 6.52277pt>
 File: /home/sebastian/Documents/bscThesis/img/cartpole.pdf Graphic file (type p
 df)
  <use /home/sebastian/Documents/bscThesis/img/cartpole.pdf>
 Package pdftex.def Info: /home/sebastian/Documents/bscThesis/img/cartpole.pdf u
-sed on input line 38.
-(pdftex.def)             Requested size: 224.06393pt x 54.10483pt.
+sed on input line 43.
+(pdftex.def)             Requested size: 441.14705pt x 106.52249pt.
+ [14
 
-</home/sebastian/Documents/bscThesis/img/acrobot.pdf, id=339, 230.05743pt x 234
+ </home/sebastian/Documents/bscThesis/img/cartpole.pdf>]
+</home/sebastian/Documents/bscThesis/img/acrobot.pdf, id=350, 230.05743pt x 234
 .7692pt>
 File: /home/sebastian/Documents/bscThesis/img/acrobot.pdf Graphic file (type pd
 f)
  <use /home/sebastian/Documents/bscThesis/img/acrobot.pdf>
 Package pdftex.def Info: /home/sebastian/Documents/bscThesis/img/acrobot.pdf us
-ed on input line 56.
+ed on input line 59.
 (pdftex.def)             Requested size: 99.58313pt x 101.62225pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 57--57
-[][][]|\T1/5fp/m/n/9.5 Vi-su-al-iza-tion
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 57--57
-\T1/5fp/m/n/9.5 of the Ac-robot
- []
-
-
-Underfull \hbox (badness 2903) in paragraph at lines 57--57
-\T1/5fp/m/n/9.5 ren-dered by the
- []
-
-[14
-
- </home/sebastian/Documents/bscThesis/img/cartpole.pdf>]
-Underfull \hbox (badness 10000) detected at line 62
-[]
- []
-
-
-Underfull \hbox (badness 10000) detected at line 62
-[]
- []
-
-
-</home/sebastian/Documents/bscThesis/img/mountaincar.pdf, id=349, 445.55077pt x
+</home/sebastian/Documents/bscThesis/img/mountaincar.pdf, id=351, 445.55077pt x
  265.05975pt>
 File: /home/sebastian/Documents/bscThesis/img/mountaincar.pdf Graphic file (typ
 e pdf)
  <use /home/sebastian/Documents/bscThesis/img/mountaincar.pdf>
 Package pdftex.def Info: /home/sebastian/Documents/bscThesis/img/mountaincar.pd
-f used on input line 66.
+f used on input line 69.
 (pdftex.def)             Requested size: 174.27617pt x 103.67621pt.
 )
 (./content/5-results.tex [15 </home/sebastian/Documents/bscThesis/img/acrobot.p
@@ -2400,28 +2375,29 @@ df> </home/sebastian/Documents/bscThesis/img/mountaincar.pdf
 pdfTeX warning: pdflatex (file /home/sebastian/Documents/bscThesis/img/mountain
 car.pdf): PDF inclusion: multiple pdfs with page group included in a single pag
 e
->]
+>] [16]
 chapter 6.
-) (./content/6-discussion.tex [16
+) (./content/6-discussion.tex [17
 
 ]
 chapter 7.
-) (./content/7-outlook.tex [17
+) (./content/7-outlook.tex [18
 
 ]
 chapter 8.
-) [18
-
-] (./thesis.bbl) [19
-
-
+) [19
 
 ] [20
 
 
+] (./thesis.bbl) [21
+
+] [22
+
+
 ] (./meta/appendix.tex
 chapter A.
-) [21
+) [23
 
 ]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 130.
@@ -2430,7 +2406,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 130.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 130.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 130.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 80850ABD31582A40FEAAAAAF7346F4CA;1610.
+(rerunfilecheck)             Checksum: 077B7365F538D33893F531F015A34884;1610.
 
 
 LaTeX Warning: There were undefined references.
@@ -2441,10 +2417,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 130.
  ) 
 Here is how much of TeX's memory you used:
- 31350 strings out of 494901
- 551116 string characters out of 6178616
- 771931 words of memory out of 5000000
- 33749 multiletter control sequences out of 15000+600000
+ 31355 strings out of 494901
+ 551182 string characters out of 6178616
+ 774987 words of memory out of 5000000
+ 33751 multiletter control sequences out of 15000+600000
  123537 words of font info for 121 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  67i,13n,102p,2082b,495s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2465,10 +2441,10 @@ nts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/adobe/utopia/putri8a.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/public/txfonts/t1xtt.pfb>
-Output written on thesis.pdf (28 pages, 266708 bytes).
+Output written on thesis.pdf (30 pages, 269174 bytes).
 PDF statistics:
- 464 PDF objects out of 1000 (max. 8388607)
- 404 compressed objects within 5 object streams
- 112 named destinations out of 1000 (max. 500000)
+ 476 PDF objects out of 1000 (max. 8388607)
+ 414 compressed objects within 5 object streams
+ 115 named destinations out of 1000 (max. 500000)
  277 words of extra memory for PDF output out of 10000 (max. 10000000)
 

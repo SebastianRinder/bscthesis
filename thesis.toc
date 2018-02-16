@@ -33,11 +33,11 @@
 \contentsline {section}{\numberline {5.1}Implementation}{14}{section.5.1}
 \contentsline {subsection}{\numberline {5.1.1}Problem environment}{14}{subsection.5.1.1}
 \contentsline {subsection}{\numberline {5.1.2}Action selection}{14}{subsection.5.1.2}
-\contentsline {section}{\numberline {5.2}Cart pole}{14}{section.5.2}
-\contentsline {section}{\numberline {5.3}Acrobot}{14}{section.5.3}
+\contentsline {section}{\numberline {5.2}Cart Pole}{14}{section.5.2}
+\contentsline {section}{\numberline {5.3}Acrobot}{15}{section.5.3}
 \contentsline {section}{\numberline {5.4}Mountain car}{15}{section.5.4}
-\contentsline {chapter}{\numberline {6}Results}{16}{chapter.6}
-\contentsline {chapter}{\numberline {7}Discussion}{17}{chapter.7}
-\contentsline {chapter}{\numberline {8}Outlook}{18}{chapter.8}
-\contentsline {chapter}{Bibliography}{19}{section*.30}
-\contentsline {chapter}{\numberline {A}Some Appendix}{21}{appendix.A}
+\contentsline {chapter}{\numberline {6}Results}{17}{chapter.6}
+\contentsline {chapter}{\numberline {7}Discussion}{18}{chapter.7}
+\contentsline {chapter}{\numberline {8}Outlook}{19}{chapter.8}
+\contentsline {chapter}{Bibliography}{21}{section*.31}
+\contentsline {chapter}{\numberline {A}Some Appendix}{23}{appendix.A}

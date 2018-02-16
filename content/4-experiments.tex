@@ -31,31 +31,34 @@ Again it consists of the linear mapping $f_s(s)^\top x$, and $A$ holds all possi
 
 The state feature function $f_s(s)$ is defined for each environment.
 
-\section{Cart pole}
+\section{Cart Pole}
 
-\begin{wrapfigure}{R}{0.5\textwidth}
-    \centering
-    \includegraphics[width=0.45\textwidth]{/home/sebastian/Documents/bscThesis/img/cartpole.pdf}
-    \caption{Visualization of the cart pole rendered by the Open AI Gym\label{fig:cartpolePygym}}
-\end{wrapfigure}
+% \begin{wrapfigure}{R}{0.5\textwidth}
+%     \centering
+%     \includegraphics[width=0.45\textwidth]{/home/sebastian/Documents/bscThesis/img/cartpole.pdf}
+%     \caption{Visualization of the Cart Pole rendered by the Open AI Gym\label{fig:cartpolePygym}}
+% \end{wrapfigure}
 
-The cart pole environment consist of a cart with a pole attached to its top. The cart is accelerated to the left or the right to balance the pole for as long as possible. An episode starts with small random state values and it ends when the maximum of time steps or a specifc state is reached. The state values contain the position and the velocity of the cart, and the angle and the angular velocity of the pole. Each of these four state values are set uniformly random between -0.05 and 0.05 at the beginning. The episode ends after 200 time steps or if the pole falls below 12 degrees relative to the vertical. It also ends when the cart is more than 2.4 meters away from the center. For each completed time step a reward of 1 is returned.
+\begin{figure}[h]
+    \includegraphics{/home/sebastian/Documents/bscThesis/img/cartpole.pdf}
+    \caption{Visualization of the Cart Pole rendered by the Open AI Gym\label{fig:cartpolePygym}}
+\end{figure}
 
-% \begin{figure}
-%     \includegraphics{/home/sebastian/Documents/bscThesis/img/cartpole.pdf}
-%     \caption{Visualization of the cart pole from Open AI Gym\label{fig:cartpolePygym}}
-% \end{figure}
-
-The cart pole implementation from Open AI Gym (figure \ref{fig:cartpolePygym}) accepts a discrete action value for either applying force to the left (-1) or to the right (1). With the four state values and an additional bias value we have five dimensions for each discrete action resulting in a total of ten dimensions. In our own cart pole simulation we only use the four state parameters for calculating an continuous action value between -1 and 1. Therefore this policy has only four dimensions.
+The Cart Pole environment consist of a cart with a pole attached to its top. The cart is accelerated to the left or the right to balance the pole for as long as possible. An episode starts with small random state values and it ends when the maximum of time steps or a specifc state is reached. The state values contain the position and the velocity of the cart, and the angle and the angular velocity of the pole. Each of these four state values are set uniformly random between -0.05 and 0.05 at the beginning. The episode ends after 200 time steps or if the pole falls below 12 degrees relative to the vertical. It also ends when the cart is more than 2.4 meters away from the center. For each completed time step a reward of 1 is returned. The cart pole implementation from Open AI Gym (Figure \ref{fig:cartpolePygym}) accepts a discrete action value for either applying force to the left (-1) or to the right (1). With the four state values and an additional bias value we have five dimensions for each discrete action resulting in a total of ten dimensions. In our own cart pole simulation we only use the four state parameters for calculating an continuous action value between -1 and 1. Therefore this policy has only four dimensions.
 
 
 \section{Acrobot}
 
-\begin{wrapfigure}{R}{0.25\textwidth}
-    \centering
+% \begin{wrapfigure}{R}{0.25\textwidth}
+%     \centering
+%     \includegraphics[width=0.20\textwidth]{/home/sebastian/Documents/bscThesis/img/acrobot.pdf}
+%     \caption{Visualization of the Acrobot rendered by the Open AI Gym\label{fig:acrobotPygym}}
+% \end{wrapfigure}
+
+\begin{figure}[h]
     \includegraphics[width=0.20\textwidth]{/home/sebastian/Documents/bscThesis/img/acrobot.pdf}
     \caption{Visualization of the Acrobot rendered by the Open AI Gym\label{fig:acrobotPygym}}
-\end{wrapfigure}
+\end{figure}
 
 The acrobatic robot has two joints and two pendulums. The upper joint has a fixed position. It connects to the first pendulum, which is attached to the second joint. A torque can be applied to that second joint, which controls the second pendulum. The goal is to gain enough momentum and swing the end of the second pendulum above a certain mark. The angle between vertical and the first pendulum and the angle between the two pendulums form the six state parameters. Four parameters are the sine and the cosine of these two angles each, whereas the last two parameters are the angular velocities. The discrete action can has the values -1, 0 or 1. Each value stands for the amount of torque applied to the joint between the two pendulum links. With the six state values, an additional bias value, and three discrete action possibilities we get 21 dimensions for the Acrobot policy.
 
@@ -67,7 +70,23 @@ The acrobatic robot has two joints and two pendulums. The upper joint has a fixe
     \caption{Visualization of the mountain car rendered by the Open AI Gym\label{fig:mountaincarPygym}}
 \end{wrapfigure}
 
-In the mountain car task, an underpowered car tries to drive uphill. It can only reach the goal on the right side if it uses both hills to gain momentum. The end of the left hill is an inelastic wall, so if the car hits it, the velocity is set to zero.
+In the mountain car task, an underpowered car tries to drive uphill. It can only reach the goal on the right side if it uses both hills to gain momentum. The end of the left hill is an inelastic wall, so if the car hits it, the velocity is set to zero. The hills are formed through a sine curve, therefore it is sufficient that the car's position is one dimensional only. The vertical position of the car is easily derived from the horizontal position with the sine function. The horizontal position and the car's velocity are cubically expanded (Table \ref{table:envs}) to get nine state values. Also a bias parameter is added as a tenth state value.
+
+\begin{table}
+    \begin{tabularx}{\textwidth}{ |X|X|X|X|X| }
+    \hline
+    Environment & Description & Action & State feature & Policy dimension \\ \hline
+    Cart Pole & $p$: cart position \newline
+                $\theta$: pole angle & continuous: [-1,1] & $(p,\dot{p},\theta,\dot{\theta})$ & 4\\ \cline{3-5}
+     &  & discrete: (-1,1) & $(p,\dot{p},\theta,\dot{\theta},1)$ & 10 \\ \hline
+    Acrobot & $\theta_1$: angle of pendulum 1 \newline $\theta_2$: angle of between pendulum 1 and 2 & discrete: (-1,0,1) & $(cos(\theta_1), sin(\theta_1), \newline cos(\theta_2), sin(\theta_2), \newline \dot{\theta_1}, \dot{\theta_2}, 1)$ & 21 \\ \hline
+    Mountain Car & $p$: horizontal car position \newline $u$: car velocity & continuous: [-1,1] & $(p, u, p^2, u^2, p u, p^2 u, \newline p u^2, p^3, u^3 , 1)$ & 10\\ \cline{3-5}
+    & & discrete: (-1,0,1) & $(p, u, p^2, u^2, p u, p^2 u, \newline p u^2, p^3, u^3 , 1)$ & 30\\ \hline
+    \end{tabularx}
+    \caption{Environment parameters\label{table:envs}}
+\end{table}
+
+
 
 %
 % \begin{figure}
