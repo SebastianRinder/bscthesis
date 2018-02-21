@@ -2,59 +2,7 @@
 \label{chap:contributions}
 
 - including trajectory kernel to local BO
--- fmincon local search on distance covariance
 --TS trajectory kernel
---- Mixing up kernel metrics (scaling factor)
----- random initial samples well distributed in search space
-
-- debug plotting
--- mixed up kernel metrics
--- acq func plots
--- hyper opt plots
---- select figure by name
-
-- global BO
--- random initial samples well distributed in search space
-- Ei use max means
-
-- simulation implementation of cart pole, acrobot and mountain car
--- (also visualization)
-
-- sampling of actions from probabilities
-
-- standardize objective values for acquisition functions
-(Before doing regression we transform our observations to zero mean and uniform variance:
-$$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$)
-
-\subsection{Gaussian Process Regression}
-
-(difference between full covariance and cov vector)
-
-Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the lower Cholesky decomposed matrix:
-
-$$LL^\top=K_n$$
-
-This is considered faster and numerically more stable \cite{rasmussen2006gaussian}. The mean vector $\mu$ is then computed as follows:
-
-\begin{equation} \label{eq:regression}
-    \mu = K_n^{-1}\,y = (L\,L^{T})^{-1}\,y = (L^{-T}\,L^{-1})\,y = L^{-T}\,(L^{-1}\,y) = L^{T}\setminus(L \setminus y).
-\end{equation}
-
-The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
-Matrix $K_n$ must be positive definite for the cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ from \eqref{eq:kNoise} until positive definiteness is achieved.
-
-For the expected improvement function we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f$ because the difference between one $x_*$ and the same $x_*$ is zero. Therefore we write:
-
-$$L_k = L \setminus K(X_*,X)$$
-
-$$v = \sigma_f - \sum_{\text{rows}} (L_k \circ L_k).$$
-
-This adaptation is inspired by \cite{nandoCode} and reduces the computational effort drastically.
-
-For the whole covariance matrix we also avoid calculating the matrix inverse:
-
-$$V = K(X_*,X_*) - (L_k^\top L_k)^\top $$
-
 
 \section{Local Bayesian optimization}
 
@@ -88,17 +36,34 @@ where $\KL(p||q) = \int p(\x) \log \frac{p(\x)}{q(\x)} d\x$ is the KL divergence
     $x_{n+1}$ = sample at the highest Thompson sampled value\\
 \end{algorithm}
 
+\subsection{Trajectory kernel}
+If using Thompson sampling as the acquisition function, the whole covariance matrix $V$ of test points is needed. To compute this covariance matrix we need a distance measure between unkown trajectories. The kernel proposed by \cite{wilson2014using} does not support a measurement between unevaluated policies. We therefore implement our own distance metric based on states, which are already present in the training data. First we filter a random subset from the training data and save it to $S_{sub}$. For the continuous action space we then calculate each mean
+$$\mu_i = f_s(S_{sub})^\top x_i \qquad \text{and}\qquad \mu_j = f_s(S_{sub})^\top x_j$$
+for the given policies $x_i$ and $x_j$. The difference between the two policies is measured by the squared Euclidean distance between the means:
+$$D(x_i,x_j) = (\mu_i - \mu_j)^\top (\mu_i - \mu_j).$$
+For a discrete action space we sample the actions $a$ from $P(A|S_{sub},x)$ for the given policies $x_i$ and $x_j$ from (\ref{eq:discreteactionselection}). The sampled actions then select the associated probabilities. We compare the discrete probability distributions for each policy by applying the symmetric Kullback-Leibler divergence:
+$$D(x_i,x_j) = \sum _{i}P(a|S_{sub},x_i)\,\log {\frac {P(a|S_{sub},x_i)}{P(a|S_{sub},x_j)}} + \sum _{j}P(a|S_{sub},x_j)\,\log {\frac {P(a|S_{sub},x_j)}{P(a|S_{sub},x_i)}}.$$
 
-\section{Efficiency and robustness}
-We vectorize every suited operation to speed up calculations in Matlab. Additionally we tune the code to run on a parallel pool.\\
+% \begin{algorithm}
+%     \caption{Thompson Sampling acquisition for Local Bayesian optimization\label{alg:acqLocalBO}}
+%     \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+%     \Input{$X$: $N$ already evaluated points\\$X_*$: $M$ random samples from the search distribution}
+%     \Output{$x_{n+1}$: next evaluation point}
+%     \BlankLine
+%
+%     $m_d$ = mahalanobis distance from test points to incumbent search distribution\\
+%     discard samples, which are outside $80\%$ of the cumulative inverse-chi-squared distribution\\
+%     get mean and covariance matrix from the Gaussian process\\
+%     get values from Thompson sampling\\
+%     $x_{n+1}$ = sample at the highest Thompson sampled value\\
+% \end{algorithm}
 
-Sometimes numerical instabilities lead to negative values for covariances. To avoid getting complex numbers we filter negative values before applying the square root on covariances when computing the expected improvement. Negative values also occur for the distance between two trajectories, and are filtered too.\\
+\section{Numerical stability and efficiency}
+Due to numerical instabilities, errors may occur during calculations. These errors are caused by the discrete implementation of continuous mathematical formulas. Sometimes numerical instabilities lead to negative values for covariances. To avoid getting complex numbers we assume negative values as zero before applying the square root on covariances when computing the standard deviation from the Gaussian process model (\ref{eq:gp:stdv}). Negative values can also occur for the distance between two trajectories, and are thresholded to zero too.\\
 
-Depending on the acquisition function we calculate either the covariance matrix or the covariance vector from the Gaussian process regression. In case of expected improvement this saves a lot of computation time, since we only need the vector of covariances (algorithm \ref{alg:gp}). \\
+When computing the symmetrical distance matrix $\hat{D}(X,X)$ (\ref{eq:tk:mc}) only the upper triangle matrix $\hat{D}_{u}$ is calculated. That halves the computational effort. We obtain $\hat{D} = \hat{D}_{u}+\hat{D}_{u}^\top$, since the diagonal elements of $\hat{D}$ are zero and $\hat{D}(x_i,x_j) = \hat{D}(x_j,x_i)$ \\
 
-Before each bayesian optimization iteration step we precompute $K$ because it only depends on the set of training points which won't change during optimization. Then $alpha$ and $L$ are derived from $K$. REF
-
-For every matrix inverse calculation we use the lower Cholesky decomposition instead. Therefore the matrix to decompose must be positive definite. We achieve this by doubling the noise variance diagonal added to the original matrix as shown in algorithm \ref{alg:cholesky}.
+To gain robustness we use the lower Cholesky decomposition instead doing matrix inverse calculation. Therefore the matrix to decompose must be positive definite. We achieve this by doubling the noise variance added to the diagonal elements of the original matrix as shown in algorithm \ref{alg:cholesky}.
 
 \begin{algorithm}
     \caption{Lower Cholesky with variance doubling\label{alg:cholesky}}
@@ -114,13 +79,45 @@ For every matrix inverse calculation we use the lower Cholesky decomposition ins
     L = lower Cholesky of $K_n$\\
 \end{algorithm}
 
-When doing hyper parameter optimization we do not double the noise variance. Instead our log marginal likelihood function returns -infinity for hyper parameters which produce a non positive definit matrix.
+When doing hyper parameter optimization we do not double the noise variance. Instead our log marginal likelihood function (\ref{eq:hypOpt}) returns -infinity for hyper parameters, which produce a non positive definit matrix. Therefore, such hyper parameters do not come into consideration when maximizing.
 
-\section{Normalization constant}
+\subsection{Gaussian Process Regression}
 
-\section{Action selection}
+\subsubsection{Inverse of prior covariance matrix}
 
-In continuous action space our stochastic policy is Gaussian distributed. Therefore the resulting probability density of the action selection,
+Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the lower Cholesky decomposed matrix:
+
+$$LL^\top=K_n$$
+
+This is considered faster and numerically more stable \cite{rasmussen2006gaussian}. The mean vector $\mu$ is then computed as follows:
+
+\begin{equation} \label{eq:regression}
+    \mu = K_n^{-1}\,y = (L\,L^{\top})^{-1}\,y = (L^{-\top}\,L^{-1})\,y = L^{-\top}\,(L^{-1}\,y) = L^{\top}\setminus(L \setminus y).
+\end{equation}
+
+The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
+Matrix $K_n$ must be positive definite for the cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ as shown in Algorithm \ref{alg:cholesky}.
+
+\subsubsection{Variances}
+
+For the expected improvement function we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ and taking the diagonal elements (\ref{eq:vectorVar}) we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f^2$ because the difference between one $x_*$ and the same $x_*$ is zero. Therefore we can write:
+
+\begin{align}
+    L_k &= L \setminus K(X_*,X) \\
+    v &= \sigma_f - \sum_{\text{rows}} (L_k \circ L_k). \label{eq:vectorvar}
+\end{align}
+
+This adaptation is inspired by \cite{nandoCode} and reduces the computational effort drastically from $\mathcal{O}(n^2)$ to $\mathcal{O}(n)$.
+
+For the whole covariance matrix for Thompson sampling we also avoid calculating the matrix inverse:
+
+$$V = K(X_*,X_*) - (L_k^\top L_k)^\top $$
+
+WRITE WHOLE MODIFIED GP ALGO BOX
+
+\subsection{Action selection}
+
+In continuous action space our stochastic policy is Gaussian distributed (\ref{eq:actionselection}). Therefore the resulting probability density of the action selection,
 
 $$P_{\pi}(a|s,x) = \frac{1}{\sqrt{2\pi\epsilon_a^2}}\exp\left(-\frac{(a-f_s(s)x)^2}{2\epsilon_a^2}\right),$$
 
@@ -133,17 +130,9 @@ allows us to do the computations of the logarithm of the probability ratios in t
 \end{align*}
 
 
+\subsection{Hyper parameter optimization}
 
-
-\section{Global optimization}
-We select the initial samples set from a bunch of sample sets such that the Euclidean distance between points of the selected set is maximized. This grants us a well covered search space as a starting condition.
-\\\\
-When optimizing the expected improvement function or the hyper parameter space we use the \texttt{GlobalSearch} Toolbox from MATLAB. But if we run the experiments on the cluster we use the local optimizer \texttt{fmincon} on 10000 random starting points to work around the lack of free global optimization toolbox licences.
-
-
-\section{Hyper parameter optimization}
-
-Especially for the trajectory kernel we want a hyper parameter optimization, because all the values of the distance matrix $D$ may get very big. When dividing by a well tuned hyper parameter $sigma_l$ before applying the exponential function \eqref{eq:trajKernel}, we avoid getting a zero kernel matrix $K$.\\
+Especially for the trajectory kernel we want a hyper parameter optimization, because all the values of the distance matrix $D$ may get very big. When dividing by a well tuned hyper parameter $\sigma_l$ before applying the exponential function \eqref{eq:trajKernel}, we avoid getting a diagonal matrix $K$ or a zero matrix $K_*$.\\
 
 When calculating $\log(|K_n|)$ for the hyperparameter optimization \eqref{eq:hypOpt}, again we use the Cholesky decomposition of $K$. Thus the determinant transforms to
 $$|K_n|=|L\,L^{T}|=|L|\,|L^{T}|=|L|\,|L|=|L|^{2}.$$
@@ -156,14 +145,7 @@ $$\log(|K_n|) = \log(|L|^{2}) = 2\,\log(|L|) = 2\,\log(\textstyle\prod_{i} L_{ii
 
 The computation of $K_y^{-1}y$ in \eqref{eq:hypOpt} is done by the same method we already use in the Gaussian process \eqref{eq:regression}.
 
-\subsection{Optimization starting point}
-When optimizing the log marginal likelihood of the gaussian process we are confronted with undefinded areas in the hyper parameter space because $K$ is not positive semi definit in those areas. To start the optimization properly we randomly select points until finding a defined one.
-
-\subsection{Adaptation of the search space}
-We start our search space with a generous boundary. For example $[\exp(-10),\exp(10)]$. After finding the first set of hyper parameters we change that boundary to a smaller one to make the following optimizations more efficient. Also the center of the search space is adjusted to always match the latest set of hyper parameters.\\
-We can do this because it is not expected that the hyper parameters change drastically between iterations.
-
-\subsection{Independent log-normal prior}
+\subsubsection{Independent log-normal prior}
 The log marginal likelihood maximization will sometimes succeed at the borders of our search space resulting in very high high or very low hyper parameters. We prevent this by adding an independet log-normal prior term as introduced in \cite{lizotte2008practical}:
 
 $$\sum_{i=f,l}\left(\frac{-\log(\sigma_i)^2}{2\cdot 10^2}) - \log 10\sqrt{2\pi} \right).$$
@@ -176,7 +158,3 @@ where $b_l$ and $b_u$ denote the lower and upper bounds of the search space and 
 
 
 ---write whole hyper opt with L and stuff
-
-\section{Python OpenAI Gym from Matlab}
-To use the simulations provided by the OpenAI Gym we prepare a python module which is imported to MATLAB. After loading the python module with \verb|py.importlib.import_module(moduleName)| we can call every method it contains via the \verb|py.moduleName.| prefix. It is vital to convert our data correctly before calling the python subroutine with it. The Matlab variables containing whole numbers are converted from \verb|Double| to \verb|Int|. Also all the vectors received by the python module have to be converted to an array through \verb|numpy.asarray()|.\\
-Implementing the OpenAI Gym grants us the classic control problems like cart pole, mountain car, and acrobot. Furthermore a lot of more complex environments like a humanoid walker or some Atari games are provided\cite{DBLP:journals/corr/BrockmanCPSSTZ16}. This will facilitate future research working with higher dimensional problems.

@@ -1,27 +1,27 @@
 \chapter{Foundations}
 \label{chap:2}
 
-\section{Markov decision process}
-In our reinforcement learning problem we use the Markov decision process model to describe possible decisions as probabilites. This model consists of a tuple $(S,A,p,p_{0},r)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities $p$, and all corresponding rewards $r$. Assume an agent which executes a policy $x$ for $T$ time steps, producing a trajectory $\xi$, and therefore receiving the final reward
+\section{Bayesian optimization}
 
-$$\bar{r}(\xi)=\sum_{t=1}^T r(s_{t-1}, a_{t-1}, s_{t}),$$
+% \begin{wrapfigure}{R}{0.5\textwidth}
+%     \centering
+%     \includegraphics[width=0.45\textwidth]{/home/sebastian/Documents/bscThesis/img/boAcq_brochu2010.pdf}
+%     \caption{Visualization of the change in the Gaussian process model and the resulting acquisition function. With every Bayesian optimization iteration step a new observation point at the maximum of the acquisition function is added to the training data. This new observation and its evaluation update the Gaussian process model. Thus the model becomes increasingly accurate in the vicinity of each observation. \cite{brochu2010tutorial} \label{fig:acqBO}}
+% \end{wrapfigure}
 
-which is the sum of all immediate rewards given by an rewarding function $r(s_{t-1}, a_{t-1}, s_{t})$. This rewarding function depends on the given environment. For example it rewards a state we want to achieve by returning a value greater than zero and can penalize states we do not want our agent to be in by returning negative values. The cumulative reward stemming from a policy is what we want to maximize with as few evaluations as feasible.
-
-\section{Global Bayesian optimization}
-To find the maximum reward of our expensivly to evaluate agent we use Bayesian optimization. It makes the search process more efficient by incorporating a Gaussian process model to  anticipate the agents behaviour. This model, containing estimates of the agent returns depending on policies, is used by a so called acquisition function to guide the exploration for promising policies. Each newly found policy is evaluated by the agent and the results are included in the Gaussian process model. Optimally these steps are repeated until the cumulative rewards converge at the maximum possible cumulative reward. In reality (Algorithm \ref{alg:boGlob}) we iterate over $N$ steps and analyse the results.\\
-To meet the mathematical context we will also refer to policies as points. And we will also refer to cumulative reward depending on a policy as objective function depending on a point.
+To find the point of the maximum of an expensivly to evaluate black box objective function we use Bayesian optimization. It makes the search process more efficient by incorporating a Gaussian process model to anticipate the objective function's behaviour. This model, containing estimates of the function's returns depending on points, is used by a so called acquisition function to guide the exploration for promising new points. Each selected point is evaluated by the objective function and the results are included in the Gaussian process model. Optimally these steps are repeated until found function values converge at the maximum possible function value. In reality (Algorithm \ref{alg:boGlob}) we iterate over $N$ steps and analyse the results. The change of the Gaussian process model affecting the acquistion function during Bayesian optimization iterations is illustrated in Figure \ref{fig:acqBO}.\\
 
 \begin{algorithm}
     \caption{Global Bayesian optimization\label{alg:boGlob}}
     \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-    \Input{$X$: $M$ uniformly random samples from the search space\\$N$: number of Bayesian optimization iterations}
+    \Input{$X$: $M$ uniformly random samples from the search space\\$N$: number of Bayesian optimization iterations\\set hyper parameters to 1}
     \Output{$x_{M+N}$}
     \BlankLine
 
-    $y$ = evaluations of the objective at the points $X$\\
+    $y$ = evaluations of the objective at the training points $X$\\
     \For{$n$ = $M$ \KwTo $M + N$}{
-        compute $K(X,X)$\\
+        optimize hyper parameters (optional)\\
+        prepare a Gaussian process model depending on $X$, $y$ and hyper parameters\\
         $x_{n+1}$ = point at the optimum of the acquisition function\\
         $y_{n+1}$ = evaluation of the objective at the point $x_{n+1}$\\
         $X = \{X, x_{n+1}\}$\\
@@ -29,12 +29,74 @@ To meet the mathematical context we will also refer to policies as points. And w
     }
 \end{algorithm}
 
-During the acquisition function optimization $K(X,X)$, originally contained by the Gaussian process, does not change. So it is precomputed.
+The optimization of hyper parameters is optional and depends on the Gaussian process kernel as mentioned in chapter \ref{chap:6}. Also the noise level parameter $\sigma_n$ is not considered as hyper parameter in this context. It is tuned seperatly \ref{chap:5}.
 
-\section{Acquisition function}
-The basis of the Bayesian optimization consists of selecting the next evaluation point in our search space. This point is at the optimum of the acquisition function, which depends on the incumbent Gaussian process model. We choose expected improvement during the global Bayesian optimization and in the local optimization (chapter \ref{chap:contributions}) we use Thompson sampling. Both acquisition functions take the mean und the variance generated by the Gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration seeks points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all.
+\begin{figure}[h]
+    \centering
+    \includegraphics{/home/sebastian/Documents/bscThesis/img/boAcq_brochu2010.pdf}
+    \caption{Visualization of the change in the Gaussian process model and the resulting acquisition function. With every Bayesian optimization iteration step a new observation point at the maximum of the acquisition function is added to the training data. This new observation and its evaluation update the Gaussian process model. Thus the model becomes increasingly accurate in the vicinity of each observation. \cite{brochu2010tutorial} \label{fig:acqBO}}
+\end{figure}
 
-\subsection{Expected improvement}
+\subsection{Gaussian Process Regression}
+The Gaussian process finds a prior distribution over the possible functions that are consistent with the training data. From the regression we then get a posterior mean and variance, which describe our model of the objective function. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more training points our model incorporates the smaller the variance, and the preciser the predictions, in the proximity around training points.\\
+In real world applications we always have some noise in the objective observations. Therefore a Gaussian distributed error term,
+
+$$\epsilon \sim \mathcal{N}(0,\sigma_n^2),$$
+
+with zero mean and $\sigma_n^2$ variance is added to the function value. Ergo the observed target
+
+$$y = f(x) + \epsilon$$
+
+regards this noise. The knowledge our training data provides is represented by the covariance matrix $K(X,X)$. With the matrix of test points $X_*$ we get the joint distribution of the target values and the estimated function values at the test locations:
+
+$$\left[ \begin{array}{c} y \\ f_* \end{array} \right] \sim \mathcal{N} \left(0, \begin{bmatrix} K(X,X)+\sigma_n^2 I & K(X,X_*) \\ K(X_*,X) & K(X_*,X_*) \end{bmatrix} \right).$$
+
+For further simplification we define $K = K(X,X)$, $K_* = K(X,X_*)$, $K_*^{\top} = K(X,X_*)^{\top} = K(X_*,X)$, and $K_{**} = K(X_*,X_*)$. Now we can calculate the posterior mean and variance at given test points $X_*$:
+
+\begin{align}
+    K_n &= K+\sigma_n^2 I \label{eq:kNoise} \\
+    \mu &= K_*K_n^{-1}y \label{eq:meanGauss} \\
+    V(x_*,x_*) &= K_{**}-K_*K_n^{-1}K_*^\top \label{eq:wholeVar} \\
+    v(x_*) &= \mathrm{diag}(V) \label{eq:vectorVar} \\
+    \sigma(x_*) &= \sqrt{v(x_*)}. \label{eq:gp:stdv}\\ \nonumber
+\end{align}
+
+The resulting vectors $\mu$ and $v$ contain the means and variances for all corresponding test points. Also we get the whole covariance matrix $V$.
+
+\subsubsection{Standard kernel}
+The similarity between points is measured by the covariance function. The better this covariance function is suited for our objective function the more precise is the resulting model.
+We use two standard kernels to compare them to the trajectory kernel (section \ref{sec:trajKernel}). In those standard kernels the distance metric for two points is given by the Euclidean distance:
+$$D(x_i,x_j) = (x_i-x_j)^\top (x_i-x_j).$$
+
+Which we then use in the squared exponential kernel,
+$$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\exp\left(-\frac{D(x_i,x_j)}{2\sigma_l^2} \right), $$
+
+and the Matern 5/2 kernel,
+$$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\left(1 + \frac{\sqrt{5 D}}{\sigma_l} + \frac{5 D}{3\sigma_l^2} \right) \exp\left(-\frac{\sqrt{5 D}}{\sigma_l} \right),$$
+
+where $\sigma_f$ denote the signal standard deviation and $\sigma_l$ the characteristic length scale. These so called hyper parameters can be tuned by hand or set with hyper parameter optimization.
+
+\subsection{Hyper parameter optimization}
+
+--EXPLAIN MARGINAL likelihood.
+
+Selecting proper hyper parameters for the Gaussian process regression can reduce the number of objective function evaluations necessary. Also it helps avoiding numerical problems. To find an optimum for the signal deviation hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log marginal likelihood function
+\begin{equation} \label{eq:hypOpt}
+    \log p(y|X,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_n^{-1} y -\frac{1}{2} \log |K_n| -\frac{n}{2}\log 2\pi,
+\end{equation}
+
+of the Gaussian process. The number of observations is $n$, $X$ is the $d \times n$ dataset of inputs and $K_n$ is the covariance matrix for the noisy target $y$.
+
+\subsection{Acquisition function}
+The basis of the Bayesian optimization consists of selecting the next evaluation point in our search space. This point is at the optimum of the acquisition function, which depends on the current Gaussian process model. We choose expected improvement during the global Bayesian optimization and in the local optimization (chapter \ref{chap:contributions}) we use Thompson sampling. Both acquisition functions take the mean und the variance generated by the Gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration seeks points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all. An exemplary comparison of acquisition function is shown in Figure \ref{fig:acqFcn}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.70\textwidth]{/home/sebastian/Documents/bscThesis/img/BayesOptLoop_acq_full.pdf}
+    \caption{Visualization of Gaussian process posterior values corresponding to different acquisition functions. In the upper frame the posterior mean $\mu$ and double standard deviation $2\sigma$ is marked as the blue line with the shaded area. The black dashed line shows the true objective and the red crosses mark already evaluated points. The lower frame compares the plots of the resulting acquisition functions probability of improvement, expected improvement, upper confidence bounds, Thompson sampling and predictive entropy search. The peaks of probability of improvement next to values with high mean illustrates its exploitive behaviour compared to expected improvement, which takes the variance more into account. Thompson sampling is the one with the most explorative peak due to its random nature. \cite{shahriari2016taking} \label{fig:acqFcn}}
+\end{figure}
+
+\subsubsection{Expected improvement}
 To get an expected improvement function value at a test point $x_*$, we need the mean value $\mu(x_*)$, and the standard deviation value $\sigma(x_*) = \sqrt{v(x_*)}$ from the Gaussian process model. Also we need the maximum of all observations $y_{max}$ and a trade-off parameter $\tau$. For the cumulative distribution function we write $\Phi(.)$ and for the probability density function we write $\phi(.)$. They are both Gaussian with zero mean and unit variance. We adopt the expected improvement function
 \[
     \mathrm{EI}(x_*)=
@@ -57,8 +119,8 @@ $$x_{n+1} = \arg \max_{x_*} \mathrm{EI(x_*)},$$
 
 we optimize the expected improvement function over the whole search space.
 
-\subsection{Thompson sampling}
-For the acquisition with Thompson sampling we sample one function from the Gaussian process posterior,
+\subsubsection{Thompson sampling}
+For Thompson sampling acquisition values we sample one function from the Gaussian process posterior,
 
 $$\mathrm{TS}\sim \mathrm{GP}(0,K(X,X_*)),$$
 
@@ -73,59 +135,30 @@ $$x_{n+1} = \arg \max_{x_*} \mathrm{TS}(x_*),$$
 
 to get the next evaluation point.
 
-\section{Gaussian Process Regression}
-The Gaussian process fits a multivariate gaussian distribution over our training data. From the regression we get a posterior mean and variance, which describe our model of the objective function. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more training points our model incorporates the smaller the variance, and the preciser the predictions, in the proximity around training points.\\
-In real world applications we always have some noise in the objective observations. Therefore a Gaussian distributed error term,
+\section{Reinforcement learning}
 
-$$\epsilon \sim \mathcal{N}(0,\sigma_n^2),$$
+In our reinforcement learning task we want to maximize the cumulative reward stemming from a policy with as few evaluations as feasible. We achieve this maximization by applying Bayesian optimization, treating the cumulative reward as the objective function and policies as points. The objective function evaluation consists of the simulation of our robotic agent.
 
-with zero mean and $\sigma_n^2$ variance is added to the function value. Ergo the observed target
+\subsection{Markov decision process}
+We use the Markov decision process model to describe the agent's decisions making \cite{sutton1998reinforcement}. This model consists of a tuple $(S,A,P,R,\gamma)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities $p \in P$, and all corresponding rewards $r \in R$. The discount factor $\gamma$ is set to 1 because we have a finite horizon Markov decision process where the timing of the reward is irrelevant. Since the transitioning probabilities and the rewards are unkown, they are accessed through simulation runs of our environment. Assume an agent which executes a policy $x$ for $T$ time steps, producing a trajectory $\xi$, and therefore receiving the final reward
 
-$$y = f(x) + \epsilon$$
+$$\bar{r}(\xi)=\sum_{t=1}^T \gamma^t r(s_{t-1}, a_{t-1}, s_{t}),$$
 
-regards this noise. The knowledge our training data provides is represented by the kernel matrix $K(X,X)$. With a matrix of test points $X_*$ we get the joint distribution of the target values and the estimated function values at the test locations:
+which will be the sum of all immediate rewards given by a rewarding function $r(s_{t-1}, a_{t-1}, s_{t})$. The explicit probablities corresponding to actions and state transitionings are also obtained (see \ref{sec:actionselection}) throughout the simulation run.
 
-$$\left[ \begin{array}{c} y \\ f_* \end{array} \right] \sim \mathcal{N} \left(0, \begin{bmatrix} K(X,X)+\sigma_n^2 I & K(X,X_*) \\ K(X_*,X) & K(X_*,X_*) \end{bmatrix} \right).$$
-
-For further simplification we define $K = K(X,X)$, $K_* = K(X,X_*)$, $K_*^{\top} = K(X,X_*)^{\top} = K(X_*,X)$, and $K_{**} = K(X_*,X_*)$. Now we can calculate the posterior mean and variance at given test points $X_*$:
-
-\begin{align}
-    K_n &= K+\sigma_n^2 I \label{eq:kNoise} \\
-    \mu &= K_*K_n^{-1}y \label{eq:meanGauss} \\
-    V &= K_{**}-K_*K_n^{-1}K_*^\top \label{eq:wholeVar} \\
-    v &= \mathrm{diag}(V). \label{eq:vectorVar} \\ \nonumber
-\end{align}
-
-The resulting vectors $\mu$ and $v$ contain the means and variances for all corresponding test points. Also we get the whole covariance matrix $V$.
-
-\subsection{Kernel for Gaussian process}
-The similarity between points is measured by the covariance function. The better this covariance function is suited for our objective function the more precise is the resulting model.
-We use two standard kernels to compare them to the trajectory kernel (section \ref{sec:trajKernel}). In those standard kernels the distance metric for two points is given by:
-$$D(x_i,x_j) = (x_i-x_j)^\top (x_i-x_j).$$
-
-Which we then use in the squared exponential kernel,
-$$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\exp\left(-\frac{D(x_i,x_j)}{2\sigma_l^2} \right), $$
-
-and the Matern 5/2 kernel,
-$$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\left(1 + \frac{\sqrt{5 D}}{\sigma_l} + \frac{5 D}{3\sigma_l^2} \right) \exp\left(-\frac{\sqrt{5 D}}{\sigma_l} \right),$$
-
-where $\sigma_f$ denote the signal standard deviation and $\sigma_l$ the characteristic length scale. These so called hyper parameters can be tuned by hand or set with hyper parameter optimization. (CHAP HYPOPT)
-
-\section{Trajectory kernel}\label{sec:trajKernel}
-
+\subsection{Trajectory kernel}\label{sec:trajKernel}
 Standard kernels like the squared exponential kernel, relate policies by measuring the difference between policy parameter values. Therefore policies with similar behavior but different parameters are not compared adequately. The behavior based trajectory kernel fixes this, by relating policies to their resulting behavior. This makes our policy search more efficient, since we avoid redundant search of different policies with similar behaviour.
 
-\subsection{Behaviour based kernel}
+\subsubsection{Behaviour based measurement}
 
-For relating policies to their resulting behavior we use the state transitioning probabilities from the Markov decision process. We formulate the conditional probability of observing trajectory $\xi$ given policy $x$ by
+For relating policies to their resultThe optimization of hyper parameters is optional and depends on the Gauing behavior we use the Markov decision process transitioning probabilities. We formulate the conditional probability of observing trajectory $\xi$ given policy $x$ as proposed in \cite{wilson2014using}:
 
-$$p(\xi|x) = p_{0}(s_{0}) \prod_{t=1}^{T} p(s_{t}|s_{t-1}, a_{t-1}) p_{\pi}(a_{t-1}|s_{t-1}, x)$$
+$$p(\xi|x) = p_{0}(s_{0}) \prod_{t=1}^{T} p(s_{t}|s_{t-1}, a_{t-1}) p_{\pi}(a_{t-1}|s_{t-1}, x).$$
 
-in which trajectory $\xi=(s_{0},a_{0}, ..., s_{T-1}, a_{T-1}, s_{T})$ contains the sequence of state, action tuples and $x$ a set of $d$ policy parameters. $p_{0}(s_{0})$ is the probability of starting in the initial state $s_{0}$. $p(s_{t}|s_{t-1}, a_{t-1})$ is the probability of transitioning from state $s_{t-1}$ to $s_{t}$ when action $a_{t-1}$ is executed. The stochastic mapping $p_{\pi}(a_{t-1}|s_{t-1},x)$ is the probability for selecting the action $a_{t-1}$ when in state $s_{t-1}$ and executing the parametric policy $x$.
+Trajectory $\xi=(s_{0},a_{0}, ..., s_{T-1}, a_{T-1}, s_{T})$ contains the sequence of state, action tuples and policy $x$ a set of $d$ parameters. $p_{0}(s_{0})$ is the probability of starting in the initial state $s_{0}$. $p(s_{t}|s_{t-1}, a_{t-1})$ is the probability of transitioning from state $s_{t-1}$ to $s_{t}$ when action $a_{t-1}$ is executed. The stochastic mapping $p_{\pi}(a_{t-1}|s_{t-1},x)$ is the probability for selecting the action $a_{t-1}$ when in state $s_{t-1}$ and executing the parametric policy $x$.
 
-\subsection{Distance metric}
-
- To examine the difference between two policies $x_{ i }$ and $x_{ j }$ the discrete Kullback Leibler divergence
+\subsubsection{Distance metric}
+To examine the difference between two policies $x_{ i }$ and $x_{ j }$ the discrete Kullback Leibler divergence
 
 $$D_{\mathrm {KL} }(P(\xi|x_{ i })||P(\xi|x_{ j })) = \sum _{i}P(\xi|x_{ i })\,\log {\frac {P(\xi|x_{ i })}{P(\xi|x_{ j })}}.$$
 
@@ -135,17 +168,20 @@ In general $D_{\mathrm {KL} }(P(\xi|x_{ i })||P(\xi|x_{ j }))$ is not equal to $
 
 $$D(x_{ i }, x_{ j }) = D_{\mathrm {KL} }(P(\xi|x_{ i })||P(\xi|x_{ j })) + D_{\mathrm {KL} }(P(\xi|x_{ j })||P(\xi|x_{ i })),$$
 
-to achieve that $D(x_{ i }, x_{ j }) = D(x_{ j }, x_{ i })$. An additional requirement for the kernel is the resulting matrix to be positive semi-definite and scalable\cite{wilson2014using}. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f^2$ to compensate for the signal variance and $\sigma_l^2$ to adjust for signal scale. This gives us the covariance function
+to achieve that $D(x_{ i }, x_{ j }) = D(x_{ j }, x_{ i })$. An additional requirement for the kernel is the resulting matrix to be positive semi-definite and scalable\cite{wilson2014using}. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f^2$ to compensate for the signal variance and $\sigma_l^2$ to adjust for signal length scale. This gives us the covariance function
 
 \begin{equation} \label{eq:trajKernel}
-K(x_{ i },x_{ j },\sigma_f,\sigma_l) = \sigma_f^2 \exp(-\sigma_l^2 D(x_{ i }, x_{ j })),
+K(x_{ i },x_{ j },\sigma_f,\sigma_l) = \sigma_f^2 \exp\left(-\frac{D(x_i,x_j)}{2\sigma_l^2} \right).
 \end{equation}
 
-\subsection{Estimation of Trajectory Kernel Values}
+The distance metric is adapted from \cite{wilson2014using}. We only added the signal variance hyper parameter.
 
+\subsubsection{Estimation of Trajectory Kernel Values}
 We estimate the divergence values, because the computational effort will be greatly reduced\cite{wilson2014using}. We use a Monte-Carlo estimate for the approximation
 
-$$\hat{D}(x_{ i }, x_{ j }) = \sum _{\xi \in \xi_i} \log\left( \frac{P(\xi|x_{ i })}{P(\xi|x_{ j })} \right) + \sum _{\xi \in \xi_j} \log\left( \frac{P(\xi|x_{ j })}{P(\xi|x_{ i })} \right) $$
+\begin{equation} \label{eq:tk:mc}
+    \hat{D}(x_{ i }, x_{ j }) = \sum _{\xi \in \xi_i} \log\left( \frac{P(\xi|x_{ i })}{P(\xi|x_{ j })} \right) + \sum _{\xi \in \xi_j} \log\left( \frac{P(\xi|x_{ j })}{P(\xi|x_{ i })} \right)
+\end{equation}
 
 of the divergences between policies with already sampled trajectories. Here $\xi_i$ is the set of trajectories generated by policy $x_i$. For our gaussian process regression we also need a distance measure between a policy with known trajectories and new policies with unknown trajectories. Since there is no closed form solution to this we use the importance sampled divergence
 
@@ -162,13 +198,4 @@ Since we only have a ratio of transitioning probabilities present in our traject
     &= \sum_{t=1}^{T} \log \left(\frac{P_{\pi}(a_{t-1}|s_{t-1},x_i)}{P_{\pi}(a_{t-1}|s_{t-1},x_j)}\right).
 \end{align*}
 
-
 Summing up the logarithms in the end is also numerically more stable than taking the logarithm of the products.
-
-\section{Hyper parameter optimization}
-Selecting proper hyper parameters for the Gaussian process regression can reduce the number of objective function evaluations necessary. Also it helps avoiding numerical problems. To find an optimum for the signal deviation hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log marginal likelihood function
-\begin{equation} \label{eq:hypOpt}
-    \log p(y|X,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_n^{-1} y -\frac{1}{2} \log |K_n| -\frac{n}{2}\log 2\pi ,
-\end{equation}
-
-of the Gaussian process. The number of observations is $n$, $X$ is the $d \times n$ dataset of inputs and $K_n$ is the covariance matrix for the noisy target $y$.

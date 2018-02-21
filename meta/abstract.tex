@@ -15,3 +15,11 @@
     Wir zeigen die Überlegenheit des verhaltensbasierten Kernels gegenüber dem parameterbasierten anhand von Robotersteruerungssimulationen.
 \end{abstract}
 \selectlanguage{english} % reset to english language
+
+As a consequence the trajectory kernel makes the search process more efficient, but also has the disadvantage that the effort for kernel calculations is greatly increased.
+
+The trajectory kernel relates policies derives a behaviour measure from the state and action parameter sets, to  accordingly. This relation has the advantage that different policies with similar results are recognized as redundant and are therefore less prioritized by the search. As a consequence the trajectory kernel makes the search process more efficient, but also has the disadvantage that the effort for kernel calculations is greatly increased.
+
+When it comes to higher dimensional problems Bayesian optimization tends to over explore because of its focus on global optimization. This can lead to not finding the optimum. We therefore also use Bayesian optimization with a locally restriced search area \cite{akrour2017local}. This area is adjusted throughout the search process to cover the most promising parts of the entire search space. As a result, we only have to optimize locally. This method is more robust against high-dimensional problems and also computationally less demanding than global optimization.\\
+
+So we will compare the trajectory kernel to standard kernels in the Bayesian optimization. We also do test runs with global Bayesian optimization and Bayesian optimization in a local context. The reinforcement learning environment will be given by the classic control tasks cart pole, mountain car and acrobot \cite{sutton1998reinforcement}.\\
