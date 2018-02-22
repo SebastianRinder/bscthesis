@@ -1,13 +1,17 @@
 \chapter{Experiments}
 \label{chap:4}
 
+- debug plotting
+-- acq func plots
+-- hyper opt plots
+
 \section{Implementation}
 
 \subsection{Efficiency}
 To cut the time for experiment runs we vectorized every suited operation to speed up calculations in Matlab. Additionally we tuned the code to run on a parallel pool.\\
 
 \subsection{Global optimization}
-The expected improvement function and the maximization of the log marginal liklihood function for hyper parameter optimization need to be maximized. Since we use MATLAB's \texttt{GlobalSearch} Toolbox, which is a global minimizer, we multiply the results of the functions by -1 to be able to minimize them appropriatly.
+The expected improvement function and the log marginal liklihood function for hyper parameter optimization need to be maximized. Since we use Matlab's \texttt{GlobalSearch} Toolbox, which is a global minimizer, we multiply the results of the functions by -1 to be able to minimize them appropriatly.
 \\
 % When optimizing the expected improvement function or the hyper parameter space we use the \texttt{GlobalSearch} Toolbox from MATLAB. But if we run the experiments on the cluster we use the local optimizer \texttt{fmincon} on 10000 random starting points to work around the lack of free global optimization toolbox licences.
 
@@ -21,12 +25,12 @@ We use MATLAB implementations of Cart Pole, Acrobot, and Mountain Car that were 
 \label{sec:actionselection}
 In continuous action space we use a linear policy to action mapping
 \begin{equation} \label{eq:actionselection}
-    a = f_s(s)^\top x + \epsilon_a,
+    a = f_s(s)^\top x + \sigma_a,
 \end{equation}
 
-with a small gaussian noise $\epsilon_a$ needed for stochastic policies. So the actions are Gaussian distributed:
+with a small gaussian noise $\sigma_a$ needed for stochastic policies. So the actions are Gaussian distributed:
 
-$$a \sim \mathcal{N}(f_s(s) x,\epsilon_a^2).$$
+$$a \sim \mathcal{N}(f_s(s) x,\sigma_a^2).$$
 
 In discrete action space environments we use a parametric soft-max action selection policy:
 
@@ -40,22 +44,34 @@ The state feature function $f_s(s)$ depends on the environment as listed in Tabl
 
 \section{Start conditions}
 
-\subsubsection{Global context}
-We select the initial samples set from a bunch of sample sets such that the Euclidean distance between points of the selected set is maximized. This grants us a well covered search space as a starting condition.
-BO : We set the initial sample count $M = 10$ and the iteration count $N = 200$.
-\subsubsection{Local context}
+For the trajectory kernel, we proposed in section \ref{sec:ownTK}, a maximum of 500 random states as the subset $S_{\text{sub}}$
+
+For the continuous action selection the standard error deviation $\sigma_a$ is set to $10^(-3)$. We adapted the action selection strategies from \cite{wilson}. Unfortunately they do not provide any parameters. Therefore this error deviation value was guessed after a few test runs.
+
+\subsection{Global context}
+
+In the global search context the policy parameter boundaries are set to -10 and 10 for each dimension resulting in a $d$ dimensional hypercubic search space.
+
+For the Bayesian optimization we select the initial samples set $X_n$ from a bunch of sample sets such that the Euclidean distance between points of the selected set is maximized. This grants us a well covered search space as a starting condition. We also set the number of initial samples to $M = 10$ and the iteration count to $N = 200$.
+
+In the expected improvement function, the trade-off parameter $\tau$ is set to 0.01 as proposed by \cite{brochu2010tutorial}.
+\subsection{Local context}
 % -- fmincon local search on distance covariance
-- standardize objective values for acquisition functions
-Before doing regression we transform our observations to zero mean and uniform variance:
+The Bayesian optimization in the local context starts with a hypersphere centered at the origin with radius 10 as the policy search space boundary. The starting point for the search is set to the origin accordingly.
+
+
+Before doing Gaussian process regression we transform our observations to zero mean and uniform variance:
 $$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$
-with a maximum of 500 states
+This standardization proposed by \cite{akrour2017local} affects the Thompson sampling exploration exploitation trade-off. The cut off distance for the samples during Thompson sampling is set to 80\%.
+
+
 
 \section{Environments}
 
 \begin{table}
-    \begin{tabularx}{\textwidth}{ |X|X|X|X|l| }
+    \begin{tabularx}{\textwidth}{ |l|X|X|X|l| }
     \hline
-    Environment & Description & Action & State feature & Policy dimension \\ \hline
+    Environment & Description & Action & State feature & Policy dimensions $d$ \\ \hline
     Cart Pole & $p$: \tabto{16pt} cart position \newline
                 $\theta$: \tabto{16pt} pole angle & continuous: [-1,1] & $(p,\dot{p},\theta,\dot{\theta})$ & 4\\ \cline{3-5}
      &  & discrete: \{-1,1\} & $(p,\dot{p},\theta,\dot{\theta},1)$ & 10 \\ \hline
