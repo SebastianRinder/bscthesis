@@ -1,4 +1,18 @@
 \chapter{Discussion}
 \label{chap:6}
+
+When computing the continuous action space trajectory distance metric, proposed by \cite{wilson2014using}, hyper parameter optimization is mandatory to compensate for high distance values. These values occur because of the Gaussian distribution density used as the probability measure for actions \ref{eq:contiAS}. Since we exponentiate the negative of the distance values, very high distance values will result in covariance values that are zero. The optimization of the scale length hyper parameter $\sigma_l$ will prevent all-zero covariance matrices. Experiments have shown that tuning the signal deviation parameter $\sigma_f$ is also helpful, because we simulate a policy only once for a result. Since a policy will not produce the exact same result after repeated evaluations, we have to assume a high variation on each result. This variation is regarded by $\sigma_f$.
+
+Unfortunately we were not able to reproduce the outstanding results with the trajectory kernel from \ref{wilson2014using}. Maybe because they do not provide any parameters or environment conditions. As shown exemplary in Figure \ref{fig:noisecompare} tuning of the noise level parameter can have a huge impact on the results. After a few test runs, we decided noise 1 2 3
+
+The results show that trajectory kernels may have some advantage if computation time is not expensive. However, the standard kernels seem to require a similar number of black box function evaluations on the experiments shown.
+
+
+
+% tune
+% $\sigma_n$ \ref{fig:noisecompare}
+% $\sigma_a$ \eqref{eq:actionselection}
+% $\tau from EI$
 %
-TODO
+%
+% trajectory kernel takes more time -> abwägen

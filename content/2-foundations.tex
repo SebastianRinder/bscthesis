@@ -9,12 +9,12 @@
 %     \caption{Visualization of the change in the Gaussian process model and the resulting acquisition function. With every Bayesian optimization iteration step a new observation point at the maximum of the acquisition function is added to the training data. This new observation and its evaluation update the Gaussian process model. Thus the model becomes increasingly accurate in the vicinity of each observation. \cite{brochu2010tutorial} \label{fig:acqBO}}
 % \end{wrapfigure}
 
-To find the point of the maximum of an expensivly to evaluate black box objective function we use Bayesian optimization \cite{brochu2010tutorial,shahriari2016taking,lizotte2008practical}. It makes the search process more efficient by incorporating a Gaussian process model to anticipate the objective function's behaviour. This model, containing estimates of the function's returns depending on points, is used by a so called acquisition function to guide the exploration for promising new points. Each selected point is evaluated by the objective function and the results are included in the Gaussian process model. Optimally these steps are repeated until found function values converge at the maximum possible function value. In reality (Algorithm \ref{alg:boGlob}) we iterate over $N$ steps and analyse the results. The change of the Gaussian process model affecting the acquistion function during Bayesian optimization iterations is illustrated in Figure \ref{fig:acqBO}.\\
+To find the maximum point of a costly black box target function, we use Bayesian optimization \cite{brochu2010tutorial,shahriari2016taking,lizotte2008practical}. It makes the search process more efficient by incorporating a Gaussian process model to anticipate the objective function's behaviour. This model, containing estimates of the function's returns depending on points, is used by a so called acquisition function to guide the exploration for promising new points. Each selected point is evaluated by the objective function and the results are included in the Gaussian process model. Optimally these steps are repeated until found function values converge at the maximum possible function value. In reality (Algorithm \ref{alg:boGlob}) we iterate over $N$ steps and analyse the results. The change of the Gaussian process model affecting the acquistion function during Bayesian optimization iterations is illustrated in Figure \ref{fig:acqBO}.\\
 
 \begin{algorithm}
     \caption{Global Bayesian optimization\label{alg:boGlob}}
     \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-    \Input{$X$: $M$ uniformly random samples from the search space\\$N$: number of Bayesian optimization iterations\\set hyper parameters to 1}
+    \Input{$X$ = $M$ uniformly random samples from the search space\\$N$ = number of Bayesian optimization iterations\\set hyper parameters to 1}
     \Output{$x_{M+N}$}
     \BlankLine
 
@@ -29,12 +29,12 @@ To find the point of the maximum of an expensivly to evaluate black box objectiv
     }
 \end{algorithm}
 
-The optimization of hyper parameters is optional and depends on the Gaussian process kernel as mentioned in chapter \ref{chap:6}. Also the noise level parameter $\sigma_n$ is not considered as hyper parameter in this context. It is will be tuned seperatly (see chapter \ref{chap:5}).
+The optimization of hyper parameters is optional and depends on the Gaussian process kernel as mentioned in chapter \ref{chap:6}. Also the noise level parameter $\sigma_n$ \eqref{eq:kNoise} is not considered as hyper parameter in this context. It will be tuned seperatly (see chapter \ref{chap:5}).
 
 \begin{figure}[h]
     \centering
     \includegraphics{/home/sebastian/Documents/bscThesis/img/boAcq_brochu2010.pdf}
-    \caption{Visualization of the change in the Gaussian process model and the resulting acquisition function. With every Bayesian optimization iteration step a new observation point at the maximum of the acquisition function is added to the training data. This new observation and its evaluation update the Gaussian process model. Thus the model becomes increasingly accurate in the vicinity of each observation. \cite{brochu2010tutorial} \label{fig:acqBO}}
+    \caption{Visualization of the change in the Gaussian process model and the resulting acquisition function \cite{brochu2010tutorial}. The x-axis contains the search space over a one-dimensional example problem. With every Bayesian optimization iteration step a new observation point at the maximum of the acquisition function is added to the training data. This new observation and its evaluation update the Gaussian process model. Thus the model becomes increasingly accurate in the vicinity of each observation. The number of observations equals the number of iterations and is denoted by $n$. \label{fig:acqBO}}
 \end{figure}
 
 \subsection{Gaussian Process Regression}
@@ -63,37 +63,36 @@ For further simplification we define $K = K(X,X)$, $K_* = K(X,X_*)$, $K_*^{\top}
 
 The resulting vectors $\mu$ and $v$ contain the means and variances for all corresponding test points. Also we get the whole covariance matrix $V$.
 
-\subsubsection{Standard kernel}
+\subsubsection{Standard kernels}
 The similarity between points is measured by the covariance function. The better this covariance function is suited for our objective function the more precise is the resulting model.
 We use two standard kernels \cite{rasmussen2006gaussian} to compare them to the trajectory kernel (section \ref{sec:trajKernel}). In those standard kernels the distance metric for two points is given by the Euclidean distance:
 $$D(x_i,x_j) = (x_i-x_j)^\top (x_i-x_j).$$
 
-Which we then use in the squared exponential kernel,
+Which we then use in the \textbf{squared exponential kernel},
 $$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\exp\left(-\frac{D(x_i,x_j)}{2\sigma_l^2} \right), $$
 
-and the Matern 5/2 kernel,
+and the \textbf{Mat\'{e}rn 5/2 kernel},
 $$K(x_i,x_j,\sigma) = \sigma_{f}^{2}\,\left(1 + \frac{\sqrt{5 D}}{\sigma_l} + \frac{5 D}{3\sigma_l^2} \right) \exp\left(-\frac{\sqrt{5 D}}{\sigma_l} \right),$$
 
 where $\sigma_f$ denote the signal standard deviation and $\sigma_l$ the characteristic length scale. These so called hyper parameters can be tuned by hand or set with hyper parameter optimization.
 
 \subsection{Hyper parameter optimization}
 
---EXPLAIN MARGINAL likelihood.
-
-Selecting proper hyper parameters for the Gaussian process regression can reduce the number of objective function evaluations necessary \cite{lizotte2008practical}. Also it helps avoiding numerical problems. To find an optimum for the signal deviation hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log marginal likelihood function
+Selecting proper hyper parameters for the Gaussian process regression can reduce the number of objective function evaluations necessary.\\
+The likelihood function of the Gaussian process describes the probability of the Gaussian process model being suited for the black box function. To find an optimum for the signal deviation hyperparameter $\sigma_f$ and the length scale hyperparameter $\sigma_l$ we maximize the log likelihood function depending on those parameters \cite{lizotte2008practical}:
 \begin{equation} \label{eq:hypOpt}
-    \log p(y|X,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_n^{-1} y -\frac{1}{2} \log |K_n| -\frac{n}{2}\log 2\pi,
+    \log p(y = f|X,\sigma_f,\sigma_l) = -\frac{1}{2} y^\top K_n^{-1} y -\frac{1}{2} \log |K_n| -\frac{n}{2}\log 2\pi,
 \end{equation}
 
-of the Gaussian process. The number of observations is $n$, $X$ is the $d \times n$ dataset of inputs and $K_n$ is the covariance matrix for the noisy target $y$.
+The number of observations is $n$, $X$ is the $d \times n$ dataset of input points and $K_n$ is the covariance matrix for the noisy target $y$.
 
 \subsection{Acquisition function}
-The basis of the Bayesian optimization consists of selecting the next evaluation point in our search space. This point is at the optimum of the acquisition function, which depends on the current Gaussian process model. We choose expected improvement \cite{brochu2010tutorial} during the global Bayesian optimization and in the local optimization (section \ref{sec:localBO}) we use Thompson sampling \cite{akrour2017local}. Both acquisition functions take the mean und the variance generated by the Gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration seeks points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all. An exemplary comparison of acquisition function is shown in Figure \ref{fig:acqFcn}.
+The basis of the Bayesian optimization consists of selecting the next evaluation point in our search space. This point is at the optimum of the acquisition function, which depends on the current Gaussian process model. We choose expected improvement \cite{brochu2010tutorial} during the global Bayesian optimization and in the local optimization (section \ref{sec:localBO}) we use Thompson sampling \cite{akrour2017local}. Both acquisition functions take the mean and the variance generated by the Gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration seeks points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all. An exemplary comparison of acquisition function is shown in Figure \ref{fig:acqFcn}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.70\textwidth]{/home/sebastian/Documents/bscThesis/img/BayesOptLoop_acq_full.pdf}
-    \caption{Visualization of Gaussian process posterior values corresponding to different acquisition functions \cite{shahriari2016taking}. In the upper frame the posterior mean $\mu$ and double standard deviation $2\sigma$ is marked as the blue line with the shaded area. The black dashed line shows the true objective and the red crosses mark already evaluated points. The lower frame compares the plots of the resulting acquisition functions probability of improvement, expected improvement, upper confidence bounds, Thompson sampling and predictive entropy search. The peaks of probability of improvement next to values with high mean illustrates its exploitive behaviour compared to expected improvement, which takes the variance more into account. Thompson sampling is the one with the most explorative peak due to its random nature. \label{fig:acqFcn}}
+    \caption{Visualization of Gaussian process posterior values corresponding to different acquisition functions \cite{shahriari2016taking}. The x-axis covers the search space over a one-dimensional example problem. In the upper frame the posterior mean $\mu$ and double standard deviation $2\sigma$ is marked as the blue line with the shaded area. The black dashed line shows the true objective and the red crosses mark already evaluated points. The lower frame compares the plots of the resulting acquisition functions probability of improvement, expected improvement, upper confidence bounds, Thompson sampling and predictive entropy search. The peaks of probability of improvement next to values with high mean illustrates its exploitive behaviour compared to expected improvement, which takes the variance more into account. Thompson sampling is the one with the most explorative peak due to its random nature. \label{fig:acqFcn}}
 \end{figure}
 
 \subsubsection{Expected improvement}
