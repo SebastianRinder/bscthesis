@@ -1,12 +1,12 @@
 \chapter{Outlook}
 \label{chap:7}
 
-% Maybe
-%  performs much better in comparison to standard kernels for more complex problems.
-
-Implementing the OpenAI Gym gives the classic control problems like cart pole, mountain car, and acrobot. Furthermore a lot of more complex environments like a humanoid walker or some Atari games are provided \cite{DBLP:journals/corr/BrockmanCPSSTZ16}. This could facilitate future research if working with higher dimensional problems.\\
-Dealing with more complex environments, can also lead to non-linear action mappings and more than one-dimensional actions. The trajectory kernels would have to be modified accordingly.
-
-Sometimes the hyper parameter optimization fails to maximize of the log marginal likelihood. To gain more robustness the maximization with partial derivates could be implemented as proposed by \cite{rasmussen2006gaussian, lizotte2008practical}.
-
-Computing the Gaussian distribution density for the continuous action selection probability measure has lead to difficulties. Instead, one could implement a classification on the basis of a sigmoid function as it is used in \cite{rasmussen2006gaussian}. The Gaussian cumulative distribution function could be suitable.
+We only did 200 iteration steps for the very time consuming runs with the global Bayesian optimization. Unfortunately the different kernels did not converge in those 200 steps. Future test runs could include a higher iteration count to receive more precise results.\\
+\\
+Implementing the OpenAI Gym provides the classic control problems like cart pole, mountain car, and acrobot. Furthermore a lot of more complex environments like a humanoid walker or some Atari games are provided \cite{DBLP:journals/corr/BrockmanCPSSTZ16}. This could facilitate future research if working with higher dimensional problems.\\
+Dealing with more complex environments, can also include non-linear action mappings and more than one-dimensional actions. The trajectory kernels would have to be modified accordingly.\\
+\\
+Sometimes the hyper parameter optimization fails to maximize of the log marginal likelihood. To gain more robustness the maximization with partial derivates could be implemented as proposed by \cite{rasmussen2006gaussian, lizotte2008practical}.\\
+\\
+Computing the Gaussian distribution density for the continuous action selection probability measure has lead to difficulties. Instead, one could implement a classification on the basis of a sigmoid function as it is used in \cite{rasmussen2006gaussian}. The Gaussian cumulative distribution function could be suitable.\\
+\\

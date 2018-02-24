@@ -1,13 +1,38 @@
-\chapter{Discussion}
+\chapter{Discussion and Conclusion}
 \label{chap:6}
 
-When computing the continuous action space trajectory distance metric, proposed by \cite{wilson2014using}, hyper parameter optimization is mandatory to compensate for high distance values. These values occur because of the Gaussian distribution density used as the probability measure for actions \ref{eq:contiAS}. Since we exponentiate the negative of the distance values, very high distance values will result in covariance values that are zero. The optimization of the scale length hyper parameter $\sigma_l$ will prevent all-zero covariance matrices. Experiments have shown that tuning the signal deviation parameter $\sigma_f$ is also helpful, because we simulate a policy only once for a result. Since a policy will not produce the exact same result after repeated evaluations, we have to assume a high variation on each result. This variation is regarded by $\sigma_f$.
+Due to the high variations in the plots, we divide the standard deviations by five before visualizing them in order to maintain the clarity of the graph. Maybe this high variance is an indicator for poorly selected model parameters. Not only the variance between trials is high, but also between iteration steps. Therefore we apply a moving mean of 15 steps on each plot.
 
-Unfortunately we were not able to reproduce the outstanding results with the trajectory kernel from \ref{wilson2014using}. Maybe because they do not provide any parameters or environment conditions. As shown exemplary in Figure \ref{fig:noisecompare} tuning of the noise level parameter can have a huge impact on the results. After a few test runs, we decided noise 1 2 3
+The continuous Cart Pole experiment on global Bayesian optimization with noise parameter $\sigma_n = 0.3$ (Figure \ref{fig:cartpoleMatlabGlobal}) shows an advantage of our trajectory kernel. It finds well performing policies faster than the other kernels. But it seems to decrease in its outcome over time. Unfortunately the time consuming experiment runs of the global Bayesian optimization with the trajectory kernel restricted us to the maximum of 200 iteration steps. As listed in Table \ref{table:cartpoleMatlabGlobal} as single trial for our trajectory kernel takes more than six hours on the cluster.
+
+
+
+When computing the continuous action space trajectory distance metric, proposed by \cite{wilson2014using}, hyper parameter optimization is mandatory to compensate for high distance values. These values occur because of the Gaussian distribution density used as the probability measure for actions \ref{eq:contiAS}. Since we exponentiate the negative of the distance values, very high distance values will result in covariance values that are zero. The optimization of the scale length hyper parameter $\sigma_l$ will prevent all-zero covariance matrices. Experiments have shown that tuning the signal deviation parameter $\sigma_f$ is also helpful, because we simulate a policy only once for a result. Since a policy will not produce the exact same result after repeated evaluations, we have to assume a high variation on each result. This variation is regarded by $\sigma_f$.\\
+\\
+For consistency we do the hyper parameter optimization on each kernel. This improves the performances of the standard kernels as well.\\
+In the Mountain Car continuous run we do not use any hyper parameter optimization, because it fails constantly. In this case we set $\sigma_l$ and $\sigma_l$ to 1.
+
+
+cunclusion graphs
+
+timesteps
+
+Did ten runs because high variance.
+
+-results beschreiben
+--werte benutzen
+--farben,
+-- einzelne und gemeinsamkeiten/untersiede
+
+Acrobot-v1 is an unsolved environment, which means it does not have a specified reward threshold at which it's considered solved.*
+CartPole-v0 defines "solving" as getting average reward of 195.0 over 100 consecutive trials.
+MountainCarContinuous-v0 defines "solving" as getting average reward of 90.0 over 100 consecutive trials.
+
+The discrete version of Mountain Car ('MountainCar-v0') stayed at the lowest possible reward during every experiment, therefore we plot no results.
 
 The results show that trajectory kernels may have some advantage if computation time is not expensive. However, the standard kernels seem to require a similar number of black box function evaluations on the experiments shown.
 
-
+Unfortunately we were not able to reproduce the outstanding results with the trajectory kernel from \ref{wilson2014using}. Maybe because they do not provide any parameters, environment conditions or their rewarding function. As shown exemplary in Figure \ref{fig:noisecompare} tuning of the noise level parameter can have a huge impact on the results. To show this impact we did the Cart Pole runs with different noise parameters.
 
 % tune
 % $\sigma_n$ \ref{fig:noisecompare}
