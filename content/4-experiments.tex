@@ -50,9 +50,9 @@ The Cart Pole environment consists of a cart with a pole attached to its top. Th
 %     \caption{Visualization of the Acrobot rendered by the OpenAI Gym\label{fig:acrobotPygym}}
 % \end{wrapfigure}
 
-The Acrobot consists of two joints and two pendulums. The upper joint has a fixed position. It connects to the first pendulum, which is attached to the second joint. A torque can be applied to that second joint, which controls the second pendulum. The pendulums start in equilibrium position and the goal is to gain enough momentum and swing the end of the second pendulum above a certain mark. The angle between vertical and the first pendulum and the angle between the two pendulums form the six state parameters. Four parameters are the sine and the cosine of these two angles each, whereas the last two parameters are the angular velocities \ref{table:envs}. The discrete action can have the values -1, 0 or 1. Each value stands for the amount of torque applied to the joint between the two pendulum links. With the six state values, an additional bias value, and three discrete action possibilities we get 21 dimensions for the Acrobot policy. We use the OpenAI Gym implementation of Acrobot ('Acrobot-v1').
+The Acrobot consists of two joints and two pendulums. The upper joint has a fixed position. It connects to the first pendulum, which is attached to the second joint. A torque can be applied to that second joint, which controls the second pendulum. The pendulums start in equilibrium position and the goal is to gain enough momentum and swing the end of the second pendulum above a certain mark. If the Acrobot passes that mark, the episode ends. A reward of -1 is received for every timestep needed. The angle between vertical and the first pendulum and the angle between the two pendulums form the six state parameters. Four parameters are the sine and the cosine of these two angles each, whereas the last two parameters are the angular velocities \ref{table:envs}. The discrete action can have the values -1, 0 or 1. Each value stands for the amount of torque applied to the joint between the two pendulum links. With the six state values, an additional bias value, and three discrete action possibilities we get 21 dimensions for the Acrobot policy. We use the OpenAI Gym implementation of Acrobot ('Acrobot-v1').
 
-\section{Mountain car}
+\section{Mountain car continuous}
 
 % \begin{wrapfigure}{R}{0.5\textwidth}
 %     \centering
@@ -60,7 +60,7 @@ The Acrobot consists of two joints and two pendulums. The upper joint has a fixe
 %     \caption{Visualization of the mountain car rendered by the OpenAI Gym\label{fig:mountaincarPygym}}
 % \end{wrapfigure}
 
-During the Mountain Car task, an underpowered car tries to drive uphill. It can only reach the goal on the right side if it uses both hills to gain momentum. The end of the left hill is an inelastic wall, so if the car hits it, the velocity is set to zero. Since the hills are formed by a sine curve, it is sufficient that the position of the car is only one-dimensional. The vertical position of the vehicle can be easily derived from the horizontal position with the sine function. The horizontal position and the car's velocity are cubically expanded (Table \ref{table:envs}) to get nine state values. Also a bias parameter is added as a tenth state value. In the continuous setting, we therefore receive ten dimensions. We use the OpenAI Gym implementation of the continuous Mountain Car task ('MountainCarContinuous-v0').
+During the Mountain Car task, an underpowered car tries to drive uphill. It can only reach the goal on the right side if it uses both hills to gain momentum. The end of the left hill is an inelastic wall, so if the car hits it, the velocity is set to zero. In the continuous setup the reward starts at 100. After an episode the squared count of performed actions is subtracted. Since the hills are formed by a sine curve, it is sufficient that the position of the car is only one-dimensional. The vertical position of the vehicle can be easily derived from the horizontal position with the sine function. The horizontal position and the car's velocity are cubically expanded (Table \ref{table:envs}) to get nine state values. Also a bias parameter is added as a tenth state value. In the continuous setting, we therefore receive ten dimensions. We use the OpenAI Gym implementation of the continuous Mountain Car task ('MountainCarContinuous-v0').
 
 %In the discrete setting we have three action values for either applying acceleration to the left or right (-1,1) or doing nothing (0). In this case we receive 30 dimensions.
 
@@ -109,7 +109,7 @@ During the Mountain Car task, an underpowered car tries to drive uphill. It can 
 
 Since we developed the Bayesian optimization algorithm in MATLAB, we first implemented a MATLAB version of Cart Pole that was adapted from \cite{joseCode}. Then we also implemented the OpenAI Gym \cite{DBLP:journals/corr/BrockmanCPSSTZ16} to provide a wide range of problem environments. To use the simulations written in Python we prepared a python module which is imported to MATLAB. After loading the python module with \verb|py.importlib.import_module(moduleName)| we can call every method it contains via the \verb|py.moduleName.| prefix. It is vital to convert our MATLAB data correctly before calling the python subroutine with it. The Matlab variables containing whole numbers are converted from \verb|Double| to \verb|Int|. Also all the vectors received by the python module have to be converted to an array through \verb|numpy.asarray()|.
 
-To cut the time for experiment runs we vectorized every suited operation to speed up calculations in MATLAB. Additionally we tuned the code to run on a parallel pool so we could run experiments on the cluster efficiently. Unfortunately, the OpenAI Gym environments do not work if we use the parallelization of MATLAB. So we used these environments only with the less computationally demanding local Bayesian optimization. The part of the cluster we used for parallel runs is equipped with Intel Xeon E5-4650 processors with 2.7 GHz each. The runs involving the OpenAI Gym were performed on my laptop Intel Core i5-7200U processor operating at 2.5 GHz.\\
+To cut the time for experiment runs we vectorized every suited operation to speed up calculations in MATLAB. Additionally we tuned the code to run on a parallel pool so we could run experiments on the cluster efficiently. Unfortunately, the OpenAI Gym environments do not work if we use the parallelization of MATLAB. So we used these environments only with the less computationally demanding local Bayesian optimization.\\
 
 % \subsection{Global optimization}
 % The expected improvement function and the log marginal liklihood function for hyper parameter optimization need to be maximized. Since we use MATLAB's \texttt{GlobalSearch} Toolbox, which is a global minimizer, we multiply the results of the functions by -1 to be able to minimize them appropriatly.
@@ -146,11 +146,13 @@ Again it consists of the linear mapping $f_s(s)^\top x$, and $A$ holds all possi
 
 The state feature function $f_s(s)$ depends on the environment as listed in Table \ref{table:envs}.
 
-\section{Starting settings}
+\section{Initial settings}
 
-For the trajectory kernel, we proposed in section \ref{sec:ownTK}, a maximum of 500 random states as the subset $S_{\text{sub}}$
+For the trajectory kernel, we proposed in section \ref{sec:ownTK}, a maximum of 500 random states as the subset $S_{\text{sub}}$ are used.
 
 For the continuous action selection the standard error deviation $\sigma_a$ is set to $10^{-3}$. We adapted the action selection strategies from \cite{wilson2014using}. Unfortunately they do not provide any parameters. Therefore this error deviation value was guessed after a few test runs.
+
+The noise variance $sigma_n^2$ is set to $10^{-8}$ for all performance tests.
 
 \subsection{Global context}
 
@@ -170,4 +172,4 @@ We run the hyper parameter optimization every time the search space is adjusted.
 
 Before doing Gaussian process regression we transform our observations to zero mean and uniform variance:
 $$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$
-This standardization proposed by \cite{akrour2017local} affects the Thompson sampling exploration exploitation trade-off. The distance threshold $d_t$ (Algorithm \ref{alg:acqLocalBO}) for the samples during Thompson sampling is set to 80\%.
+This standardization proposed by \cite{akrour2017local} affects the Thompson sampling exploration exploitation trade-off. The distance threshold $d_t$ (algorithm \ref{alg:acqLocalBO}) for the samples during Thompson sampling is set to 80\%.

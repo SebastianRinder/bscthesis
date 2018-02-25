@@ -9,7 +9,7 @@
 %     \caption{Visualization of the change in the Gaussian process model and the resulting acquisition function. With every Bayesian optimization iteration step a new observation point at the maximum of the acquisition function is added to the training data. This new observation and its evaluation update the Gaussian process model. Thus the model becomes increasingly accurate in the vicinity of each observation. \cite{brochu2010tutorial} \label{fig:acqBO}}
 % \end{wrapfigure}
 
-To find the maximum point of a costly black box target function, we use Bayesian optimization \cite{brochu2010tutorial,shahriari2016taking,lizotte2008practical}. It makes the search process more efficient by incorporating a Gaussian process model to anticipate the objective function's behaviour. This model, containing estimates of the function's returns depending on points, is used by a so called acquisition function to guide the exploration for promising new points. Each selected point is evaluated by the objective function and the results are included in the Gaussian process model. Optimally these steps are repeated until found function values converge at the maximum possible function value. In reality (Algorithm \ref{alg:boGlob}) we iterate over $N$ steps and analyse the results. The change of the Gaussian process model affecting the acquistion function during Bayesian optimization iterations is illustrated in Figure \ref{fig:acqBO}.\\
+To find the maximum point of a costly black box target function, we use Bayesian optimization \cite{brochu2010tutorial,shahriari2016taking,lizotte2008practical}. It makes the search process more efficient by incorporating a Gaussian process model to anticipate the objective function's behaviour. This model, containing estimates of the function's returns depending on points, is used by a so called acquisition function to guide the exploration for promising new points. Each selected point is evaluated by the objective function and the results are included in the Gaussian process model. Optimally these steps are repeated until found function values converge at the maximum possible function value. In reality (algorithm \ref{alg:boGlob}) we iterate over $N$ steps and analyse the results. The change of the Gaussian process model affecting the acquisition function during Bayesian optimization iterations is illustrated in figure \ref{fig:acqBO}.\\
 
 \begin{algorithm}
     \caption{Global Bayesian optimization\label{alg:boGlob}}
@@ -29,7 +29,7 @@ To find the maximum point of a costly black box target function, we use Bayesian
     }
 \end{algorithm}
 
-The optimization of hyper parameters is optional and depends on the Gaussian process kernel as mentioned in chapter \ref{chap:6}. Also the noise level parameter $\sigma_n$ \eqref{eq:kNoise} is not considered as hyper parameter in this context. It will be tuned seperatly (see chapter \ref{chap:5}).
+The optimization of hyper parameters is optional and depends on the Gaussian process kernel as mentioned in chapter \ref{chap:6}. Also the noise level parameter $\sigma_n$ \eqref{eq:kNoise} is not considered as hyper parameter in this context. It will be tuned separatly (see chapter \ref{chap:5}).
 
 \begin{figure}[h]
     \centering
@@ -38,7 +38,7 @@ The optimization of hyper parameters is optional and depends on the Gaussian pro
 \end{figure}
 
 \subsection{Gaussian Process Regression}
-The Gaussian process finds a prior distribution over the possible functions that are consistent with the training data. From the regression we then get a posterior mean and variance, which describe our model of the objective function \cite{rasmussen2006gaussian}. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more training points our model incorporates the smaller the variance, and the preciser the predictions, in the proximity around training points.\\
+The Gaussian process finds a prior distribution over the possible functions that are consistent with the training data. From the regression we then get a posterior mean and variance, which describe our model of the objective function \cite{rasmussen2006gaussian}. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more training points our model incorporates the smaller the variance, and the more precise the predictions, in the proximity around training points.\\
 In real world applications we always have some noise in the objective observations. Therefore a Gaussian distributed error term,
 
 $$\epsilon \sim \mathcal{N}(0,\sigma_n^2),$$
@@ -87,7 +87,7 @@ The likelihood function of the Gaussian process describes the probability of the
 The number of observations is $n$, $X$ is the $d \times n$ dataset of input points and $K_n$ is the covariance matrix for the noisy target $y$.
 
 \subsection{Acquisition function}
-The basis of the Bayesian optimization consists of selecting the next evaluation point in our search space. This point is at the optimum of the acquisition function, which depends on the current Gaussian process model. We choose expected improvement \cite{brochu2010tutorial} during the global Bayesian optimization and in the local optimization (section \ref{sec:localBO}) we use Thompson sampling \cite{akrour2017local}. Both acquisition functions take the mean and the variance generated by the Gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration seeks points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all. An exemplary comparison of acquisition function is shown in Figure \ref{fig:acqFcn}.
+The basis of the Bayesian optimization consists of selecting the next evaluation point in our search space. This point is at the optimum of the acquisition function, which depends on the current Gaussian process model. We choose expected improvement \cite{brochu2010tutorial} during the global Bayesian optimization and in the local optimization (section \ref{sec:localBO}) we use Thompson sampling \cite{akrour2017local}. Both acquisition functions take the mean and the variance generated by the Gaussian process model into account to guide the exploration process. The difficulty lies in avoiding excessive exploration or exploitation. Exploration seeks points with a high variance and exploitation selects points with a high mean instead. The latter one would result in a local optimum whereas too much exploration may not improve at all. An exemplary comparison of acquisition function is shown in figure \ref{fig:acqFcn}.
 
 \begin{figure}[h]
     \centering
@@ -96,7 +96,7 @@ The basis of the Bayesian optimization consists of selecting the next evaluation
 \end{figure}
 
 \subsubsection{Expected improvement}
-To get an expected improvement function value at a test point $x_*$, we need the mean value $\mu(x_*)$, and the standard deviation value $\sigma(x_*) = \sqrt{v(x_*)}$ from the Gaussian process model. Also we need the maximum of all observations $y_{max}$ and a trade-off parameter $\tau$. For the cumulative distribution function we write $\Phi(.)$ and for the probability density function we write $\phi(.)$. They are both Gaussian with zero mean and unit variance. We adopt the expected improvement function
+To get an expected improvement function value at a test point $x_*$, we need the mean value $\mu(x_*)$, and the standard deviation value $\sigma(x_*) = \sqrt{v(x_*)}$ from the Gaussian process model. Also we need the maximum of all observations $y_{max}$ and a trade-off parameter $\tau$. For the cumulative distribution function, we write $\Phi(.)$ and for the probability density function we write $\phi(.)$. They are both Gaussian with zero mean and unit variance. We adopt the expected improvement function
 \[
     \mathrm{EI}(x_*)=
 \begin{cases}
@@ -123,8 +123,8 @@ For Thompson sampling acquisition values we sample one function from the Gaussia
 
 $$\mathrm{TS}\sim \mathrm{GP}(0,K(X,X_*)),$$
 
-where $X$ is the dataset of already evaluated points, and $X_*$ is a randomly Gaussian distributed set of points with mean and variance given by the local optimzer. These mean and variance represent our current search space.
-To draw function values we need the mean vector $\mu$ and the full covariance matrix $V$ from the Gaussian process model. First we take the lower Cholesky decomposite of $V$ such that $L_V L_V^\top = V$. Then we generate a vector $g$, which consists of independent Gaussian distributed valus with zero mean and unit variance. Finally we get a vector $\mathrm{TS}$ of sampled values:
+where $X$ is the dataset of already evaluated points, and $X_*$ is a randomly Gaussian distributed set of points with mean and variance given by the local optimizer. These mean and variance represent our current search space.
+To draw function values, we need the mean vector $\mu$ and the full covariance matrix $V$ from the Gaussian process model. First we take the lower Cholesky decomposite of $V$ such that $L_V L_V^\top = V$. Then we generate a vector $g$, which consists of independent Gaussian distributed valus with zero mean and unit variance. Finally we get a vector $\mathrm{TS}$ of sampled values:
 
 $$\mathrm{TS}(x_*) = \mu + L_V g.$$
 
@@ -139,7 +139,7 @@ to get the next evaluation point.
 In our reinforcement learning task we want to maximize the cumulative reward stemming from a policy with as few evaluations as feasible. We achieve this maximization by applying Bayesian optimization, treating the cumulative reward as the objective function and policies as points. The objective function evaluation consists of the simulation of a robotic agent.
 
 \subsection{Markov decision process}
-We use the Markov decision process model to describe the agent's decisions making \cite{sutton1998reinforcement}. This model consists of a tuple $(S,A,P,R,\gamma)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities $p \in P$, and all corresponding rewards $r \in R$. The discount factor $\gamma$ is set to 1 because we have a finite horizon Markov decision process where the timing of the reward is irrelevant. Since the transitioning probabilities and the rewards are unkown, they are accessed through simulation runs of our environment. Assume the agent executing a policy $x$ for $T$ time steps, producing a trajectory $\xi$, and therefore receiving the final reward
+We use the Markov decision process model to describe the agent's decisions making \cite{sutton1998reinforcement}. This model consists of a tuple $(S,A,P,R,\gamma)$, holding all states $s \in S$, all actions $a \in A$, all state transitioning probabilities $p \in P$, and all corresponding rewards $r \in R$. The discount factor $\gamma$ is set to 1 because we have a finite horizon Markov decision process where the timing of the reward is irrelevant. Since the transitioning probabilities and the rewards are unknown, they are accessed through simulation runs of our environment. Assume the agent executing a policy $x$ for $T$ time steps, producing a trajectory $\xi$, and therefore receiving the final reward
 
 $$\bar{r}(\xi)=\sum_{t=1}^T \gamma^t r(s_{t-1}, a_{t-1}, s_{t}),$$
 
@@ -182,7 +182,7 @@ To reduce the computational effort an estimation of kernel values is applied. Th
     \hat{D}(x_{ i }, x_{ j }) = \sum _{\xi \in \xi_i} \log\left( \frac{P(\xi|x_{ i })}{P(\xi|x_{ j })} \right) + \sum _{\xi \in \xi_j} \log\left( \frac{P(\xi|x_{ j })}{P(\xi|x_{ i })} \right)
 \end{equation}
 
-is sufficient to measure the divergences between policies with already sampled trajectories \cite{wilson2014using}. Here $\xi_i$ is the set of trajectories generated by policy $x_i$. For our Gaussian process regression we also need a distance measure between a policy with known trajectories and new policies with unknown trajectories. Since there is no closed form solution to this we use the importance sampled divergence
+is sufficient to measure the divergences between policies with already sampled trajectories \cite{wilson2014using}. Here $\xi_i$ is the set of trajectories generated by policy $x_i$. For our Gaussian process regression, we also need a distance measure between a policy with known trajectories and new policies with unknown trajectories. Since there is no closed form solution to this we use the importance sampled divergence
 
 $$\hat{D}(x_{ new }, x_{ j }) = \sum _{\xi \in \xi_j} \left[\frac{P(\xi|x_{ new })}{P(\xi|x_{ j })}\,\log\left(\frac{P(\xi|x_{new})}{P(\xi|x_{j})}\right)+\log\left(\frac{P(\xi|x_{ j })}{P(\xi|x_{ new })}\right)\right] $$
 

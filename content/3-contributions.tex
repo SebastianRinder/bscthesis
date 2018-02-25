@@ -19,29 +19,29 @@ To prevent the mean from moving too fast from the initial point and to avoid the
     & & &\HH(\pi_n) - \HH(\pi) & &\leq \beta,\label{eq:entropy:our}
 \end{align}
 
-where $\KL(.||.)$ denotes the Kullback Leibler divergence $\mathcal{H}(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$. We implement the local Bayesian optimization (Algoritm \ref{alg:localBO}) as suggested by \cite{akrour2017local}
+where $\KL(.||.)$ denotes the Kullback Leibler divergence $\mathcal{H}(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$. We implement the local Bayesian optimization as suggested in \cite{akrour2017local}.
 
-\begin{algorithm}[t]
-   \caption{Local Bayesian Optimization\label{alg:localBO}}
-   \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+% \begin{algorithm}[t]
+%    \caption{Local Bayesian Optimization\label{alg:localBO}}
+%    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+%
+%    \Input{Initial search policy $\pi_0 = \mathcal{N}(\boldsymbol{\mu}_0, \sigma_0^2I)$\\ step-size $\epsilon$\\ entropy reduction rate $\beta$}
+%    \Output{Search policy $\pi_N$}
+%    \BlankLine
+%    \For{$n=1$ \KwTo $N$}{
+%        \textit{{\small Fit:}} Gaussian $\pntilde$ from local samples of $\pnstar$ \hfill\\
+%        \textit{{\small Optimize:}} $(\eta^*, \omega^*) = \arg\min g_n(\eta, \omega)$ \hfill\\
+%     %   \STATE  Compute weights $\gstar = \frac{\estar}{\estar + \ostar}$ and $\lstar = \frac{1}{\estar + \ostar}$
+%        \textit{{\small Bayesian Update:}} $\left(\pi_{n+1}\right)^{\estar + \ostar}  \propto \pi_{n}^{\estar} \pnstar$ \hfill\\
+%        \textit{{\small Evaluate:}} $\x_n$ from local samples of $\pnstar$ \hfill \\
+%        $\Data_n   \longleftarrow \Data_{n-1} \cup \{(\x_n, y_n)\}$
+%    }
+% \end{algorithm}
 
-   \Input{Initial search policy $\pi_0 = \mathcal{N}(\boldsymbol{\mu}_0, \sigma_0^2I)$\\ step-size $\epsilon$\\ entropy reduction rate $\beta$}
-   \Output{Search policy $\pi_N$}
-   \BlankLine
-   \For{$n=1$ \KwTo $N$}{
-       \textit{{\small Fit:}} Gaussian $\pntilde$ from local samples of $\pnstar$ \hfill\\
-       \textit{{\small Optimize:}} $(\eta^*, \omega^*) = \arg\min g_n(\eta, \omega)$ \hfill\\
-    %   \STATE  Compute weights $\gstar = \frac{\estar}{\estar + \ostar}$ and $\lstar = \frac{1}{\estar + \ostar}$
-       \textit{{\small Bayesian Update:}} $\left(\pi_{n+1}\right)^{\estar + \ostar}  \propto \pi_{n}^{\estar} \pnstar$ \hfill\\
-       \textit{{\small Evaluate:}} $\x_n$ from local samples of $\pnstar$ \hfill \\
-       $\Data_n   \longleftarrow \Data_{n-1} \cup \{(\x_n, y_n)\}$
-   }
-\end{algorithm}
 
+\subsection{Constraint Thompson sampling}
 
-\subsection{Thompson sampling}
-
-To perform Thompson sampling on the variable search distribution we first sample $M$ points from the current search distribution (Algorithm \ref{alg:acqLocalBO}). Then we compute the mahalanobis distance for each test point to discard samples, which are at the outer edge of the search space. The mahalanobis distance is used to regard the covariance of the current search distribution.
+To perform Thompson sampling on the variable search distribution we first sample $M$ points from the current search distribution (algorithm \ref{alg:acqLocalBO}). Then we compute the Mahalanobis distance for each test point to discard samples, which are at the outer edge of the search space. The Mahalanobis distance is used to regard the covariance of the current search distribution.
 
 \begin{algorithm}
     \caption{Thompson sampling acquisition for local Bayesian optimization\label{alg:acqLocalBO}}
@@ -50,7 +50,7 @@ To perform Thompson sampling on the variable search distribution we first sample
     \Output{$x_{n+1}$: next evaluation point}
     \BlankLine
 
-    compute the mahalanobis distance from test points to current search distribution\\
+    compute the Mahalanobis distance from test points to current search distribution\\
     keep samples, which are inside $d_t\%$ of the distribution density\\
     get mean and covariance matrix from the Gaussian process\\
     get values from Thompson sampling\\
@@ -73,7 +73,7 @@ $$D(x_i,x_j) = \sum _{i}P(a|S_{\text{sub}},x_i)\,\log {\frac {P(a|S_{\text{sub}}
 %     \Output{$x_{n+1}$: next evaluation point}
 %     \BlankLine
 %
-%     $m_d$ = mahalanobis distance from test points to incumbent search distribution\\
+%     $m_d$ = Mahalanobis distance from test points to incumbent search distribution\\
 %     discard samples, which are outside $80\%$ of the cumulative inverse-chi-squared distribution\\
 %     get mean and covariance matrix from the Gaussian process\\
 %     get values from Thompson sampling\\
@@ -118,7 +118,7 @@ This is considered faster and numerically more stable \cite{rasmussen2006gaussia
 \end{equation}
 
 The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
-Matrix $K_n$ must be positive definite for the cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ as shown in Algorithm \ref{alg:cholesky}.
+Matrix $K_n$ must be positive definite for the cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ as shown in algorithm \ref{alg:cholesky}.
 
 \subsubsection{Variances}
 
