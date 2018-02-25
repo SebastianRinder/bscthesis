@@ -59,7 +59,7 @@ To perform Thompson sampling on the variable search distribution we first sample
 
 \subsection{Trajectory kernel}
 \label{sec:ownTK}
-If using Thompson sampling as the acquisition function, the whole covariance matrix $V$ of test points is needed. To compute this covariance matrix we need a distance measure between unkown trajectories. The kernel proposed by \cite{wilson2014using} does not support a measurement between unevaluated policies. We therefore implement our own distance metric based on states, which are already present in the training data. First we filter a random subset from the training data and save it to $S_{\text{sub}}$. For the continuous action space we then calculate each mean
+If using Thompson sampling as the acquisition function, the whole covariance matrix $V$ of test points is needed. To compute this covariance matrix, we need a distance measure between unknown trajectories. The kernel proposed by \cite{wilson2014using} does not support a measurement between unevaluated policies. We therefore implement our own distance metric based on states, which are already present in the training data. First we filter a random subset from the training data and save it to $S_{\text{sub}}$. For the continuous action space we then calculate each mean
 $$\mu_i = f_s(S_{\text{sub}})^\top x_i \qquad \text{and}\qquad \mu_j = f_s(S_{\text{sub}})^\top x_j$$
 for the given policies $x_i$ and $x_j$. The difference between the two policies is measured by the squared Euclidean distance between the means:
 $$D(x_i,x_j) = (\mu_i - \mu_j)^\top (\mu_i - \mu_j).$$
@@ -81,11 +81,11 @@ $$D(x_i,x_j) = \sum _{i}P(a|S_{\text{sub}},x_i)\,\log {\frac {P(a|S_{\text{sub}}
 % \end{algorithm}
 
 \section{Numerical stability and efficiency}
-Due to numerical instabilities, errors may occur during calculations. These errors are caused by the discrete implementation of continuous mathematical formulas. Sometimes numerical instabilities lead to negative values for covariances. To avoid getting complex numbers we assume negative values as zero before applying the square root on covariances when computing the standard deviation from the Gaussian process model (\ref{eq:gp:stdv}). Negative values can also occur for the distance between two trajectories, and are thresholded to zero too.\\
+Due to numerical instabilities, errors may occur during calculations. These errors are caused by the discrete implementation of continuous mathematical formulas. Sometimes numerical instabilities lead to negative values for covariances. To avoid getting complex numbers we assume negative values as zero before applying the square root on covariances when computing the standard deviation from the Gaussian process model (\ref{eq:gp:stdv}). Negative values can also occur for the distance between two trajectories, and are thresholded to zero, too.\\
 
 When computing the symmetrical distance matrix $\hat{D}(X,X)$ (\ref{eq:tk:mc}) only the upper triangle matrix $\hat{D}_{u}$ is calculated. That halves the computational effort. We obtain $\hat{D} = \hat{D}_{u}+\hat{D}_{u}^\top$, since the diagonal elements of $\hat{D}$ are zero and $\hat{D}(x_i,x_j) = \hat{D}(x_j,x_i)$.\\
 
-To gain robustness we use the lower Cholesky decomposition instead doing matrix inverse calculation. Therefore the matrix to decompose must be positive definite. We achieve this by doubling the noise variance added to the diagonal elements of the original matrix as shown in algorithm \ref{alg:cholesky}.
+To gain robustness we use the lower Cholesky decomposition instead doing matrix inverse calculation. Therefore, the matrix to decompose must be positive definite. We achieve this by doubling the noise variance added to the diagonal elements of the original matrix as shown in algorithm \ref{alg:cholesky}.
 
 \begin{algorithm}
     \caption{Lower Cholesky with variance doubling\label{alg:cholesky}}
@@ -101,7 +101,7 @@ To gain robustness we use the lower Cholesky decomposition instead doing matrix 
     L = lower Cholesky of $K_n$\\
 \end{algorithm}
 
-When doing hyper parameter optimization we do not double the noise variance. Instead our log marginal likelihood function (\ref{eq:hypOpt}) returns $-\infty$ for hyper parameters, which produce a non positive definit matrix $K_n$. Therefore, such hyper parameters do not come into consideration when maximizing.
+When doing hyper parameter optimization, we do not double the noise variance. Instead our log marginal likelihood function (\ref{eq:hypOpt}) returns $-\infty$ for hyper parameters, which produce a non positive definite matrix $K_n$. Therefore, such hyper parameters do not come into consideration when maximizing.
 
 \subsection{Gaussian Process Regression}
 
@@ -118,11 +118,11 @@ This is considered faster and numerically more stable \cite{rasmussen2006gaussia
 \end{equation}
 
 The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
-Matrix $K_n$ must be positive definite for the cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ as shown in algorithm \ref{alg:cholesky}.
+Matrix $K_n$ must be positive definite for the Cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ as shown in algorithm \ref{alg:cholesky}.
 
 \subsubsection{Variances}
 
-For the expected improvement function we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ and taking the diagonal elements (\ref{eq:vectorVar}) we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f^2$ because the difference between one $x_*$ and the same $x_*$ is zero. Therefore we can write:
+For the expected improvement function, we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ and taking the diagonal elements (\ref{eq:vectorVar}) we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f^2$ because the difference between one $x_*$ and the same $x_*$ is zero. Therefore we can write:
 
 \begin{align}
     L_k &= L \setminus K(X_*,X) \\
@@ -167,11 +167,11 @@ $$\log(|K_n|) = \log(|L|^{2}) = 2\,\log(|L|) = 2\,\log(\textstyle\prod_{i} L_{ii
 The computation of $K_y^{-1}y$ in \eqref{eq:hypOpt} is done by the same method we already use in the Gaussian process \eqref{eq:regression}.
 
 \subsubsection{Independent log-normal prior}
-The log marginal likelihood maximization will sometimes succeed at the borders of our search space resulting in very high high or very low hyper parameters. We prevent this by adding an independet log-normal prior term as introduced in \cite{lizotte2008practical}:
+The log marginal likelihood maximization will sometimes succeed at the borders of our search space resulting in very high high or very low hyper parameters. We prevent this by adding an independent log-normal prior term as introduced in \cite{lizotte2008practical}:
 
 $$\sum_{i=f,l}\left(\frac{-\log(\sigma_i)^2}{2\cdot 10^2}) - \log 10\sqrt{2\pi} \right).$$
 
-Since the suggested prior is centered at the point of origin with standard deviation 10, but we want our search space to adapt between iterations, we make the mean and the standard deviation adjustable. We write:
+Since the suggested prior is centred at the point of origin with standard deviation 10, but we want our search space to adapt between iterations, we make the mean and the standard deviation adjustable. We write:
 
 $$\sum_{i=1,2}\left(\frac{-(h_i-c_i)^2}{2(b_{u_i}-b_{l_i})^2}) - \log(b_{u_i}-b_{l_i})\sqrt{2\pi} \right),$$
 

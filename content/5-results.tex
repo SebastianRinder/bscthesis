@@ -1,12 +1,12 @@
 \chapter{Results}
 \label{chap:5}
 %
-We plot the mean and the standard deviation of the cumulative reward for all kernel runs. One kernel run consists of a number of trials depending on the experiment. We use more than one trial per kernel to compenstate for the variable result one run can produce. Also, due to high variations between iteration steps, all plots are smoothed by a moving mean of 15 steps. And the standard deviation values are divided by five to maintain readability when three or four different kernel plots are present in one graph. Each plot includes the mean of every kernel's outcome as a line and the corresponding standard deviation as a shaded area above and below. The green and blue graph show the two standard kernels, squared exponential and Matérn 5/2, and the magenta and red graph show the trajectory kernels. The trajectory kernel proposed by \cite{wilson2014using} is marked as the magenta one, whereas the trajectory kernel we come up with (Section \ref{sec:ownTK}) is marked as the red one. Also a table is provided for each experiment showing the benchmark data for corresponding kernels. The column \textbf{mean(time)} contains the mean value of the minutes needed for each trail and the column \textbf{std(time)} the associated standard deviation. The column \textbf{time performance} relates the time needed for the whole run to the time needed for the squared exponential kernel run. If the percentage is negative the associated kernel took more time than the squared exponential kernel. The last column, \textbf{learning performance}, compares the summarized cumulative rewards to those of the squared exponential kernel. If the percentage is positive then the overall learning performance is better than the squared exponential kernel ones. The discrete version of the OpenAI Gym Mountain Car ('MountainCar-v0') stayed at the lowest possible reward during all experiments, therefore we plot no results.
+We plot the mean and the standard deviation of the cumulative reward for all kernel runs. One kernel run consists of a number of trials depending on the experiment. We use more than one trial per kernel to compensate for the variable result one run can produce. Also, due to high variations between iteration steps, all plots are smoothed by a moving mean of 15 steps. And the standard deviation values are divided by five to maintain readability when three or four different kernel plots are present in one graph. Each plot includes the mean of every kernel's outcome as a line and the corresponding standard deviation as a shaded area above and below. The green and blue graph show the two standard kernels, squared exponential and Matérn 5/2, and the magenta and red graph show the trajectory kernels. The trajectory kernel proposed by \cite{wilson2014using} is marked as the magenta one, whereas the trajectory kernel we come up with (Section \ref{sec:ownTK}) is marked as the red one. Also a table is provided for each experiment showing the benchmark data for corresponding kernels. The column \textbf{mean(time)} contains the mean value of the minutes needed for each trail and the column \textbf{std(time)} the associated standard deviation. The column \textbf{time performance} relates the time needed for the whole run to the time needed for the squared exponential kernel run. If the percentage is negative the associated kernel took more time than the squared exponential kernel. The last column, \textbf{learning performance}, compares the summarized cumulative rewards to those of the squared exponential kernel. If the percentage is positive then the overall learning performance is better than the squared exponential kernel ones. The discrete version of the OpenAI Gym Mountain Car ('MountainCar-v0') stayed at the lowest possible reward during all experiments, therefore we plot no results.
 
 \begin{table}[h]
     \centering
     \begin{tabular}{|l|l|l|l|l|}\hline
-        Environment & Optimzer & Action space & Kernels & Simulation\\\hline
+        Environment & Optimizer & Action space & Kernels & Simulation\\\hline
         Cart Pole & globally & continuous & S, M, TW, TO & MATLAB (cluster)\\\hline
         Cart Pole & locally & continuous & S, M, TO & MATLAB (cluster)\\\hline
         Cart Pole & locally & discrete & S, M, TO & OpenAI Gym (laptop)\\\hline
@@ -24,14 +24,14 @@ Here we plot the learning performance of each experiment. We also provide tables
 \subsection{Cart pole}
 This subsection contains the results of the different Cart Pole setups.
 
-\subsubsection{Matlab implementation of Cart pole on the global optimizer}
+\subsubsection{MATLAB implementation of Cart pole on the global optimizer}
 
-In figure \ref{fig:cartpoleMatlabGlobal} we plot four differnet kernel runs of the MATLAB CartPole implementation in the global Bayesian optimization context. Our MATLAB CartPole implementation runs at most until 1000 time steps. For this implementation we use a continuous action selection policy with four dimensions. Ten trials were completed on each kernel to observe the average performance.
+In figure \ref{fig:cartpoleMatlabGlobal} we plot four different kernel runs of the MATLAB CartPole implementation in the global Bayesian optimization context. Our MATLAB CartPole implementation runs at most until 1000 time steps. For this implementation we use a continuous action selection policy with four dimensions. Ten trials were completed on each kernel to observe the average performance.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=.7\textwidth]{/home/sebastian/Documents/bscThesis/img/results/global_cartpole_matlab_10.pdf}
-    \caption{Results of the MATLAB Cart Pole implementation with a continuous action selection policy with the global optimzation. Each kernel graph contains the average over 10 trials.}
+    \caption{Results of the MATLAB Cart Pole implementation with a continuous action selection policy with the global optimization. Each kernel graph contains the average over 10 trials.}
     \label{fig:cartpoleMatlabGlobal}
 \end{figure}
 \begin{table}[h]
@@ -51,13 +51,13 @@ In figure \ref{fig:cartpoleMatlabGlobal} we plot four differnet kernel runs of t
 
 
 \newpage
-\subsubsection{Matlab implementation of Cart pole on the local optimizer}
-In figure \ref{fig:cartpoleMatlabLocal} we plot three differnet kernel runs of the MATLAB CartPole implementation in the local Bayesian optimization context. For this implementation we use a continuous action selection policy with four dimensions. Ten trials were completed on each kernel to observe the average performance.
+\subsubsection{MATLAB implementation of Cart pole on the local optimizer}
+In figure \ref{fig:cartpoleMatlabLocal} we plot three different kernel runs of the MATLAB CartPole implementation in the local Bayesian optimization context. For this implementation we use a continuous action selection policy with four dimensions. Ten trials were completed on each kernel to observe the average performance.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{/home/sebastian/Documents/bscThesis/img/results/local_cartpole_matlab_10.pdf}
-    \caption{Results of the MATLAB Cart Pole implementation with a continuous action selection policy on the local optimzer. Each kernel graph contains the average over 10 trials.}
+    \caption{Results of the MATLAB Cart Pole implementation with a continuous action selection policy on the local optimizer. Each kernel graph contains the average over 10 trials.}
     \label{fig:cartpoleMatlabLocal}
 \end{figure}
 \begin{table}[h]
@@ -73,12 +73,12 @@ In figure \ref{fig:cartpoleMatlabLocal} we plot three differnet kernel runs of t
 
 \newpage
 \subsubsection{OpenAI Gym implementation of Cart pole on the local optimizer}
-In figure \ref{fig:cartpolePygym} we plot three differnet kernel runs of the OpenAI Gym CartPole implementation in the local Bayesian optimization context. For this implementation we use a discrete action selection policy with five dimensions for two possible actions resulting in a total of ten dimensions. Ten trials were completed on each kernel to observe the average performance.
+In figure \ref{fig:cartpolePygym} we plot three different kernel runs of the OpenAI Gym CartPole implementation in the local Bayesian optimization context. For this implementation we use a discrete action selection policy with five dimensions for two possible actions resulting in a total of ten dimensions. Ten trials were completed on each kernel to observe the average performance.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{/home/sebastian/Documents/bscThesis/img/results/local_cartpole_pygym_10.pdf}
-    \caption{Results of the OpenAI Gym Cart Pole implementation with a discrete action selection policy on the local optimzer. Each kernel graph contains the average over 10 trials.}
+    \caption{Results of the OpenAI Gym Cart Pole implementation with a discrete action selection policy on the local optimizer. Each kernel graph contains the average over 10 trials.}
     \label{fig:cartpolePygym}
 \end{figure}
 \begin{table}[h]
@@ -94,11 +94,11 @@ In figure \ref{fig:cartpolePygym} we plot three differnet kernel runs of the Ope
 
 \newpage
 \subsection{Acrobot}
-In figure \ref{fig:acrobotPygym} we plot three differnet kernel runs of the OpenAI Gym Acrobot implementation in the local Bayesian optimization context. For this implementation we use a discrete action selection policy with seven dimensions for three possible actions resulting in a total of 21 dimensions. Ten trials were completed on each kernel to observe the average performance.
+In figure \ref{fig:acrobotPygym} we plot three different kernel runs of the OpenAI Gym Acrobot implementation in the local Bayesian optimization context. For this implementation we use a discrete action selection policy with seven dimensions for three possible actions resulting in a total of 21 dimensions. Ten trials were completed on each kernel to observe the average performance.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{/home/sebastian/Documents/bscThesis/img/results/local_acrobot_pygym_10.pdf}
-    \caption{Results of the OpenAI Gym Acrobot implementation with a discrete action selection policy on the local optimzer. Each kernel graph contains the average over 10 trials.}
+    \caption{Results of the OpenAI Gym Acrobot implementation with a discrete action selection policy on the local optimizer. Each kernel graph contains the average over 10 trials.}
     \label{fig:acrobotPygym}
 \end{figure}
 \begin{table}[h]
@@ -114,11 +114,11 @@ In figure \ref{fig:acrobotPygym} we plot three differnet kernel runs of the Open
 
 \newpage
 \subsection{Mountain Car}
-In figure \ref{fig:mountaincarPygym} we plot three differnet kernel runs of the OpenAI Gym Mountain Car continuous implementation in the local Bayesian optimization context. For this implementation we use a continuous action selection policy with ten dimensions. Ten trials were completed on each kernel to observe the average performance.
+In figure \ref{fig:mountaincarPygym} we plot three different kernel runs of the OpenAI Gym Mountain Car continuous implementation in the local Bayesian optimization context. For this implementation we use a continuous action selection policy with ten dimensions. Ten trials were completed on each kernel to observe the average performance.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{/home/sebastian/Documents/bscThesis/img/results/local_mountaincar_pygym_10.pdf}
-    \caption{Results of the OpenAI Gym Mountain Car continuous implementation with a continuous action selection policy on the local optimzer. Each kernel graph contains the average over 10 trials.}
+    \caption{Results of the OpenAI Gym Mountain Car continuous implementation with a continuous action selection policy on the local optimizer. Each kernel graph contains the average over 10 trials.}
     \label{fig:mountaincarPygym}
 \end{figure}
 \begin{table}[h]
