@@ -1,14 +1,11 @@
 \chapter{Contributions}
 \label{chap:contributions}
 
-% - including trajectory kernel to local BO
-% --TS trajectory kernel
+As we will see in the Experiments, the local Bayesian optimization technique is more efficient than the commonly used global one. We implement this local Bayesian algorithm developed by \cite{akrour2017local} and we also contribute a trajectory kernel suited for the Thompson sampling acquisition function used by the proposed algorithm.
 
 \section{Local Bayesian optimization}
 \label{sec:localBO}
-- formula for search dist update
-
-Modelling the objective function for a higher dimensional search space is challenging. Also global Bayesian optimization tends to over-explore. To perform a more robust optimization we use local Bayesian optimization as stated in \cite{akrour2017local}. It restricts the search space of the acquisition function to a local area which is moved, resized, and rotated between iterations. This local area is defined by a Gaussian distribution in which the mean and variance represent the center and the exploration reach respectively. To update that mean and variance properly we minimize the Kullback-Leibler divergence between the current search distribution $\pi_n$ and the probability $p_n^* = p(\x=\x^*|\mathcal{D}_n)$ of $\x^*$ being optimal. This results in a search area which neglects poorly performing regions.
+Modelling the objective function for a higher dimensional search space is challenging. Also global Bayesian optimization tends to over-explore. To perform a more robust optimization we use local Bayesian optimization as stated in \cite{akrour2017local}. It restricts the search space of the acquisition function to a local area which is moved, resized, and rotated between iterations. This local area is defined by a Gaussian distribution in which the mean and variance represent the centre and the exploration reach respectively. To update that mean and variance properly we minimize the Kullback-Leibler divergence between the current search distribution $\pi_n$ and the probability $p_n^* = p(\x=\x^*|\mathcal{D}_n)$ of $\x^*$ being optimal. This results in a search area which neglects poorly performing regions.
 
 To prevent the mean from moving too fast from the initial point and to avoid the variance becoming too small quickly the minimization is constrained with the hyper parameters $\alpha$ and $\beta$. Therefore our optimization problem is given by
 
@@ -19,7 +16,7 @@ To prevent the mean from moving too fast from the initial point and to avoid the
     & & &\HH(\pi_n) - \HH(\pi) & &\leq \beta,\label{eq:entropy:our}
 \end{align}
 
-where $\KL(.||.)$ denotes the Kullback Leibler divergence $\mathcal{H}(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$. We implement the local Bayesian optimization as suggested in \cite{akrour2017local}.
+where $\KL(.||.)$ denotes the Kullback-Leibler divergence $\mathcal{H}(p) = -\int p(\x)\log(p(\x)) d\x$ is the entropy of $p$. We implement the local Bayesian optimization as suggested in \cite{akrour2017local}.
 
 % \begin{algorithm}[t]
 %    \caption{Local Bayesian Optimization\label{alg:localBO}}
@@ -41,30 +38,32 @@ where $\KL(.||.)$ denotes the Kullback Leibler divergence $\mathcal{H}(p) = -\in
 
 \subsection{Constraint Thompson sampling}
 
-To perform Thompson sampling on the variable search distribution we first sample $M$ points from the current search distribution (algorithm \ref{alg:acqLocalBO}). Then we compute the Mahalanobis distance for each test point to discard samples, which are at the outer edge of the search space. The Mahalanobis distance is used to regard the covariance of the current search distribution.
+To perform Thompson sampling on the variable search distribution we first sample a number of points from the current search distribution (algorithm \ref{alg:acqLocalBO}). Then we compute the Mahalanobis distance for each test point to discard samples, which are at the outer edge of the search space. The Mahalanobis distance is used to regard the covariance of the current search distribution in distance computations.
 
 \begin{algorithm}
     \caption{Thompson sampling acquisition for local Bayesian optimization\label{alg:acqLocalBO}}
     \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-    \Input{$X$ = $N$ already evaluated points\\$X_*$ = $M$ random samples from the search distribution\\$d_t$ = distance threshold}
-    \Output{$x_{n+1}$: next evaluation point}
+    \Input{$X$ = $n$ already evaluated points\\$X_*$ = random samples from the search distribution\\$d_t$ = distance threshold}
+    \Output{$\mathbf{x}_{n+1}$: next evaluation point}
     \BlankLine
 
     compute the Mahalanobis distance from test points to current search distribution\\
-    keep samples, which are inside $d_t\%$ of the distribution density\\
+    keep samples, which are inside the distance threshold $d_t$ of the distribution density\\
     get mean and covariance matrix from the Gaussian process\\
     get values from Thompson sampling\\
-    $x_{n+1}$ = sample at the highest Thompson sampled value\\
+    $\mathbf{x}_{n+1}$ = sample at the maximum of Thompson sampled values\\
 \end{algorithm}
 
-\subsection{Trajectory kernel}
+\subsection{Trajectory kernel for local Bayesian optimization}
 \label{sec:ownTK}
 If using Thompson sampling as the acquisition function, the whole covariance matrix $V$ of test points is needed. To compute this covariance matrix, we need a distance measure between unknown trajectories. The kernel proposed by \cite{wilson2014using} does not support a measurement between unevaluated policies. We therefore implement our own distance metric based on states, which are already present in the training data. First we filter a random subset from the training data and save it to $S_{\text{sub}}$. For the continuous action space we then calculate each mean
-$$\mu_i = f_s(S_{\text{sub}})^\top x_i \qquad \text{and}\qquad \mu_j = f_s(S_{\text{sub}})^\top x_j$$
-for the given policies $x_i$ and $x_j$. The difference between the two policies is measured by the squared Euclidean distance between the means:
-$$D(x_i,x_j) = (\mu_i - \mu_j)^\top (\mu_i - \mu_j).$$
-For the discrete action space we sample the actions $a$ from $P(A|S_{\text{sub}},x)$ for the given policies $x_i$ and $x_j$ from (\ref{eq:discreteactionselection}). The sampled actions then select the associated probabilities. We compare the discrete probability distributions for each policy by applying the Kullback-Leibler twice to get a symmetric distance measure:
-$$D(x_i,x_j) = \sum _{i}P(a|S_{\text{sub}},x_i)\,\log {\frac {P(a|S_{\text{sub}},x_i)}{P(a|S_{\text{sub}},x_j)}} + \sum _{j}P(a|S_{\text{sub}},x_j)\,\log {\frac {P(a|S_{\text{sub}},x_j)}{P(a|S_{\text{sub}},x_i)}}.$$
+$$m_i = f_s(S_{\text{sub}})^\top \mathbf{x}_i \qquad \text{and}\qquad m_j = f_s(S_{\text{sub}})^\top \mathbf{x}_j$$
+for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$. The difference between the two policies is measured by the squared Euclidean distance between the means:
+$$D(\mathbf{x}_i,\mathbf{x}_j) = (m_i - m_j)^\top (m_i - m_j).$$
+For the discrete action space we sample the actions $a$ from $P(a|S_{\text{sub}},x)$ for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$ from (\ref{eq:discreteactionselection}). The sampled actions then select the associated probability values. We compare the sets of probability values for each policy by applying the discrete Kullback-Leibler divergence
+$$D(\mathbf{x}_i,\mathbf{x}_j) = \sum _{i}P(a_i)\,\log {\frac {P(a_i)}{P(a_j)}} + \sum _{j}P(a_j)\,\log {\frac {P(a_j)}{P(a_i)}},$$
+
+where $a_i$ denotes the actions sampled from the probabilities $P(a|S_{\text{sub}},\mathbf{x}_i)$ and $P(a_i)$ the corresponding probabilities. As in the other trajektory kernel (section \ref{sec:trajKernel}) we add the both Kullback-Leibler divergences to get a symmetric distance measure.
 
 % \begin{algorithm}
 %     \caption{Thompson Sampling acquisition for Local Bayesian optimization\label{alg:acqLocalBO}}
@@ -83,7 +82,7 @@ $$D(x_i,x_j) = \sum _{i}P(a|S_{\text{sub}},x_i)\,\log {\frac {P(a|S_{\text{sub}}
 \section{Numerical stability and efficiency}
 Due to numerical instabilities, errors may occur during calculations. These errors are caused by the discrete implementation of continuous mathematical formulas. Sometimes numerical instabilities lead to negative values for covariances. To avoid getting complex numbers we assume negative values as zero before applying the square root on covariances when computing the standard deviation from the Gaussian process model (\ref{eq:gp:stdv}). Negative values can also occur for the distance between two trajectories, and are thresholded to zero, too.\\
 
-When computing the symmetrical distance matrix $\hat{D}(X,X)$ (\ref{eq:tk:mc}) only the upper triangle matrix $\hat{D}_{u}$ is calculated. That halves the computational effort. We obtain $\hat{D} = \hat{D}_{u}+\hat{D}_{u}^\top$, since the diagonal elements of $\hat{D}$ are zero and $\hat{D}(x_i,x_j) = \hat{D}(x_j,x_i)$.\\
+When computing the symmetrical distance matrix $\hat{D}(X,X)$ (\ref{eq:tk:mc}) only the upper triangle matrix $\hat{D}_{u}$ is calculated. That halves the computational effort. We obtain $\hat{D} = \hat{D}_{u}+\hat{D}_{u}^\top$, since the diagonal elements of $\hat{D}$ are zero and $\hat{D}(\mathbf{x}_i,\mathbf{x}_j) = \hat{D}(\mathbf{x}_j,\mathbf{x}_i)$.\\
 
 To gain robustness we use the lower Cholesky decomposition instead doing matrix inverse calculation. Therefore, the matrix to decompose must be positive definite. We achieve this by doubling the noise variance added to the diagonal elements of the original matrix as shown in algorithm \ref{alg:cholesky}.
 
@@ -101,13 +100,15 @@ To gain robustness we use the lower Cholesky decomposition instead doing matrix 
     L = lower Cholesky of $K_n$\\
 \end{algorithm}
 
-When doing hyper parameter optimization, we do not double the noise variance. Instead our log marginal likelihood function (\ref{eq:hypOpt}) returns $-\infty$ for hyper parameters, which produce a non positive definite matrix $K_n$. Therefore, such hyper parameters do not come into consideration when maximizing.
+When doing hyper parameter optimization, we do not double the noise variance. Instead our log marginal likelihood function (\ref{eq:hypOpt}) returns negative infinity for hyper parameters, which produce a non positive definite matrix $K_n$. Therefore, such hyper parameters do not come into consideration when maximizing.
 
-\subsection{Gaussian Process Regression}
+\subsection{Gaussian process regression}
+
+Since the prior covariance matrix $K_n$ (and therefore its Cholesky decomposite $L$) does not change during the acquisition function optimization it can be pre-computed to make the Gaussian process regression more efficient. Additionally we customize the computation of the variance vector to lower the computational effort.
 
 \subsubsection{Inverse of prior covariance matrix}
 
-Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the lower Cholesky decomposed matrix:
+Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the reduce Cholesky decomposed matrix:
 
 $$LL^\top=K_n$$
 
@@ -118,11 +119,11 @@ This is considered faster and numerically more stable \cite{rasmussen2006gaussia
 \end{equation}
 
 The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
-Matrix $K_n$ must be positive definite for the Cholesky decomposition. So we double the noise variance hyperparameter $\sigma_n^2$ as shown in algorithm \ref{alg:cholesky}.
+Matrix $K_n$ must be positive definite for the Cholesky decomposition. So we double the noise variance hyper parameter $\sigma_n^2$ as shown in algorithm \ref{alg:cholesky}.
 
 \subsubsection{Variances}
 
-For the expected improvement function, we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ and taking the diagonal elements (\ref{eq:vectorVar}) we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f^2$ because the difference between one $x_*$ and the same $x_*$ is zero. Therefore we can write:
+For the expected improvement function, we only need the vector of variances. Instead of calculating the whole covariance matrix $V$ and taking the diagonal elements (\ref{eq:vectorVar}) we can take a shortcut. All elements on the diagonal of $K(X_*,X_*)$ equal $\sigma_f^2$ because the difference between one $\mathbf{x}_*$ and the same $\mathbf{x}_*$ is zero. Therefore we can write:
 
 \begin{align}
     L_k &= L \setminus K(X_*,X) \\
@@ -135,8 +136,6 @@ For the whole covariance matrix for Thompson sampling we also avoid calculating 
 
 $$V = K(X_*,X_*) - (L_k^\top L_k)^\top $$
 
-TODO WRITE WHOLE MODIFIED GP ALGO BOX
-
 \subsection{Action selection}
 
 In continuous action space our stochastic policy is Gaussian distributed (\ref{eq:actionselection}). Therefore the resulting probability density of the action selection,
@@ -146,16 +145,16 @@ $$P_{\pi}(a|s,x) = \frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a-f_s(s)x)^2
 allows us to do the computations of the logarithm of the probability ratios in the trajectory kernel more efficient:
 
 \begin{align*}
-    \sum_{t=0}^{T-1} \log \left(\frac{P_{\pi}(a_{t}|s_{t},x_i)}{P_{\pi}(a_{t}|s_{t},x_j)}\right) &= \sum_{t=0}^{T-1} \log \left(\frac{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)x_i)^2}{2\sigma_a^2}\right)}{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)x_j)^2}{2\sigma_a^2}\right)}\right)\\
-    &= \sum_{t=0}^{T-1} \log \left( \exp \left( -\frac{(a_t-f_s(s_t)x_i)^2}{2\sigma_a^2} - \left(-\frac{(a_t-f_s(s_t)x_j)^2}{2\sigma_a^2}\right)\right)\right)\\
-    &= \frac{1}{2\sigma_a^2} \sum_{t=0}^{T-1} \left((a_t-f_s(s_t)x_j)^2 - (a_t-f_s(s_t)x_i)^2\right).
+    \sum_{t=0}^{T-1} \log \left(\frac{P_{\pi}(a_{t}|s_{t},\mathbf{x}_i)}{P_{\pi}(a_{t}|s_{t},\mathbf{x}_j)}\right) &= \sum_{t=0}^{T-1} \log \left(\frac{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)\mathbf{x}_i)^2}{2\sigma_a^2}\right)}{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)\mathbf{x}_j)^2}{2\sigma_a^2}\right)}\right)\\
+    &= \sum_{t=0}^{T-1} \log \left( \exp \left( -\frac{(a_t-f_s(s_t)\mathbf{x}_i)^2}{2\sigma_a^2} - \left(-\frac{(a_t-f_s(s_t)\mathbf{x}_j)^2}{2\sigma_a^2}\right)\right)\right)\\
+    &= \frac{1}{2\sigma_a^2} \sum_{t=0}^{T-1} \left((a_t-f_s(s_t)\mathbf{x}_j)^2 - (a_t-f_s(s_t)\mathbf{x}_i)^2\right).
 \end{align*}
 
 \subsection{Hyper parameter optimization}
 
 Especially for the trajectory kernel we want a hyper parameter optimization, because all the values of the distance matrix $D$ may get very big. When dividing by a well tuned hyper parameter $\sigma_l$ before applying the exponential function \eqref{eq:trajKernel}, we avoid getting a diagonal matrix $K$ or a zero matrix $K_*$.\\
 
-When calculating $\log(|K_n|)$ for the hyperparameter optimization \eqref{eq:hypOpt}, again we use the Cholesky decomposition of $K$. Thus the determinant transforms to
+When calculating $\log(|K_n|)$ for the hyper parameter optimization \eqref{eq:hypOpt}, again we use the Cholesky decomposition of $K$. Thus the determinant transforms to
 $$|K_n|=|L\,L^{T}|=|L|\,|L^{T}|=|L|\,|L|=|L|^{2}.$$
 
 Since the determinant of the Cholesky decomposed matrix,
@@ -176,6 +175,3 @@ Since the suggested prior is centred at the point of origin with standard deviat
 $$\sum_{i=1,2}\left(\frac{-(h_i-c_i)^2}{2(b_{u_i}-b_{l_i})^2}) - \log(b_{u_i}-b_{l_i})\sqrt{2\pi} \right),$$
 
 where $b_l$ and $b_u$ denote the lower and upper bounds of the search space and $c$ its center. And since we optimize over the logarithmic space $h_1 = \log\sigma_f$ and $h_2 = \log\sigma_l$.
-
-
-TODO write whole hyper opt with L and stuff

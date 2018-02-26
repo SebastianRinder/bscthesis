@@ -2,28 +2,39 @@ Matrices and constants are noted as capital letters, and vectors and scalars as 
 \\
 \begin{tabular}{l l}
     \underline{Symbol} & \underline{Meaning}\\
-    $S$ & Matrix of states\\
-    $A$ & Matrix of actions\\
-    $p$ & state transitioning probabilitiy\\
-    $p_0$ & probabilitiy of starting in state $s_0$\\
-    $r$ & immediate reward\\
+    $t$ & time step of the simulation\\
+    $\mathbf{s}_t \in S$ & states\\
+    $a_t \in \mathbf{a}$ & actions\\
+    $p_t \in \mathbf{p}$ & state transitioning probabilities\\
+    $r_t \in \mathbf{r}$ & rewards\\
     $\bar{r}$ & cumulative reward, sum of all rewards from one trajectory\\
-    $M$ & number of initial sample points before starting the Bayesian optimization\\
-    $N$ & number of total Bayesian optimization steps\\
-    $n$ & number of training points present\\
+    $n_{s}$ & number of initial sample points before starting the Bayesian optimization\\
+    $n_{BO}$ & number of total Bayesian optimization steps\\
+    $n$ & number of training points currently present\\
     $n_*$ & number of sample test points\\
     $d$ & number of dimensions in the problem\\
-    $x$ & training point vector of length $d$\\
-    $x_*$ & test point vector of length $d$\\
-    $X$ & $n \times d$ matrix of $n$ points $x^{\top}$\\
-    $X_*$ & $n_* \times d$ matrix of $n_*$ test points $x^{\top}_*$\\
-    $y$ & vector of $n$ evaluated objective function values\\
+    $\mathbf{x}$ & training point vector of length $d$\\
+    $\mathbf{x_*}$ & test point vector of length $d$\\
+    $X$ & $n \times d$ matrix of $n$ points $\mathbf{x}^{\top}$\\
+    $X_*$ & $n_* \times d$ matrix of $n_*$ test points $\mathbf{x}^{\top}_*$\\
+    $\mathbf{y}$ & vector of $n$ evaluated objective function values\\
     $K(X,X) = K$ & $n \times n$ covariance matrix\\
     $K(X,X_*) = K_*$ & $n \times n_*$ covariance between training and test points\\
     $K(X_*,X) = K_*^\top$ & same as $K(X,X_*)^{\top}$\\
     $K(X_*,X_*) = K_{**}$ & $n_* \times n_*$ covariance matrix\\
+    $K_n$ & noise regarding prior covariance matrix\\
     $\circ$ & Hadamard product, element-wise product\\
     diag($V$) & returns the diagonal elements of the square matrix $V$ as a vector\\
-    $\mathcal{O}(n)$ & Big O notation - linear algorithm performance\\
-    $\mathcal{O}(n^2)$ & Big O notation - quadratic algorithm performance\\
+    $\mathcal{O}(n)$ & big O notation - linear algorithmic performance\\
+    $\mathcal{O}(n^2)$ & big O notation - quadratic algorithmic performance\\
+    $\sigma_n^2$ & noise variance\\
+    $\sigma_f^2$ & signal variance hyper parameter\\
+    $\sigma_l^2$ & length scale hyper parameter\\
+    $\epsilon$ & Gaussian distributed error with noise variance $\sigma_n^2$\\
+    $f$ & objective black-box function\\
+    $I$ & Identity matrix\\
+    $\mathbf{m}$, $m$ & mean values of the Gaussian process from test points $X_*$\\
+    $V$ & whole variance matrix of test points $X_*$\\
+    $\mathbf{v}$, $v$ & variances from test points $X_*$\\
+    $\mathbf{s}_\mathrm{dv}$ & vector of standard deviations from test points $X_*$\\
 \end{tabular}
