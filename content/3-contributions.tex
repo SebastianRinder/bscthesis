@@ -60,10 +60,10 @@ If using Thompson sampling as the acquisition function, the whole covariance mat
 $$m_i = f_s(S_{\text{sub}})^\top \mathbf{x}_i \qquad \text{and}\qquad m_j = f_s(S_{\text{sub}})^\top \mathbf{x}_j$$
 for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$. The difference between the two policies is measured by the squared Euclidean distance between the means:
 $$D(\mathbf{x}_i,\mathbf{x}_j) = (m_i - m_j)^\top (m_i - m_j).$$
-For the discrete action space we sample the actions $a$ from $P(a|S_{\text{sub}},x)$ for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$ from (\ref{eq:discreteactionselection}). The sampled actions then select the associated probability values. We compare the sets of probability values for each policy by applying the discrete Kullback-Leibler divergence
-$$D(\mathbf{x}_i,\mathbf{x}_j) = \sum _{i}P(a_i)\,\log {\frac {P(a_i)}{P(a_j)}} + \sum _{j}P(a_j)\,\log {\frac {P(a_j)}{P(a_i)}},$$
+For the discrete action space we sample the actions $\mathbf{a}$ from $P(\mathbf{a}|S_{\text{sub}},x)$ for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$ from (\ref{eq:discreteactionselection}). The sampled actions then select the associated probability values. We compare the sets of probability values for each policy by applying the discrete Kullback-Leibler divergence
+$$D(\mathbf{x}_i,\mathbf{x}_j) = \sum _{i}P(\mathbf{a}_i)\,\log {\frac {P(\mathbf{a}_i)}{P(\mathbf{a}_j)}} + \sum _{j}P(\mathbf{a}_j)\,\log {\frac {P(\mathbf{a}_j)}{P(\mathbf{a}_i)}},$$
 
-where $a_i$ denotes the actions sampled from the probabilities $P(a|S_{\text{sub}},\mathbf{x}_i)$ and $P(a_i)$ the corresponding probabilities. As in the other trajektory kernel (section \ref{sec:trajKernel}) we add the both Kullback-Leibler divergences to get a symmetric distance measure.
+where $\mathbf{a}_i$ denotes the actions sampled from the probabilities $P(\mathbf{a}|S_{\text{sub}},\mathbf{x}_i)$ and $P(\mathbf{a}_i)$ the corresponding probabilities. As in the other trajektory kernel (section \ref{sec:trajKernel}) we add the both Kullback-Leibler divergences to get a symmetric distance measure.
 
 % \begin{algorithm}
 %     \caption{Thompson Sampling acquisition for Local Bayesian optimization\label{alg:acqLocalBO}}

@@ -1,15 +1,15 @@
 \chapter{Discussion and Conclusion}
 \label{chap:6}
-TODO local BO >> global
+
 \section{Learning performance}
-The continuous Cart Pole MATLAB experiment on global Bayesian optimization (figure \ref{fig:cartpoleMatlabGlobal}) shows a learning performance advantage of our trajectory kernel. It finds well performing policies faster than the other kernels. The Wilson kernel performed far worse than the others. The other kernels have a promising start, but after 20 iterations they stop improving constantly. Instead they find very good and very bad policies, resulting in quite constant mean with a high deviation. This could be an issue of the expected improvement acquisition function, exploring too much after a while. Unfortunately, none of the kernel converges during the 200 Bayesian optimization steps at the maximum possible cumulative reward of 1000. As listed in Table \ref{table:cartpoleMatlabGlobal} a single trial for our trajectory kernel takes almost seven hours on the cluster on average. Therefore we only did 200 iteration steps for the very time consuming runs with the global Bayesian optimization.
-
-The continuous Cart Pole MATLAB experiment on local Bayesian optimization (figure \ref{fig:cartpoleMatlabLocal}) shows a slight performance advantage of our trajectory kernel. Each kernel converges at the maximum after about 400 black-box function evaluations. Presumably due to the well suited Thompson sampling acquisition function in the local optimization context and the autonomously adjusting local search space. Comparing it with the same experiment (figure \ref{fig:cartpoleMatlabGlobal}), the local optimization clearly outperforms the global one.
-
-The discrete Cart Pole OpenAI Gym experiment on local Bayesian optimization (figure \ref{fig:cartpolePygym}) shows a slight performance disadvantage of our trajectory kernel. In this experiment we have a maximum of 200 time steps per episode, and therefore the highest possible cumulative reward is 200.
-
-The discrete Acrobot OpenAI Gym experiment on local Bayesian optimization (figure \ref{fig:acrobotPygym}) converges at roughly -100. The Acrobot has no definition of solving, but reaching the goal in 100 time steps is fairly good. Our kernel performs worse than the standard kernel in the beginning but catches up towards the end.
-
+The continuous Cart Pole MATLAB experiment on global Bayesian optimization (figure \ref{fig:cartpoleMatlabGlobal}) shows a learning performance advantage of our trajectory kernel. It finds well performing policies faster than the other kernels. The Wilson kernel performed far worse than the others. The other kernels have a promising start, but after 20 iterations they stop improving constantly. Instead they find very good and very bad policies, resulting in quite constant mean with a high deviation. This could be an issue of the expected improvement acquisition function, exploring too much after a while. Unfortunately, none of the kernel converges during the 200 Bayesian optimization steps at the maximum possible cumulative reward of 1000. As listed in Table \ref{table:cartpoleMatlabGlobal} a single trial for our trajectory kernel takes almost seven hours on the cluster on average. Therefore we only did 200 iteration steps for the very time consuming runs with the global Bayesian optimization.\\
+\\
+The continuous Cart Pole MATLAB experiment on local Bayesian optimization (figure \ref{fig:cartpoleMatlabLocal}) shows a slight performance advantage of our trajectory kernel. Each kernel converges at the maximum after about 400 black-box function evaluations. Presumably due to the well suited Thompson sampling acquisition function in the local optimization context and the autonomously adjusting local search space. Comparing it with the same experiment (figure \ref{fig:cartpoleMatlabGlobal}), the local optimization clearly outperforms the global one.\\
+\\
+The discrete Cart Pole OpenAI Gym experiment on local Bayesian optimization (figure \ref{fig:cartpolePygym}) shows a slight performance disadvantage of our trajectory kernel. In this experiment we have a maximum of 200 time steps per episode, and therefore the highest possible cumulative reward is 200.\\
+\\
+The discrete Acrobot OpenAI Gym experiment on local Bayesian optimization (figure \ref{fig:acrobotPygym}) converges at roughly -100. The Acrobot has no definition of solving, but reaching the goal in 100 time steps is fairly good. Our kernel performs worse than the standard kernel in the beginning but catches up towards the end.\\
+\\
 The continuous Mountain Car OpenAI Gym experiment on local Bayesian optimization (figure \ref{fig:acrobotPygym}) shows a major performance drawback compared to the standard kernels. But the result is not conclusive because the environment did not solve. The received cumulative rewards on the best runs converge at zero, which means that the agent learns to do nothing. This is due to the rewarding function that discourages any action taken. A successful continuous Mountain Car run would receive a reward around 90. In this experiment we also do not use any hyper parameter optimization, because it fails constantly. In this case we set $\sigma_f$ and $\sigma_l$ to 1.
 
 \section{Model parameters}
@@ -20,9 +20,7 @@ When computing the continuous action space trajectory distance metric, proposed 
 
 \section{Conclusion}
 
-The results show that trajectory kernels can have some advantage if computation time is not expensive compared to evaluation including robotic movement.
-% However, the standard kernels seem to require a similar number of black box function evaluations on the experiments shown.
-
+The results show that trajectory kernels can have some advantage if computation time is not expensive compared to evaluations including robotic movement.
 Unfortunately, we were not able to reproduce the outstanding results with the trajectory kernel from \ref{wilson2014using}. Maybe because they do not provide any parameters, environment settings or rewarding functions. In our experiments the overall learning performance of the trajectory kernels was either worse or slightly better than the learning performance of standard kernels. If you take the computing efficiency into consideration they perform far worse than standard kernels. Depending on the setup, the trajectory kernels took between 3 and 22 times more computational time than the squared exponential kernel (the measured times of continuous Mountain Car are not considered, because it did not solve).\\
 \\
 Maybe the bad learning performance of the trajectory kernel is a problem of poorly tuned hyper parameters $\sigma_f$ and $\sigma_l$, the noise level parameter $\sigma_n$, the expected improvement trade-off parameter $\tau$ or other model constraints. Apart from that, the trajectory kernel would only be worthwhile on black box functions that are quite expensively to evaluate compared to the computational effort needed for trajectory kernel calculations.
