@@ -22,7 +22,7 @@ where $\KL(.||.)$ denotes the Kullback-Leibler divergence $\mathcal{H}(p) = -\in
 %    \caption{Local Bayesian Optimization\label{alg:localBO}}
 %    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 %
-%    \Input{Initial search policy $\pi_0 = \mathcal{N}(\boldsymbol{\mu}_0, \sigma_0^2I)$\\ step-size $\epsilon$\\ entropy reduction rate $\beta$}
+%    \Input{Initial search policy $\pi_0 = \mathcal{N}(\boldsymbol{\mathrm{m}}_0, \sigma_0^2I)$\\ step-size $\epsilon$\\ entropy reduction rate $\beta$}
 %    \Output{Search policy $\pi_N$}
 %    \BlankLine
 %    \For{$n=1$ \KwTo $N$}{
@@ -60,10 +60,10 @@ If using Thompson sampling as the acquisition function, the whole covariance mat
 $$m_i = f_s(S_{\text{sub}})^\top \mathbf{x}_i \qquad \text{and}\qquad m_j = f_s(S_{\text{sub}})^\top \mathbf{x}_j$$
 for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$. The difference between the two policies is measured by the squared Euclidean distance between the means:
 $$D(\mathbf{x}_i,\mathbf{x}_j) = (m_i - m_j)^\top (m_i - m_j).$$
-For the discrete action space we sample the actions $\mathbf{a}$ from $P(\mathbf{a}|S_{\text{sub}},x)$ for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$ from (\ref{eq:discreteactionselection}). The sampled actions then select the associated probability values. We compare the sets of probability values for each policy by applying the discrete Kullback-Leibler divergence
-$$D(\mathbf{x}_i,\mathbf{x}_j) = \sum _{i}P(\mathbf{a}_i)\,\log {\frac {P(\mathbf{a}_i)}{P(\mathbf{a}_j)}} + \sum _{j}P(\mathbf{a}_j)\,\log {\frac {P(\mathbf{a}_j)}{P(\mathbf{a}_i)}},$$
+For the discrete action space we sample the actions $\mathbf{a}$ from $\mathrm{P}(\mathbf{a}|S_{\text{sub}},x)$ for the given policies $\mathbf{x}_i$ and $\mathbf{x}_j$ from (\ref{eq:discreteactionselection}). The sampled actions then select the associated probability values. We compare the sets of probability values for each policy by applying the discrete Kullback-Leibler divergence
+$$D(\mathbf{x}_i,\mathbf{x}_j) = \sum _{i}\mathrm{P}(\mathbf{a}_i)\,\log {\frac {\mathrm{P}(\mathbf{a}_i)}{\mathrm{P}(\mathbf{a}_j)}} + \sum _{j}\mathrm{P}(\mathbf{a}_j)\,\log {\frac {\mathrm{P}(\mathbf{a}_j)}{\mathrm{P}(\mathbf{a}_i)}},$$
 
-where $\mathbf{a}_i$ denotes the actions sampled from the probabilities $P(\mathbf{a}|S_{\text{sub}},\mathbf{x}_i)$ and $P(\mathbf{a}_i)$ the corresponding probabilities. As in the other trajektory kernel (section \ref{sec:trajKernel}) we add the both Kullback-Leibler divergences to get a symmetric distance measure.
+where $\mathbf{a}_i$ denotes the actions sampled from the probabilities $\mathrm{P}(\mathbf{a}|S_{\text{sub}},\mathbf{x}_i)$ and $\mathrm{P}(\mathbf{a}_i)$ the corresponding probabilities. As in the other trajektory kernel (section \ref{sec:trajKernel}) we add the both Kullback-Leibler divergences to get a symmetric distance measure.
 
 % \begin{algorithm}
 %     \caption{Thompson Sampling acquisition for Local Bayesian optimization\label{alg:acqLocalBO}}
@@ -97,7 +97,7 @@ To gain robustness we use the lower Cholesky decomposition instead doing matrix 
         double $\sigma_n^2$\\
         $K_n = K+\sigma_n^2 I$\\
     }
-    L = lower Cholesky of $K_n$\\
+    $L$ = lower Cholesky of $K_n$\\
 \end{algorithm}
 
 When doing hyper parameter optimization, we do not double the noise variance. Instead our log marginal likelihood function (\ref{eq:hypOpt}) returns negative infinity for hyper parameters, which produce a non positive definite matrix $K_n$. Therefore, such hyper parameters do not come into consideration when maximizing.
@@ -108,17 +108,17 @@ Since the prior covariance matrix $K_n$ (and therefore its Cholesky decomposite 
 
 \subsubsection{Inverse of prior covariance matrix}
 
-Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the reduce Cholesky decomposed matrix:
+Instead of calculating the inverse of $K_n$ in \eqref{eq:meanGauss} we use the Cholesky decomposed matrix:
 
 $$LL^\top=K_n$$
 
-This is considered faster and numerically more stable \cite{rasmussen2006gaussian}. The mean vector $\mu$ is then computed as follows:
+This is considered faster and numerically more stable \cite{rasmussen2006gaussian}. The mean vector $\mathrm{m}$ is then computed as follows:
 
 \begin{equation} \label{eq:regression}
-    \mu = K_n^{-1}\,y = (L\,L^{\top})^{-1}\,y = (L^{-\top}\,L^{-1})\,y = L^{-\top}\,(L^{-1}\,y) = L^{\top}\setminus(L \setminus y).
+    \mathrm{m} = K_n^{-1}\,y = (L\,L^{\top})^{-1}\,\mathbf{y} = (L^{-\top}\,L^{-1})\,\mathbf{y} = L^{-\top}\,(L^{-1}\,\mathbf{y}) = L^{\top}\setminus(L \setminus \mathbf{y}).
 \end{equation}
 
-The backslash operator denotes the matrix left division, so the solution $x=A\setminus b$ satisfies the system of linear equations $A\,x=b$.
+The backslash operator denotes the matrix left division, so the solution $\mathbf{x}=A\setminus \mathbf{b}$ satisfies the system of linear equations $A\,\mathbf{x}=\mathbf{b}$.
 Matrix $K_n$ must be positive definite for the Cholesky decomposition. So we double the noise variance hyper parameter $\sigma_n^2$ as shown in algorithm \ref{alg:cholesky}.
 
 \subsubsection{Variances}
@@ -140,14 +140,14 @@ $$V = K(X_*,X_*) - (L_k^\top L_k)^\top $$
 
 In continuous action space our stochastic policy is Gaussian distributed (\ref{eq:actionselection}). Therefore the resulting probability density of the action selection,
 
-$$P_{\pi}(a|s,x) = \frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a-f_s(s)x)^2}{2\sigma_a^2}\right),$$
+$$P_{\pi}(\mathbf{a}|\mathbf{s},\mathbf{x}) = \frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(\mathbf{a}-f_s(\mathbf{s})x)^2}{2\sigma_a^2}\right),$$
 
 allows us to do the computations of the logarithm of the probability ratios in the trajectory kernel more efficient:
 
 \begin{align*}
-    \sum_{t=0}^{T-1} \log \left(\frac{P_{\pi}(a_{t}|s_{t},\mathbf{x}_i)}{P_{\pi}(a_{t}|s_{t},\mathbf{x}_j)}\right) &= \sum_{t=0}^{T-1} \log \left(\frac{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)\mathbf{x}_i)^2}{2\sigma_a^2}\right)}{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(s_t)\mathbf{x}_j)^2}{2\sigma_a^2}\right)}\right)\\
-    &= \sum_{t=0}^{T-1} \log \left( \exp \left( -\frac{(a_t-f_s(s_t)\mathbf{x}_i)^2}{2\sigma_a^2} - \left(-\frac{(a_t-f_s(s_t)\mathbf{x}_j)^2}{2\sigma_a^2}\right)\right)\right)\\
-    &= \frac{1}{2\sigma_a^2} \sum_{t=0}^{T-1} \left((a_t-f_s(s_t)\mathbf{x}_j)^2 - (a_t-f_s(s_t)\mathbf{x}_i)^2\right).
+    \sum_{t=1}^{t_\mathrm{max}} \log \left(\frac{P_{\pi}(a_{t}|s_{t},\mathbf{x}_i)}{P_{\pi}(a_{t}|s_{t},\mathbf{x}_j)}\right) &= \sum_{t=1}^{t_\mathrm{max}} \log \left(\frac{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(\mathbf{s}_t)\mathbf{x}_i)^2}{2\sigma_a^2}\right)}{\frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a_t-f_s(\mathbf{s}_t)\mathbf{x}_j)^2}{2\sigma_a^2}\right)}\right)\\
+    &= \sum_{t=1}^{t_\mathrm{max}} \log \left( \exp \left( -\frac{(a_t-f_s(\mathbf{s}_t)\mathbf{x}_i)^2}{2\sigma_a^2} - \left(-\frac{(a_t-f_s(\mathbf{s}_t)\mathbf{x}_j)^2}{2\sigma_a^2}\right)\right)\right)\\
+    &= \frac{1}{2\sigma_a^2} \sum_{t=10}^{t_\mathrm{max}} \left((a_t-f_s(\mathbf{s}_t)\mathbf{x}_j)^2 - (a_t-f_s(\mathbf{s}_t)\mathbf{x}_i)^2\right).
 \end{align*}
 
 \subsection{Hyper parameter optimization}
@@ -163,15 +163,15 @@ is the product of its diagonal elements, we can transform this into a numericall
 
 $$\log(|K_n|) = \log(|L|^{2}) = 2\,\log(|L|) = 2\,\log(\textstyle\prod_{i} L_{ii}) = 2\textstyle\sum_{i} \log(L_{ii}).$$
 
-The computation of $K_y^{-1}y$ in \eqref{eq:hypOpt} is done by the same method we already use in the Gaussian process \eqref{eq:regression}.
+The computation of $K_y^{-1}\mathbf{y}$ in \eqref{eq:hypOpt} is done by the same method we already use in the Gaussian process \eqref{eq:regression}.
 
 \subsubsection{Independent log-normal prior}
 The log marginal likelihood maximization will sometimes succeed at the borders of our search space resulting in very high high or very low hyper parameters. We prevent this by adding an independent log-normal prior term as introduced in \cite{lizotte2008practical}:
 
-$$\sum_{i=f,l}\left(\frac{-\log(\sigma_i)^2}{2\cdot 10^2}) - \log 10\sqrt{2\pi} \right).$$
+$$\sum_{i=f,l}\left(\frac{-\log(\sigma_i)^2}{2\cdot 10^2} - \log\left(10\sqrt{2\pi}\right) \right).$$
 
 Since the suggested prior is centred at the point of origin with standard deviation 10, but we want our search space to adapt between iterations, we make the mean and the standard deviation adjustable. We write:
 
-$$\sum_{i=1,2}\left(\frac{-(h_i-c_i)^2}{2(b_{u_i}-b_{l_i})^2}) - \log(b_{u_i}-b_{l_i})\sqrt{2\pi} \right),$$
+$$\sum_{i=1,2}\left(\frac{-(h_i-c_i)^2}{2(b_{u_i}-b_{l_i})^2} - \log\left((b_{u_i}-b_{l_i})\sqrt{2\pi}\right) \right),$$
 
 where $b_l$ and $b_u$ denote the lower and upper bounds of the search space and $c$ its center. And since we optimize over the logarithmic space $h_1 = \log\sigma_f$ and $h_2 = \log\sigma_l$.
