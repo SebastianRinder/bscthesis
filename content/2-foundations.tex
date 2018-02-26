@@ -11,7 +11,7 @@ Our reinforcement problem is described by a black-box function that only provide
 %     \caption{Visualization of the change in the Gaussian process model and the resulting acquisition function. With every Bayesian optimization iteration step a new observation point at the maximum of the acquisition function is added to the training data. This new observation and its evaluation update the Gaussian process model. Thus the model becomes increasingly accurate in the vicinity of each observation. \cite{brochu2010tutorial} \label{fig:acqBO}}
 % \end{wrapfigure}
 
-To find the maximum point of a costly black box target function, we use Bayesian optimization \cite{brochu2010tutorial,shahriari2016taking,lizotte2008practical}. It makes the search process more efficient by incorporating a Gaussian process model to anticipate the objective function's behaviour. This model, containing estimates of the function's returns depending on points, is used by a so called acquisition function to guide the exploration for promising new points. Each selected point is evaluated by the objective function and the results are included in the Gaussian process model. Optimally these steps are repeated until found function values converge at the maximum possible function value. In reality (algorithm \ref{alg:boGlob}) we iterate over $N$ steps and analyse the results. The change of the Gaussian process model affecting the acquisition function during Bayesian optimization iterations is illustrated in figure \ref{fig:acqBO}.\\
+To find the maximum point of a costly black box target function, we use Bayesian optimization \cite{brochu2010tutorial,shahriari2016taking,lizotte2008practical}. It makes the search process more efficient by incorporating a Gaussian process model to anticipate the objective function's behaviour. This model, containing estimates of the function's returns depending on points, is used by a so called acquisition function to guide the exploration for promising new points. Each selected point is evaluated by the objective function and the results are included in the Gaussian process model. Optimally these steps are repeated until found function values converge at the maximum possible function value. In reality (algorithm \ref{alg:boGlob}) we iterate over $n_{BO}$ steps and analyse the results. The change of the Gaussian process model affecting the acquisition function during Bayesian optimization iterations is illustrated in figure \ref{fig:acqBO}.\\
 
 \begin{algorithm}
     \caption{Global Bayesian optimization\label{alg:boGlob}}
@@ -40,7 +40,7 @@ The optimization of hyper parameters is optional and depends on the Gaussian pro
 \end{figure}
 
 \subsection{Gaussian Process Regression}
-The Gaussian process finds a prior distribution over the possible functions that are consistent with the training data. From the regression we then get a posterior mean and variance, which describe our model of the objective function \cite{rasmussen2006gaussian}. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more training points our model incorporates the smaller the variance, and the more precise the predictions, in the proximity around training points.\\
+The Gaussian process finds a prior distribution over the possible functions that are consistent with the training data. From the regression we get a posterior mean and variance, which describe our model of the objective function \cite{rasmussen2006gaussian}. The mean represents a prediction of the true objective at a given point and the variance represents the uncertainty at that point. The more training points our model incorporates the smaller the variance, and the more precise the predictions, in the proximity around training points.\\
 In real world applications we always have some noise in the objective observations. Therefore a Gaussian distributed error term,
 
 $$\epsilon \sim \mathcal{N}(0,\sigma_n^2),$$
@@ -49,7 +49,7 @@ with zero mean and $\sigma_n^2$ variance is added to the function value. Ergo th
 
 $$\mathbf{y} = f(\mathbf{x}) + \epsilon$$
 
-regards this noise \cite{brochu2010tutorial,rasmussen2006gaussian,lizotte2008practical,shahriari2016taking}. The knowledge our training data provides is represented by the covariance matrix $K(X,X)$. With the matrix of test points $X_*$ we get the joint distribution of the target values and the estimated function values at the test locations \cite{rasmussen2006gaussian}:
+regards this noise \cite{brochu2010tutorial,shahriari2016taking,lizotte2008practical,rasmussen2006gaussian}. The knowledge our training data provides is represented by the covariance matrix $K(X,X)$. With the matrix of test points $X_*$ we get the joint distribution of the target values and the estimated function values at the test locations \cite{rasmussen2006gaussian}:
 
 $$\left[ \begin{array}{c} \mathbf{y} \\ f_* \end{array} \right] \sim \mathcal{N} \left(0, \begin{bmatrix} K(X,X)+\sigma_n^2 I & K(X,X_*) \\ K(X_*,X) & K(X_*,X_*) \end{bmatrix} \right).$$
 
@@ -161,13 +161,13 @@ Trajectory $\xi=(\mathbf{s}_{0},\mathbf{a}_{0}, ..., \mathbf{s}_{t_\mathrm{max}-
 \subsubsection{Distance metric}
 To examine the difference between two policies $\mathbf{x}_{ i }$ and $\mathbf{x}_{ j }$ the discrete Kullback-Leibler divergence
 
-$$\mathrm {KL}(P(\xi|\mathbf{x}_{ i })||P(\xi|\mathbf{x}_{ j })) = \sum _{i}P(\xi|\mathbf{x}_{ i })\,\log {\frac {P(\xi|\mathbf{x}_{ i })}{P(\xi|\mathbf{x}_{ j })}}.$$
+$$\mathrm {KL}(p(\xi|\mathbf{x}_{ i })||p(\xi|\mathbf{x}_{ j })) = \sum _{\xi in \xi_i}p(\xi|\mathbf{x}_{ i })\,\log {\frac {p(\xi|\mathbf{x}_{ i })}{p(\xi|\mathbf{x}_{ j })}}.$$
 
-is applied to the policy-trajectory mapping probabilities $P(\xi|\mathbf{x}_{ i })$ and $P(\xi|\mathbf{x}_{ j })$ \cite{wilson2014using}. The Kullback-Leibler divergence measures how the two distributions diverge from another.\\
+is applied to the policy-trajectory mapping probabilities $p(\xi|\mathbf{x}_{ i })$ and $p(\xi|\mathbf{x}_{ j })$ \cite{wilson2014using}. The Kullback-Leibler divergence measures how the two distributions diverge from another.\\
 
-In general $\mathrm {KL}(P(\xi|\mathbf{x}_{ i })||P(\xi|\mathbf{x}_{ j }))$ is not equal to $\mathrm {KL}(P(\xi|\mathbf{x}_{ j })||P(\xi|\mathbf{x}_{ i }))$. But we need a symmetric distance measure. So we sum up the two divergences
+In general $\mathrm {KL}(p(\xi|\mathbf{x}_{ i })||p(\xi|\mathbf{x}_{ j }))$ is not equal to $\mathrm {KL}(p(\xi|\mathbf{x}_{ j })||p(\xi|\mathbf{x}_{ i }))$. But we need a symmetric distance measure. So we sum up the two divergences
 
-$$D(\mathbf{x}_{ i }, \mathbf{x}_{ j }) = \mathrm {KL}(P(\xi|\mathbf{x}_{ i })||P(\xi|\mathbf{x}_{ j })) + \mathrm {KL}(P(\xi|\mathbf{x}_{ j })||P(\xi|\mathbf{x}_{ i })),$$
+$$D(\mathbf{x}_{ i }, \mathbf{x}_{ j }) = \mathrm {KL}(p(\xi|\mathbf{x}_{ i })||p(\xi|\mathbf{x}_{ j })) + \mathrm {KL}(p(\xi|\mathbf{x}_{ j })||p(\xi|\mathbf{x}_{ i })),$$
 
 to achieve that $D(\mathbf{x}_{ i }, \mathbf{x}_{ j }) = D(\mathbf{x}_{ j }, \mathbf{x}_{ i })$. An additional requirement for the kernel is the resulting matrix to be positive semi-definite and scalable\cite{wilson2014using}. Therefore we exponentiate the negative of our distance matrix $D$. We also apply the hyper parameters $\sigma_f^2$ to compensate for the signal variance and $\sigma_l^2$ to adjust for signal length scale. This gives us the covariance function
 
@@ -181,22 +181,22 @@ In addition to the distance metric proposed by \cite{wilson2014using} we include
 To reduce the computational effort an estimation of kernel values is applied. The approximation with the Monte-Carlo estimate
 
 \begin{equation} \label{eq:tk:mc}
-    \hat{D}(\mathbf{x}_{ i }, \mathbf{x}_{ j }) = \sum _{\xi \in \xi_i} \log\left( \frac{P(\xi|\mathbf{x}_{ i })}{P(\xi|\mathbf{x}_{ j })} \right) + \sum _{\xi \in \xi_j} \log\left( \frac{P(\xi|\mathbf{x}_{ j })}{P(\xi|\mathbf{x}_{ i })} \right)
+    \hat{D}(\mathbf{x}_{ i }, \mathbf{x}_{ j }) = \sum _{\xi \in \xi_i} \log\left( \frac{p(\xi|\mathbf{x}_{ i })}{p(\xi|\mathbf{x}_{ j })} \right) + \sum _{\xi \in \xi_j} \log\left( \frac{p(\xi|\mathbf{x}_{ j })}{p(\xi|\mathbf{x}_{ i })} \right)
 \end{equation}
 
-is sufficient to measure the divergences between policies with already sampled trajectories \cite{wilson2014using}. Here $\xi_i$ is the set of trajectories generated by policy $\mathbf{x}_i$. For our Gaussian process regression, we also need a distance measure between a policy with known trajectories and new policies with unknown trajectories. Since there is no closed form solution to this we use the importance sampled divergence
+is sufficient to measure the divergences between policies with already sampled trajectories \cite{wilson2014using}. $\xi_i$ is the set of trajectories generated by policy $\mathbf{x}_i$. For our Gaussian process regression, we also need a distance measure between a policy with known trajectories and new policies with unknown trajectories. Since there is no closed form solution to this we use the importance sampled divergence
 
-$$\hat{D}(\mathbf{x}_\mathrm{ * }, \mathbf{x}_{ j }) = \sum _{\xi \in \xi_j} \left[\frac{P(\xi|\mathbf{x}_\mathrm{ * })}{P(\xi|\mathbf{x}_{ j })}\,\log\left(\frac{P(\xi|\mathbf{x}_\mathrm{ * })}{P(\xi|\mathbf{x}_{j})}\right)+\log\left(\frac{P(\xi|\mathbf{x}_{ j })}{P(\xi|\mathbf{x}_\mathrm{ * })}\right)\right] $$
+$$\hat{D}(\mathbf{x}_\mathrm{ * }, \mathbf{x}_{ j }) = \sum _{\xi \in \xi_j} \left[\frac{p(\xi|\mathbf{x}_\mathrm{ * })}{p(\xi|\mathbf{x}_{ j })}\,\log\left(\frac{p(\xi|\mathbf{x}_\mathrm{ * })}{p(\xi|\mathbf{x}_{j})}\right)+\log\left(\frac{p(\xi|\mathbf{x}_{ j })}{p(\xi|\mathbf{x}_\mathrm{ * })}\right)\right] $$
 
 to estimate the divergence between the new policy $\mathbf{x}_\mathrm{ * }$ and the policy $\mathbf{x}_j$ with already sampled trajectories $\xi_j$ \cite{wilson2014using}.
 
 Since we only have a ratio of transitioning probabilities present in our trajectory kernel we can reduce the logarithmic term to:
 
 \begin{align*}
-    \log\left(\frac{P(\xi|\mathbf{x}_i)}{P(\xi|\mathbf{x}_j)}\right)
-    &= \log\left(\frac{P_{0}(\mathbf{s}_{0}) \prod_{t=1}^{t_\mathrm{max}} P_s(\mathbf{s}_{t}|\mathbf{s}_{t-1},\mathbf{a}_{t-1}) P_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_i)}{P_{0}(\mathbf{s}_{0}) \prod_{t=1}^{t_\mathrm{max}} P_s(\mathbf{s}_{t}|\mathbf{s}_{t-1},\mathbf{a}_{t-1}) P_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_j)}\right)\\
-    &= \log\left(\prod_{t=1}^{t_\mathrm{max}}\frac{ P_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_i)}{P_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_j)}\right)\\
-    &= \sum_{t=1}^{t_\mathrm{max}} \log \left(\frac{P_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_i)}{P_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_j)}\right).
+    \log\left(\frac{p(\xi|\mathbf{x}_i)}{p(\xi|\mathbf{x}_j)}\right)
+    &= \log\left(\frac{p_{0}(\mathbf{s}_{0}) \prod_{t=1}^{t_\mathrm{max}} p_s(\mathbf{s}_{t}|\mathbf{s}_{t-1},\mathbf{a}_{t-1}) p_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_i)}{p_{0}(\mathbf{s}_{0}) \prod_{t=1}^{t_\mathrm{max}} p_s(\mathbf{s}_{t}|\mathbf{s}_{t-1},\mathbf{a}_{t-1}) p_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_j)}\right)\\
+    &= \log\left(\prod_{t=1}^{t_\mathrm{max}}\frac{ p_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_i)}{p_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_j)}\right)\\
+    &= \sum_{t=1}^{t_\mathrm{max}} \log \left(\frac{p_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_i)}{p_{\pi}(\mathbf{a}_{t-1}|\mathbf{s}_{t-1},\mathbf{x}_j)}\right).
 \end{align*}
 
 Summing up the logarithms of the probability ratios in the end is also numerically more stable than computing the logarithm of the products.

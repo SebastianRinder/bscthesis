@@ -1,4 +1,4 @@
-Matrices and constants are noted as capital letters, and vectors and scalars as lower case letters. Vectors are assumed as column vectors. The first dimension of a matrix indicates its row number, the second dimension its column number.\\
+Matrices are noted as capital letters, and vectors as bold lower case letters. Scalars and constants are denoted by lower case letters.\\
 \\
 \begin{tabular}{l l}
     \underline{Symbol} & \underline{Meaning}\\
@@ -13,12 +13,13 @@ Matrices and constants are noted as capital letters, and vectors and scalars as 
     $n_{BO}$ & number of total Bayesian optimization steps\\
     $n$ & number of training points currently present\\
     $n_*$ & number of sample test points\\
-    $d$ & number of dimensions in the problem\\
+    $d$ & number of dimensions of the problem\\
     $\mathbf{x}$ & training point vector of length $d$\\
     $\mathbf{x_*}$ & test point vector of length $d$\\
     $X$ & $n \times d$ matrix of $n$ points $\mathbf{x}^{\top}$\\
     $X_*$ & $n_* \times d$ matrix of $n_*$ test points $\mathbf{x}^{\top}_*$\\
     $\mathbf{y}$ & vector of $n$ evaluated objective function values\\
+    $\mathbf{y'}$ & vector of standardized values of $\mathbf{y}$\\
     $K(X,X) = K$ & $n \times n$ covariance matrix\\
     $K(X,X_*) = K_*$ & $n \times n_*$ covariance between training and test points\\
     $K(X_*,X) = K_*^\top$ & same as $K(X,X_*)^{\top}$\\
@@ -32,6 +33,11 @@ Matrices and constants are noted as capital letters, and vectors and scalars as 
     $\sigma_f^2$ & signal variance hyper parameter\\
     $\sigma_l^2$ & length scale hyper parameter\\
     $\sigma_a^2$ & action selection variance for continuous policies\\
+
+\end{tabular}
+\newpage
+\begin{tabular}{l l}
+    \underline{Symbol} & \underline{Meaning}\\
     $\epsilon$ & Gaussian distributed error with noise variance $\sigma_n^2$\\
     $f$ & objective black-box function\\
     $I$ & Identity matrix\\
@@ -39,4 +45,5 @@ Matrices and constants are noted as capital letters, and vectors and scalars as 
     $V$ & whole variance matrix of test points $X_*$\\
     $\mathbf{v}$, $v$ & variances from test points $X_*$\\
     $\mathbf{s}_\mathrm{dv}$ & vector of standard deviations from test points $X_*$\\
+    $\mathbf{g}$ & vector of random Gaussian distributed values with zero mean and unit variance\\
 \end{tabular}

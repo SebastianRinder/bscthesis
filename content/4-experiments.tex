@@ -135,16 +135,16 @@ $$a \sim \mathcal{N}(f_s(\mathbf{s}) \mathbf{x},\sigma_a^2),$$
 result in the probability measure by the Gaussian density:
 
 \begin{equation}\label{eq:contiAS}
-    P_{\pi}(a|\mathbf{s},\mathbf{x}) = \frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a-f_s(\mathbf{s})\mathbf{x})^2}{2\sigma_a^2}\right).
+    p_{\pi}(a|\mathbf{s},\mathbf{x}) = \frac{1}{\sqrt{2\pi\sigma_a^2}}\exp\left(-\frac{(a-f_s(\mathbf{s})\mathbf{x})^2}{2\sigma_a^2}\right).
 \end{equation}
 
 In discrete action space environments we use a parametric soft-max action selection policy:
 
 \begin{equation} \label{eq:discreteactionselection}
-    P(a|\mathbf{s},\mathbf{x}_a)= \frac{\exp(f_s(\mathbf{s})^\top \mathbf{x}_a)}{\sum_{a\in A} \exp(f_s(\mathbf{s})^\top \mathbf{x}_a)}.
+    p(a|\mathbf{s},\mathbf{x}_a)= \frac{\exp(f_s(\mathbf{s})^\top \mathbf{x}_a)}{\sum_{a\in A} \exp(f_s(\mathbf{s})^\top \mathbf{x}_a)}.
 \end{equation}
 
-Again it consists of a linear mapping $f_s(\mathbf{s})^\top \mathbf{x}_a$, and $A$ holds all possible actions. The resulting action is then sampled from the probability of action $a$ given state $\mathbf{s}$. The policy $\mathbf{x}_a$ for a discrete action $a$ is a subset of parameters from the policy $\mathbf{x}$.
+Again it consists of a linear mapping $f_s(\mathbf{s})^\top \mathbf{x}_a$. The resulting action is sampled from the probability of action $a$ given state $\mathbf{s}$. The policy $\mathbf{x}_a$ for a discrete action $a$ is a subset of parameters from the policy $\mathbf{x}$.
 
 The state feature function $f_s(\mathbf{s})$ depends on the environment as listed in Table \ref{table:envs}.
 
@@ -152,7 +152,7 @@ The state feature function $f_s(\mathbf{s})$ depends on the environment as liste
 
 For the trajectory kernel, we proposed in section \ref{sec:ownTK}, a maximum of 500 random states as the subset $S_{\text{sub}}$ are used.
 
-For the continuous action selection the standard error deviation $\sigma_a$ is set to $10^{-3}$. We adapted the action selection strategies from \cite{wilson2014using}. Unfortunately, they do not provide any parameters. Therefore this error deviation value was guessed after a few test runs.
+For the continuous action selection the noise parameter $\sigma_a$ is set to $10^{-3}$. We adapted the action selection strategies from \cite{wilson2014using}. Unfortunately, they do not provide any parameters. Therefore this error deviation value was guessed after a few test runs.
 
 The noise variance $\sigma_n^2$ is set to $10^{-8}$ for all performance tests.
 
@@ -160,7 +160,7 @@ The noise variance $\sigma_n^2$ is set to $10^{-8}$ for all performance tests.
 
 In the global search context the policy parameter boundaries are set to -10 and 10 for each dimension resulting in a $d$ dimensional hypercubic search space.
 
-For the Bayesian optimization we select the initial samples set $X_n$ from a bunch of sample sets such that the Euclidean distance between points of the selected set is maximized. This grants us a well covered search space as a starting condition. We also set the number of initial samples to $M = 10$ and the iteration count to $N = 200$.
+For the Bayesian optimization we select the initial samples set $X_n$ from a bunch of sample sets such that the Euclidean distance between points of the selected set is maximized. This grants us a well covered search space as a starting condition. We also set the number of initial samples to $n_{s} = 10$ and the iteration count to $n_{BO} = 200$.
 
 In the expected improvement function, the trade-off parameter $\tau$ is set to 0.01 as proposed by \cite{brochu2010tutorial}.
 
@@ -173,5 +173,5 @@ The Bayesian optimization in the local context starts with a hypersphere centred
 We run the hyper parameter optimization every time the search space is adjusted. In total we carry out 400 Bayesian optimization steps, in which the search space is adapted every four steps.
 
 Before doing Gaussian process regression we transform our observations to zero mean and uniform variance:
-$$y = \frac{y_{n}-\mathrm{mean}(y_{n})}{\mathrm{std}(y_{n})}.$$
+$$\mathbf{y'} := \frac{\mathbf{y}-\mathrm{mean}(\mathbf{y})}{\mathrm{std}(\mathbf{y})}.$$
 This standardization proposed by \cite{akrour2017local} affects the Thompson sampling exploration exploitation trade-off. In algorithm \ref{alg:acqLocalBO} we only use 300 samples for the Thompson sampling due to its quadratic computational effort. The distance threshold $d_t$  for the sample filtering during Thompson sampling is set to 80\%.
